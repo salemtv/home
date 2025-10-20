@@ -1,5 +1,5 @@
 :root {
-      --color-bg: #0e0c1a;
+      --color-bg: slateblue;
       --color-primary: #0e0c1a;
       --color-secondary: #1e1e2f;
       --color-accent: #e50914;
@@ -94,7 +94,7 @@ img {
     .loader span {
       width: 30px;
       height: 30px;
-      border: 4px solid var(--color-primary);
+      border: 4px solid var(--color-bg);
       border-top: 4px solid transparent;
       border-radius: 50%;
       animation: spin 1s linear infinite;
@@ -187,7 +187,7 @@ img {
     }
 
     footer{
-      background:var(--color-bg);
+      background:var(--color-primary);
       padding:1.2rem;
       text-align:center;
       font-size:0.8rem;
