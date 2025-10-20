@@ -138,6 +138,7 @@ img {
     }
     select:focus {
       border-color: var(--color-bg);
+      border-width: 2px;
       }
     .botonxtra {
       display: flex;
