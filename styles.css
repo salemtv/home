@@ -193,26 +193,5 @@ img {
       font-size: 0.7rem;
       color: var(--color-button);
     }
-.anuncio {
-background: rgba(32, 178, 170,.5);
-border: 1px solid lightseagreen;
-color: lightseagreen;
-padding: 10px;
-border-radius: 8px;
-text-align: center;
-font-size: 0.9rem;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.anuncio a {
-color: var(--color-text);
-}
-.anuncio img.profile {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 3px;
-    margin-left: 5px;
-  }
+.anuncio { background: rgba(32, 178, 170,.05); border-radius:8px; padding:8px 12px; display:inline-flex; gap:6px; align-items:center; color:lightseagreen; }
+.anuncio img.profile{ width:15px;height:15px;border-radius:50% }
