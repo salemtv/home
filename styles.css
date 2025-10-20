@@ -136,6 +136,9 @@ img {
       border-radius: 6px;
       font-size: 1rem;
     }
+    select:focus {
+      border-color: var(--color-bg);
+      }
     .botonxtra {
       display: flex;
       justify-content: center;
