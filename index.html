@@ -271,28 +271,6 @@ color: var(--color-text);
         </div>
       </div>
     </div>
-    <script>
-function openInstagram() {
-  // Intentar abrir la app
-  window.location = "instagram://user?username=yefrysammir";
-
-  // Programamos el fallback
-  const fallback = setTimeout(function () {
-    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-      window.location = "https://apps.apple.com/app/instagram/id389801252";
-    } else if (/Android/.test(navigator.userAgent)) {
-      window.location = "https://play.google.com/store/apps/details?id=com.instagram.android";
-    }
-  }, 1500);
-
-  // Si la página pierde visibilidad (porque se abrió la app), cancelamos el fallback
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "hidden") {
-      clearTimeout(fallback);
-    }
-  }, { once: true });
-}
-</script>
     
 <div class="anuncio"><p>Powered by</p><img class="profile" src="https://th.bing.com/th/id/OIG2.Ls14.mrVPhRAUIQyj_Y8?dpr=3&pid=ImgDetMain" alt="Sam"><a href="javascript:openInstagram()">@yefrysammir</a></div>
   </main>
@@ -300,54 +278,6 @@ function openInstagram() {
   <footer>
     &copy; 2025 STV. Todos los derechos reservados.
   </footer>
-
-  <script>
-    function cambiarCanal(sel) {
-      const canal = sel.value;
-      localStorage.setItem('canalSeleccionado', canal);
-      const iframe = document.getElementById('videoIframe');
-      const loader = document.getElementById('loader');
-      const badge = document.getElementById('liveBadge');
-      loader.style.display = 'flex';
-      badge.classList.remove('visible');
-      iframe.src = `https://streamtp22.com/global1.php?stream=${canal}`;
-    }
-
-    function recargarIframe() {
-      const iframe = document.getElementById('videoIframe');
-      const loader = document.getElementById('loader');
-      const badge = document.getElementById('liveBadge');
-      loader.style.display = 'flex';
-      badge.classList.remove('visible');
-      iframe.src = iframe.src;
-    }
-
-    window.addEventListener('load', () => {
-      const canalGuardado = localStorage.getItem('canalSeleccionado') || 'liga1max';
-      document.getElementById('canalSelector').value = canalGuardado;
-      const iframe = document.getElementById('videoIframe');
-      const loader = document.getElementById('loader');
-      const badge = document.getElementById('liveBadge');
-      iframe.src = `https://streamtp22.com/global1.php?stream=${canalGuardado}`;
-
-      iframe.onload = () => {
-        loader.style.display = 'none';
-        badge.classList.add('visible');
-      };
-
-      iframe.onerror = () => {
-        loader.style.display = 'none';
-        badge.classList.remove('visible');
-      };
-    });
-  </script>
-
-<script>
-    // Service Worker PWA
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
 
 </body>
 </html>
