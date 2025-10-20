@@ -1,0 +1,23 @@
+{
+  "name": "Salem TV",
+  "short_name": "STV",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e0c1a",
+  "theme_color": "#0e0c1a",
+  "icons": [
+    {
+      "src": "https://iili.io/FbndiJt.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://iili.io/Fbn3wwg.md.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
