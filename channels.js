@@ -6,7 +6,7 @@
       const badge = document.getElementById('liveBadge');
       loader.style.display = 'flex';
       badge.classList.remove('visible');
-      iframe.src = `https://streamtp22.com/global1.php?stream=${canal}`;
+      iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canal}`;
     }
 
     function recargarIframe() {
@@ -24,7 +24,7 @@
       const iframe = document.getElementById('videoIframe');
       const loader = document.getElementById('loader');
       const badge = document.getElementById('liveBadge');
-      iframe.src = `https://streamtp22.com/global1.php?stream=${canalGuardado}`;
+      iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalGuardado}`;
 
       iframe.onload = () => {
         loader.style.display = 'none';
