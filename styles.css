@@ -186,12 +186,25 @@ img {
       font-size: 1.35rem;
     }
 
-    footer {
-      background-color: var(--color-bg);
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--color-button);
+    footer{
+      background:var(--color-bg);
+      padding:1.2rem;
+      text-align:center;
+      font-size:0.8rem;
+      color:var(--color-muted);
+      margin-top:18px;
     }
-.anuncio { background: rgba(32, 178, 170,.05); border-radius:8px; padding:8px 12px; display:inline-flex; gap:6px; align-items:center; color:lightseagreen; }
-.anuncio img.profile{ width:15px;height:15px;border-radius:50% }
+.anuncio {
+  background: rgba(32, 178, 170,.05);
+  border-radius:8px;
+  padding:8px 12px;
+  display:inline-flex;
+  gap:6px;
+  align-items:center;
+  color:lightseagreen;
+}
+.anuncio img.profile {
+  width:15px;
+  height:15px;
+  border-radius:50%;
+}
