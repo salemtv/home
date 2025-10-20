@@ -142,7 +142,7 @@ img {
       align-items: center;
       }
     .live-badge {
-      background-color: var(--color-accent);
+      background-color: var(--color-bg);
       color: white;
       padding: 4px 10px;
       border-radius: 12px;
@@ -192,11 +192,11 @@ img {
       padding:1.2rem;
       text-align:center;
       font-size:0.8rem;
-      color:var(--color-muted);
+      color:var(--color-secondary);
       margin-top:18px;
     }
 .anuncio {
-  background: rgba(0, 0, 0,.05);
+  background: transparent;
   border-radius:8px;
   padding:8px 12px;
   display:inline-flex;
