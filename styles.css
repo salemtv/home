@@ -195,13 +195,13 @@ img {
       margin-top:18px;
     }
 .anuncio {
-  background: rgba(32, 178, 170,.05);
+  background: rgba(0, 0, 0,.05);
   border-radius:8px;
   padding:8px 12px;
   display:inline-flex;
   gap:6px;
   align-items:center;
-  color:lightseagreen;
+  color:var(--color-bg);
 }
 .anuncio img.profile {
   width:15px;
