@@ -1,12 +1,12 @@
 :root {
-      --color-bg: #000;
-      --color-primary: #000;
-      --color-secondary: #333;
+      --color-bg: #0e0c1a;
+      --color-primary: #0e0c1a;
+      --color-secondary: #1e1e2f;
       --color-accent: #e50914;
       --color-text: #ffffff;
-      --color-muted: #444;
-      --color-button: #111;/**#292943;**/
-      --color-button-hover: #222;
+      --color-muted: #9aa3b5;
+      --color-button: #2a2a40;/**#292943;**/
+      --color-button-hover: #3a3a5c;
     }
 /*******/
 html, body {
