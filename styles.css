@@ -176,6 +176,7 @@ img {
       align-items: center;
       transition: background 0.3s;
       flex-shrink: 0;
+      margin-left: 1rem;
     }
 
     .btn-icon:hover {
