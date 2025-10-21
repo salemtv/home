@@ -209,7 +209,7 @@ img {
   color:var(--color-secondary);
 }
 .anuncio a {
-  color: var(--color-bg);
+  color: var(--color-bg)!important;
 }
 .anuncio img.profile {
   width:15px;
