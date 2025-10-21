@@ -192,11 +192,11 @@ img {
     }
 
     footer{
-      background:var(--color-primary);
+      background:;
       padding:1.2rem;
       text-align:center;
       font-size:0.8rem;
-      color:var(--color-secondary);
+      color:;
       margin-top:18px;
     }
 .anuncio {
@@ -206,7 +206,10 @@ img {
   display:inline-flex;
   gap:6px;
   align-items:center;
-  color:var(--color-bg);
+  color:var(--color-secondary);
+}
+.anuncio a {
+  color: var(--color-bg);
 }
 .anuncio img.profile {
   width:15px;
