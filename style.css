@@ -112,8 +112,8 @@ height: auto;
     .selector{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
     select{background:var(--color-button);color:white;border:none;padding:0.4rem 0.8rem;border-radius:6px;font-size:var(--font)}*/
     .botonxtra{display:flex;align-items:center;gap:8px;justify-content:end;flex-direction:row;}
-    .live-badge{background:var(--color-accent);color:white;padding:4px 10px;border-radius:12px;font-size:var(--font-xs);font-weight:500;flex-shrink:0;}
-    .live-badge.visible{display:none}/**Arreglar en futuro**/
+    .live-badge{display: none;background:var(--color-accent);color:white;padding:4px 10px;border-radius:12px;font-size:var(--font-xs);font-weight:500;flex-shrink:0;}
+    .live-badge.visible{display:block}/**Arreglar en futuro**/
 .dot {
   color: rgba(255,255,255,.9);
   animation: blink 1s infinite;
