@@ -63,6 +63,7 @@ width: 100%;
       display:flex;
       align-items:center;
       justify-content:center;
+    flex-direction: row;
 	  text-align: center;
       position:sticky;
       top:0;
@@ -70,8 +71,11 @@ width: 100%;
 height: auto;
     }
     header img{height:40px}
-    header .title {}
-
+    header .title {
+        background: var(--color-bg);
+        font-size: var(--font-xxs);
+        padding: 1px 3px;
+    }
     /* Tabs sticky under header */
     .tabs {
       position:sticky;
@@ -108,7 +112,7 @@ height: auto;
     .selector{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
     select{background:var(--color-button);color:white;border:none;padding:0.4rem 0.8rem;border-radius:6px;font-size:var(--font)}*/
     .botonxtra{display:flex;align-items:center;gap:8px;justify-content:end;flex-direction:row;}
-    .live-badge{position: absolute;top:176px;right: 2rem;background:var(--color-accent);color:white;padding:4px 10px;border-radius:12px;font-size:var(--font-xs);font-weight:500;flex-shrink:0;}
+    .live-badge{background:var(--color-accent);color:white;padding:4px 10px;border-radius:12px;font-size:var(--font-xs);font-weight:500;flex-shrink:0;}
     .live-badge.visible{display:none}/**Arreglar en futuro**/
 .dot {
   color: rgba(255,255,255,.9);
