@@ -4,13 +4,13 @@
       --color-blur: rgba(0,0,0,.5);
     /**/
       --color-primary: #000;
-      --color-secondary: #1d1d20;
-      --color-button: #2c2c30;
-      --color-button-hover: #3b3a40;
+      --color-secondary: #222;
+      --color-button: #333;
+      --color-button-hover: #444;
     /**/
       --color-text: #ffffff;
       --color-black: black;
-      --color-muted: #9aa3b5;
+      --color-muted: #777;
     /**/
 	  --font: 1rem;
 	  --font-xs: 0.8rem;
