@@ -1,14 +1,17 @@
 :root {
       --color-bg: #ff00aa;
+      --color-accent: #00e0ff;
+      --color-blur: rgba(0,0,0,.5);
+    /**/
       --color-primary: #000;
       --color-secondary: #1d1d20;
-      --color-black: black;
-      --color-blur: rgba(0,0,0,.5);
-      --color-accent: #00e0ff;
-      --color-text: #ffffff;
-      --color-muted: #9aa3b5;
       --color-button: #2c2c30;
       --color-button-hover: #3b3a40;
+    /**/
+      --color-text: #ffffff;
+      --color-black: black;
+      --color-muted: #9aa3b5;
+    /**/
 	  --font: 1rem;
 	  --font-xs: 0.8rem;
       --font-xxs: 0.6rem;
@@ -55,8 +58,8 @@ width: 100%;
 
     /* Sticky Header */
     header{
-      background-color:var(--color-blur);
-    backdrop-filter: blur(4px);
+      background:var(--color-blur);
+      backdrop-filter: blur(4px);
       padding:1rem;
       display:flex;
       align-items:center;
