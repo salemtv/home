@@ -461,7 +461,6 @@ function renderEnVi(){
   const p = PAGES.envi || {title:'Channels', defaultStream:'foxsports'};
   const container = document.createElement('div');
   container.innerHTML = `
-    <h3 style="margin-bottom:8px">${p.title}</h3>
     <div class="iframe-container">
       <div class="loader" id="loader"><span></span></div>
       <iframe id="videoIframe" allow="picture-in-picture" playsinline webkit-playsinline allowfullscreen></iframe>
@@ -471,8 +470,17 @@ function renderEnVi(){
         <div class="selector-display">
           <span style="font-size: 20px" class="material-symbols-outlined">tv</span>
           <span class="selected-text">L1 Max</span>
-          <span class="material-symbols-outlined arrow">expand_more</span>
+
+          <!-- LIVE badge dentro del recuadro -->
+          <span id="liveBadge" class="live-badge"><span class="dot">●</span> LIVE</span>
+
+          <!-- Flechas nuevas -->
+          <div class="selector-arrows">
+            <span class="material-symbols-outlined arrow-up">expand_less</span>
+            <span class="material-symbols-outlined arrow-down">expand_more</span>
+          </div>
         </div>
+
         <div class="selector-options hidden">
 <div data-value="beinsportes">BeiN Sports</div>
 <div data-value="beinsport_xtra_espanol">BeiN Sports Xtra</div>
@@ -513,8 +521,8 @@ function renderEnVi(){
 <div data-value="tycsports">TyC Sports</div>
         </div>
       </div>
+
       <div class="botonxtra">
-        <span id="liveBadge" class="live-badge"><span class="dot">●</span> LIVE</span>
         <button class="btn-icon" id="reloadBtn" title="Recargar canal">
           <span class="material-symbols-outlined">autoplay</span>
         </button>
@@ -549,32 +557,64 @@ function initCustomSelector() {
   const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
+  const arrowUp = custom.querySelector('.arrow-up');
+  const arrowDown = custom.querySelector('.arrow-down');
+  const optionList = [...options.querySelectorAll('div')];
 
+  // Cargar selección actual
   const canalSaved = localStorage.getItem('canalSeleccionado') || 'foxsports';
-  const currentOption = options.querySelector(`[data-value="${canalSaved}"]`);
-  if (currentOption) text.textContent = currentOption.textContent;
+  let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
+  if (currentIndex < 0) currentIndex = 0;
+  text.textContent = optionList[currentIndex]?.textContent || 'Canal';
 
+  // Actualizar iframe y guardar selección
+  const updateSelection = (index) => {
+    if (index < 0 || index >= optionList.length) return;
+    const selected = optionList[index];
+    const value = selected.dataset.value;
+    text.textContent = selected.textContent;
+    localStorage.setItem('canalSeleccionado', value);
+    if (loader) loader.style.display = 'flex';
+    if (badge) badge.classList.remove('visible');
+    iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
+    currentIndex = index;
+  };
+
+  // Mostrar / ocultar lista
   display.addEventListener('click', () => {
+    const isHidden = options.classList.contains('hidden');
     options.classList.toggle('hidden');
+    arrowDown.textContent = isHidden ? 'expand_less' : 'expand_more'; // cambia ícono
   });
 
-  options.querySelectorAll('div').forEach(opt => {
-    opt.addEventListener('click', e => {
-      const value = e.target.dataset.value;
-      const label = e.target.textContent;
-      text.textContent = label;
+  // Cerrar al hacer clic fuera
+  document.addEventListener('click', (e) => {
+    if (!custom.contains(e.target)) {
       options.classList.add('hidden');
-      localStorage.setItem('canalSeleccionado', value);
-      if (loader) loader.style.display = 'flex';
-      if (badge) badge.classList.remove('visible');
-      iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
+      arrowDown.textContent = 'expand_more';
+    }
+  });
+
+  // Clic en una opción
+  optionList.forEach((opt, i) => {
+    opt.addEventListener('click', () => {
+      updateSelection(i);
+      options.classList.add('hidden');
+      arrowDown.textContent = 'expand_more';
     });
   });
 
-  document.addEventListener('click', e => {
-    if (!custom.contains(e.target)) options.classList.add('hidden');
+  // Flechas ↑ ↓ para cambiar canal
+  arrowUp.addEventListener('click', (e) => {
+    e.stopPropagation();
+    updateSelection(currentIndex - 1);
+  });
+  arrowDown.addEventListener('click', (e) => {
+    e.stopPropagation();
+    updateSelection(currentIndex + 1);
   });
 }
+
 /* ---------------- EnVi 2 ---------------- */
 function renderEnVi2(){
   const p = {title:'Latam TV', defaultStream:'history'};
