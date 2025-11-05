@@ -3,6 +3,7 @@
       --color-primary: #000;
       --color-secondary: #1d1d20;
       --color-black: black;
+      --color-blur: rgba(0,0,0,.5);
       --color-accent: #00e0ff;
       --color-text: #ffffff;
       --color-muted: #9aa3b5;
@@ -54,7 +55,8 @@ width: 100%;
 
     /* Sticky Header */
     header{
-      background-color:var(--color-primary);
+      background-color:var(--color-blur);
+    backdrop-filter: blur(4px);
       padding:1rem;
       display:flex;
       align-items:center;
@@ -73,7 +75,7 @@ height: auto;
       position:sticky;
 	  top:75px; /* header height ~72 */
       z-index:50;
-      background:rgba(14,12,26,.5);
+      background:var(--color-blur);
       padding:8px 1rem;
       backdrop-filter: blur(4px);
     }
