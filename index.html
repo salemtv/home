@@ -2,80 +2,63 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- App iOS -->
+  <!-- Prevent pinch/zoom on mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <!-- App iOS -->
   <link rel="apple-touch-icon" href="https://iili.io/FbndiJt.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="STV" />
 
   <!-- Manifest -->
-<link rel="manifest" href="manifest.json" />
-<title>Salem TV</title>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="icon" type="image/png" href="https://iili.io/FbnBO4j.png">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-<meta name="theme-color" content="#0e0c1a" />
-<link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <title>STV</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" href="https://iili.io/FbnBO4j.png">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <meta name="theme-color" content="#0e0c1a" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 </head>
 <body>
   <header>
-    <img src="https://iili.io/FPk2m9n.png" alt="Logo" /><span></span>
+    <div class="center">
+      <img src="https://iili.io/FPk2m9n.png" alt="Logo" />
+      <div class="title"></div>
+    </div>
   </header>
 
-  <main>
-    <div class="iframe-container">
-      <div class="loader" id="loader"><span></span></div>
-      <iframe id="videoIframe" allow="picture-in-picture" playsinline webkit-playsinline allowfullscreen></iframe>
-    </div>
-
-    <div class="controls">
-      <div class="selector-line">
-        <div class="selector">
-          <span class="material-symbols-outlined">tv</span>
-          <select id="canalSelector" onchange="cambiarCanal(this)">
-<option value="espndeportes">ESPN Deportes</option>
-<option value="espn">ESPN</option>
-<option value="espn2">ESPN2</option>
-<option value="espn3">ESPN3</option>
-<option value="espn4">ESPN4</option>
-<option value="espn5">ESPN5</option>
-<option value="espn6">ESPN6</option>
-<option value="espn7">ESPN7</option>
-<option value="disney2">Disney+</option>
-<option value="beinsport_xtra_espanol">BeiNsport</option>
-<option value="dsports">DSports</option>
-<option value="dsports2">DSports2</option>
-<option value="dsportsplus">DSports+</option>
-<option value="golperu">Gol Perú</option>
-<option value="liga1max">L1 Max</option>
-<option value="movistar">Movistar</option>
-<option value="premiere1">Premiere 1</option>
-<option value="premiere2">Premiere 2</option>
-<option value="premiere3">Premiere 3</option>
-          </select>
-        </div>
-
-        <div class="botonxtra">
-        <span id="liveBadge" class="live-badge"><span class="dot">●</span> LIVE</span>
-        <button class="btn-icon" onclick="recargarIframe()" title="Recargar canal">
-          <span class="material-symbols-outlined">refresh</span>
-        </button>
-        </div>
-      </div>
-    </div>
-      </main>
-      <footer>
-<div style="display:flex;justify-content:center;padding:10px">
-    <div class="anuncio">
-      <img class="profile" src="https://th.bing.com/th/id/OIG2.Ls14.mrVPhRAUIQyj_Y8?dpr=1&pid=ImgDetMain" alt="Sam">
-      <a href="" target="_blank" style="color:inherit">Sam</a>
-      <span style="margin-left:10px;">&nbsp;|&nbsp;&nbsp;&nbsp;Powered by STV</span>
+  <!-- sticky tabs: EnVi first (default), Imágenes second -->
+  <div class="tabs" id="tabs">
+    <div class="tabs-inner">
+      <div class="tab active" data-tab="envi">Sports</div>
+<div class="tab" data-tab="envi2">Others</div>
+      <div class="tab" data-tab="images">Movies</div>
     </div>
   </div>
+
+  <main id="main">
+    <!-- contenido dinámico -->
+  </main>
+
+  <!-- Modal fullscreen para videos asociados a imagenes -->
+  <div id="modalFull" class="modal-full" aria-hidden="true">
+    <div class="modal-inner" id="modalInner">
+      <button class="modal-close" id="modalClose" title="Cerrar">
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+    </button>
+      <div class="modal-media" id="modalMedia"></div>
+    </div>
+  </div>
+
+ <footer>
+<p>All visual content displayed here is external to our website. It belongs to a free collection of public links. It does not belong to us. The advertising displayed comes exclusively from the stream owner (via embed). We apologize for any inconvenience; we do our best and we do it for entertainment purposes. We are a non-profit organization.</p>
+    <div class="anuncio">
+      <img class="profile" src="https://th.bing.com/th/id/OIG2.Ls14.mrVPhRAUIQyj_Y8?dpr=1&pid=ImgDetMain" alt="Salem">
+      <span>Powered by Salem</span>
+    </div>
   </footer>
-<script src="channels.js"></script>
-<script src="socials.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
