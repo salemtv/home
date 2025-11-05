@@ -58,7 +58,7 @@ width: 100%;
 
     /* Sticky Header */
     header{
-      background:var(--color-blur);
+      background:var(--color-bg);
       backdrop-filter: blur(4px);
       padding:1rem;
       display:flex;
