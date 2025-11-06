@@ -493,6 +493,7 @@ font-size: 32px;
 /* --- Flechas internas (scroll manual) --- */
 .scroll-btn {
   margin: 0;
+  margin-top: 8px;
   text-align: center;
   padding: 6px 0;
   cursor: pointer;
@@ -509,6 +510,7 @@ font-size: 32px;
 .scroll-btn:hover {
   opacity: 1;
   background:;
+ color: var(--color-bg);
 }
 
 /* --- Contenedor de las opciones --- */
@@ -546,10 +548,10 @@ font-size: 32px;
   display: none;
   background: var(--color-bg);
   color: var(--color-text);
-  padding: 3px 5px;
+  padding: 2px 5px;
   border-radius: 12px;
   font-size: var(--font-xxs);
-  font-weight: 500;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
