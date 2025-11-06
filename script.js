@@ -612,15 +612,19 @@ function initCustomSelector() {
     });
   });
 
-  // Scroll manual dentro del menú
-  scrollUp.addEventListener('click', (e) => {
-    e.stopPropagation();
-    optionsContainer.scrollBy({ top: -40, behavior: 'smooth' });
-  });
-  scrollDown.addEventListener('click', (e) => {
-    e.stopPropagation();
-    optionsContainer.scrollBy({ top: 40, behavior: 'smooth' });
-  });
+  /* --- Scroll manual corregido --- */
+scrollUp.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const optionHeight = optionList[0]?.offsetHeight || 40;
+  optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
+});
+
+scrollDown.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const optionHeight = optionList[0]?.offsetHeight || 40;
+  const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
+  optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
+});
 }
 
 /* ---------------- EnVi 2 ---------------- */
