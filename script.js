@@ -458,10 +458,9 @@ document.head.appendChild(style);
 
 /* ---------------- EnVi ---------------- */
 function renderEnVi() {
-  const p = PAGES.envi || { title: 'Class', defaultStream: 'foxsports' };
+  const p = PAGES.envi || { title: 'Channels', defaultStream: 'foxsports' };
   const container = document.createElement('div');
   container.innerHTML = `
-    <h3 style="margin-bottom:8px">${p.title}</h3>
     <div class="iframe-container">
       <div class="loader" id="loader"><span></span></div>
       <iframe id="videoIframe" allow="picture-in-picture" playsinline webkit-playsinline allowfullscreen></iframe>
