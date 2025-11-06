@@ -469,7 +469,7 @@ function renderEnVi() {
       <div class="custom-selector" id="canalSelectorCustom">
         <div class="selector-display">
           <div class="selector-left">
-            <span style="font-size:22px" class="material-symbols-outlined">smart_display</span>
+            <span style="font-size:22px" class="material-symbols-outlined">mimo</span>
             <span class="selected-text highlight">L1 Max</span>
             <span id="liveBadge" class="live-badge"><span class="dot">LIVE</span></span>
           </div>
@@ -541,10 +541,29 @@ function renderEnVi() {
   };
 
   document.getElementById('reloadBtn').addEventListener('click', () => {
-    if (loader) loader.style.display = 'flex';
-    if (badge) badge.classList.remove('visible');
-    iframe.src = iframe.src.split('?')[0] + '?_=' + Date.now();
-  });
+  if (loader) loader.style.display = 'flex';
+  if (badge) badge.classList.remove('visible');
+
+  const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
+  
+  // Crear un nuevo iframe limpio
+  const newIframe = document.createElement('iframe');
+  newIframe.id = 'videoIframe';
+  newIframe.allow = 'picture-in-picture';
+  newIframe.playsInline = true;
+  newIframe.setAttribute('webkit-playsinline', '');
+  newIframe.allowFullscreen = true;
+  newIframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalActual}?reload=${Date.now()}`;
+
+  // Reemplazar el iframe anterior
+  iframe.parentNode.replaceChild(newIframe, iframe);
+
+  // Actualizar la referencia y restaurar comportamiento del loader
+  newIframe.onload = () => {
+    if (loader) loader.style.display = 'none';
+    if (badge) badge.classList.add('visible');
+  };
+});
 
   initCustomSelector();
 }
