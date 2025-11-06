@@ -79,8 +79,9 @@ height: auto;
         font-size: var(--font-xxs);
         padding: 1px 3px;
         position: absolute;
-        top: 5px;
-        right: -2px;
+        border-radius: 4px;
+        top: 3px;
+        right: -4px;
         font-weight: bold;
     }
     /* Tabs sticky under header */
