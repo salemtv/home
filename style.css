@@ -415,12 +415,21 @@ font-size: 32px;
   /**box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);**/
 }
 
-/* === Ajustes finales del selector === */
 /* === Selector personalizado moderno === */
 .custom-selector {
   position: relative;
   width: 100%;
   user-select: none;
+  flex: 1;
+}
+
+/* --- Contenedor de controles (selector + botón reload en la misma línea) --- */
+.controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: nowrap;
 }
 
 /* --- Encabezado del selector --- */
@@ -433,6 +442,7 @@ font-size: 32px;
   justify-content: space-between;
   cursor: pointer;
   transition: background 0.2s;
+  width: 100%;
 }
 
 .selector-display:hover {
@@ -458,23 +468,18 @@ font-size: 32px;
   transition: transform 0.2s;
 }
 
-/* --- Menú desplegable (modo relativo, empuja contenido) --- */
-/* --- Menú desplegable (flotante controlado, no empuja nada) --- */
-
+/* --- Menú desplegable (RELATIVO) --- */
 .selector-options {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
+  position: relative;
   background: var(--color-secondary);
   border-radius: 10px;
   box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+  margin-top: 8px;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
   transform: translateY(-4px);
   transition: max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease;
-  z-index: 10;
 }
 
 .selector-options:not(.hidden) {
@@ -567,22 +572,5 @@ font-size: 32px;
   gap: 8px;
   justify-content: end;
   flex-direction: row;
-}
-.controls {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-/* --- Animación suave de apertura del menú --- */
-.selector-options {
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease;
-}
-
-.selector-options:not(.hidden) {
-  opacity: 1;
-  transform: translateY(0);
+  flex-shrink: 0;
 }
