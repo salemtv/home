@@ -473,8 +473,8 @@ font-size: 32px;
   background: var(--color-secondary);
   border-radius: 10px;
   box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+  margin-top: 8px;
   /* ✨ Quitamos el margin-top que creaba el espacio */
-  margin-top: 0;
   width: 100%; /* asegura que ocupe todo el ancho del selector */
   overflow: hidden;
   max-height: 0;
@@ -493,7 +493,6 @@ font-size: 32px;
 /* --- Flechas internas (scroll manual) --- */
 .scroll-btn {
   margin: 0;
-  margin-top: 8px;
   text-align: center;
   padding: 6px 0;
   cursor: pointer;
