@@ -456,11 +456,13 @@ document.head.appendChild(style);
   }catch(e){console.warn(e);}
 })();
 
+
 /* ---------------- EnVi ---------------- */
-function renderEnVi(){
-  const p = PAGES.envi || {title:'Channels', defaultStream:'foxsports'};
+function renderEnVi() {
+  const p = PAGES.envi || { title: 'Channels', defaultStream: 'foxsports' };
   const container = document.createElement('div');
   container.innerHTML = `
+    <h3 style="margin-bottom:8px">${p.title}</h3>
     <div class="iframe-container">
       <div class="loader" id="loader"><span></span></div>
       <iframe id="videoIframe" allow="picture-in-picture" playsinline webkit-playsinline allowfullscreen></iframe>
@@ -468,21 +470,18 @@ function renderEnVi(){
     <div class="controls" style="margin-top:8px">
       <div class="custom-selector" id="canalSelectorCustom">
         <div class="selector-display">
-          <span style="font-size: 20px" class="material-symbols-outlined">tv</span>
-          <span class="selected-text">L1 Max</span>
-
-          <!-- LIVE badge dentro del recuadro -->
-          <span id="liveBadge" class="live-badge"><span class="dot">●</span> LIVE</span>
-
-          <!-- Flechas nuevas -->
-          <div class="selector-arrows">
-            <span class="material-symbols-outlined arrow-up">expand_less</span>
-            <span class="material-symbols-outlined arrow-down">expand_more</span>
+          <div class="selector-left">
+            <span style="font-size:20px" class="material-symbols-outlined">tv</span>
+            <span class="selected-text highlight">L1 Max</span>
+            <span id="liveBadge" class="live-badge"><span class="dot">●</span> LIVE</span>
           </div>
+          <span class="material-symbols-outlined arrow-toggle">expand_more</span>
         </div>
 
         <div class="selector-options hidden">
-<div data-value="beinsportes">BeiN Sports</div>
+          <span class="scroll-btn up material-symbols-outlined">expand_less</span>
+          <div class="options-container">
+           <div data-value="beinsportes">BeiN Sports</div>
 <div data-value="beinsport_xtra_espanol">BeiN Sports Xtra</div>
 <div data-value="disney4">Disney 1</div>
 <div data-value="disney8">Disney 2</div>
@@ -519,12 +518,17 @@ function renderEnVi(){
 <div data-value="premiere8">Premiere 8</div>
 <div data-value="telefe">Telefe</div>
 <div data-value="tycsports">TyC Sports</div>
+          </div>
+          <span class="scroll-btn down material-symbols-outlined">expand_more</span>
         </div>
       </div>
 
       <div class="botonxtra">
         <button class="btn-icon" id="reloadBtn" title="Recargar canal">
           <span class="material-symbols-outlined">autoplay</span>
+        </button>
+        <button class="btn-icon" id="remoteBtn" title="Modo TV" style="display:none">
+          <span class="material-symbols-outlined">remote</span>
         </button>
       </div>
     </div>
@@ -544,74 +548,100 @@ function renderEnVi(){
     iframe.src = iframe.src.split('?')[0] + '?_=' + Date.now();
   });
 
-  initCustomSelector();
+  // Detectar si es TV o modo remoto
+  const isTV = /tv|smart|tizen|netcast|viera|bravia/i.test(navigator.userAgent);
+  const remoteBtn = document.getElementById('remoteBtn');
+  if (isTV) remoteBtn.style.display = 'flex';
+
+  initCustomSelector(isTV);
 }
 
 /* ---------------- Custom Selector ---------------- */
-function initCustomSelector() {
+function initCustomSelector(isTV = false) {
   const custom = document.getElementById('canalSelectorCustom');
   if (!custom) return;
+
   const display = custom.querySelector('.selector-display');
   const options = custom.querySelector('.selector-options');
   const text = custom.querySelector('.selected-text');
   const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
-  const arrowUp = custom.querySelector('.arrow-up');
-  const arrowDown = custom.querySelector('.arrow-down');
-  const optionList = [...options.querySelectorAll('div')];
+  const toggleArrow = custom.querySelector('.arrow-toggle');
+  const optionList = [...custom.querySelectorAll('.options-container div')];
+  const scrollUp = custom.querySelector('.scroll-btn.up');
+  const scrollDown = custom.querySelector('.scroll-btn.down');
+  const optionsContainer = custom.querySelector('.options-container');
 
-  // Cargar selección actual
   const canalSaved = localStorage.getItem('canalSeleccionado') || 'foxsports';
   let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
   if (currentIndex < 0) currentIndex = 0;
   text.textContent = optionList[currentIndex]?.textContent || 'Canal';
 
-  // Actualizar iframe y guardar selección
   const updateSelection = (index) => {
     if (index < 0 || index >= optionList.length) return;
     const selected = optionList[index];
     const value = selected.dataset.value;
     text.textContent = selected.textContent;
     localStorage.setItem('canalSeleccionado', value);
-    if (loader) loader.style.display = 'flex';
-    if (badge) badge.classList.remove('visible');
+    loader.style.display = 'flex';
+    badge.classList.remove('visible');
     iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
     currentIndex = index;
   };
 
   // Mostrar / ocultar lista
   display.addEventListener('click', () => {
-    const isHidden = options.classList.contains('hidden');
+    const hidden = options.classList.contains('hidden');
     options.classList.toggle('hidden');
-    arrowDown.textContent = isHidden ? 'expand_less' : 'expand_more'; // cambia ícono
+    toggleArrow.textContent = hidden ? 'expand_less' : 'expand_more';
   });
 
   // Cerrar al hacer clic fuera
   document.addEventListener('click', (e) => {
     if (!custom.contains(e.target)) {
       options.classList.add('hidden');
-      arrowDown.textContent = 'expand_more';
+      toggleArrow.textContent = 'expand_more';
     }
   });
 
-  // Clic en una opción
+  // Clic en opciones
   optionList.forEach((opt, i) => {
     opt.addEventListener('click', () => {
       updateSelection(i);
       options.classList.add('hidden');
-      arrowDown.textContent = 'expand_more';
+      toggleArrow.textContent = 'expand_more';
     });
   });
 
-  // Flechas ↑ ↓ para cambiar canal
-  arrowUp.addEventListener('click', (e) => {
+  // Scroll manual dentro del menú
+  scrollUp.addEventListener('click', (e) => {
     e.stopPropagation();
-    updateSelection(currentIndex - 1);
+    optionsContainer.scrollBy({ top: -40, behavior: 'smooth' });
   });
-  arrowDown.addEventListener('click', (e) => {
+  scrollDown.addEventListener('click', (e) => {
     e.stopPropagation();
-    updateSelection(currentIndex + 1);
+    optionsContainer.scrollBy({ top: 40, behavior: 'smooth' });
+  });
+
+  // Teclas físicas (modo TV o activado)
+  const remoteBtn = document.getElementById('remoteBtn');
+  let remoteActive = false;
+
+  remoteBtn?.addEventListener('click', () => {
+    remoteActive = !remoteActive;
+    remoteBtn.classList.toggle('active', remoteActive);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!remoteActive) return;
+    if (e.key === 'ArrowUp') updateSelection(currentIndex - 1);
+    if (e.key === 'ArrowDown') updateSelection(currentIndex + 1);
+    if (e.key === 'Enter') {
+      const hidden = options.classList.contains('hidden');
+      options.classList.toggle('hidden');
+      toggleArrow.textContent = hidden ? 'expand_less' : 'expand_more';
+    }
   });
 }
 
