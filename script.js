@@ -479,7 +479,7 @@ function renderEnVi() {
         <div class="selector-options hidden">
           <span class="scroll-btn up material-symbols-outlined">expand_less</span>
           <div class="options-container">
-            <div data-value="beinsportes">BeiN Sports</div>
+<div data-value="beinsportes">BeiN Sports</div>
 <div data-value="beinsport_xtra_espanol">BeiN Sports Xtra</div>
 <div data-value="disney4">Disney 1</div>
 <div data-value="disney8">Disney 2</div>
@@ -533,56 +533,37 @@ function renderEnVi() {
   const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
+  const reloadBtn = document.getElementById('reloadBtn');
+
+  // Cargar el canal guardado o el predeterminado
   const canalSaved = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
   iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
+
   iframe.onload = () => {
-    if (loader) loader.style.display = 'none';
-    if (badge) badge.classList.add('visible');
+    loader.style.display = 'none';
+    badge.classList.add('visible');
   };
 
-  document.getElementById('reloadBtn').addEventListener('click', () => {
-  if (loader) loader.style.display = 'flex';
-  if (badge) badge.classList.remove('visible');
+  // --- Recargar canal ---
+  reloadBtn.addEventListener('click', () => {
+    loader.style.display = 'flex';
+    badge.classList.remove('visible');
 
-  const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
+    // 🔁 forzar recarga real
+    const currentSrc = iframe.src.split('?')[0];
+    iframe.src = `${currentSrc}?_=${Date.now()}`;
 
-  // Asegurarnos de la URL completa (usa https:// si tu servidor usa https)
-  const srcUrl = (canalActual.startsWith('http://') || canalActual.startsWith('https://'))
-    ? canalActual
-    : `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
-
-  // Crear un nuevo iframe limpio
-  const newIframe = document.createElement('iframe');
-  newIframe.id = 'videoIframe';
-  newIframe.setAttribute('allow', 'picture-in-picture');
-  newIframe.setAttribute('playsinline', '');
-  newIframe.setAttribute('webkit-playsinline', '');
-  newIframe.setAttribute('allowfullscreen', '');
-  newIframe.style.width = '100%';
-  newIframe.style.height = '100%';
-  newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
-
-  // Manejadores para mostrar/ocultar loader y badge
-  newIframe.onload = () => {
-    if (loader) loader.style.display = 'none';
-    if (badge) badge.classList.add('visible');
-    console.log('iframe cargado:', newIframe.src);
-  };
-  newIframe.onerror = (err) => {
-    if (loader) loader.style.display = 'none';
-    console.error('Error al cargar iframe:', newIframe.src, err);
-  };
-
-  // Reemplazar el iframe anterior
-  const oldIframe = document.getElementById('videoIframe');
-  if (oldIframe && oldIframe.parentNode) {
-    oldIframe.parentNode.replaceChild(newIframe, oldIframe);
-  } else {
-    // fallback: añadir donde estaba el .iframe-container
-    const containerEl = document.querySelector('.iframe-container');
-    if (containerEl) containerEl.appendChild(newIframe);
-  }
-});
+    // 🧩 Actualizar referencias en el selector
+    setTimeout(() => {
+      const newIframe = document.getElementById('videoIframe');
+      const custom = document.getElementById('canalSelectorCustom');
+      if (custom) {
+        custom.iframeRef = newIframe;
+        custom.loaderRef = loader;
+        custom.badgeRef = badge;
+      }
+    }, 400);
+  });
 
   initCustomSelector();
 }
@@ -595,15 +576,22 @@ function initCustomSelector() {
   const display = custom.querySelector('.selector-display');
   const options = custom.querySelector('.selector-options');
   const text = custom.querySelector('.selected-text');
-  const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
+  let iframe = document.getElementById('videoIframe');
   const toggleArrow = custom.querySelector('.arrow-toggle');
   const optionList = [...custom.querySelectorAll('.options-container div')];
   const scrollUp = custom.querySelector('.scroll-btn.up');
   const scrollDown = custom.querySelector('.scroll-btn.down');
   const optionsContainer = custom.querySelector('.options-container');
 
+  // Guardar referencias para reconectar tras recargar
+  custom.dataset.initialized = 'true';
+  custom.iframeRef = iframe;
+  custom.loaderRef = loader;
+  custom.badgeRef = badge;
+
+  // Cargar canal guardado
   const canalSaved = localStorage.getItem('canalSeleccionado') || 'foxsports';
   let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
   if (currentIndex < 0) currentIndex = 0;
@@ -618,13 +606,30 @@ function initCustomSelector() {
     selected.classList.add('active-option');
     text.textContent = selected.textContent;
     localStorage.setItem('canalSeleccionado', value);
-    loader.style.display = 'flex';
-    badge.classList.remove('visible');
-    iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
-    currentIndex = index;
+
+    const oldIframe = custom.iframeRef || document.getElementById('videoIframe');
+    const newIframe = document.createElement('iframe');
+    newIframe.id = 'videoIframe';
+    newIframe.allow = 'picture-in-picture';
+    newIframe.playsInline = true;
+    newIframe.allowFullscreen = true;
+    newIframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
+
+    custom.loaderRef.style.display = 'flex';
+    custom.badgeRef.classList.remove('visible');
+
+    newIframe.onload = () => {
+      custom.loaderRef.style.display = 'none';
+      custom.badgeRef.classList.add('visible');
+    };
+
+    if (oldIframe && oldIframe.parentNode) {
+      oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+      custom.iframeRef = newIframe; // ✅ actualizar referencia
+    }
   };
 
-  // Mostrar / ocultar lista (cerrada por defecto)
+  // Mostrar / ocultar lista
   display.addEventListener('click', () => {
     options.classList.toggle('hidden');
     toggleArrow.textContent = options.classList.contains('hidden')
@@ -632,7 +637,7 @@ function initCustomSelector() {
       : 'expand_less';
   });
 
-  // Cerrar al hacer clic fuera
+  // Cerrar si se hace clic fuera
   document.addEventListener('click', (e) => {
     if (!custom.contains(e.target)) {
       options.classList.add('hidden');
@@ -649,19 +654,19 @@ function initCustomSelector() {
     });
   });
 
-  /* --- Scroll manual corregido --- */
-scrollUp.addEventListener('click', (e) => {
-  e.stopPropagation();
-  const optionHeight = optionList[0]?.offsetHeight || 40;
-  optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
-});
+  // --- Scroll manual mejorado ---
+  scrollUp.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const optionHeight = optionList[0]?.offsetHeight || 40;
+    optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
+  });
 
-scrollDown.addEventListener('click', (e) => {
-  e.stopPropagation();
-  const optionHeight = optionList[0]?.offsetHeight || 40;
-  const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
-  optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
-});
+  scrollDown.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const optionHeight = optionList[0]?.offsetHeight || 40;
+    const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
+    optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
+  });
 }
 
 /* ---------------- EnVi 2 ---------------- */
