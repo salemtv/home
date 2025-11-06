@@ -479,7 +479,7 @@ function renderEnVi() {
         <div class="selector-options hidden">
           <span class="scroll-btn up material-symbols-outlined">expand_less</span>
           <div class="options-container">
-<div data-value="beinsportes">BeiN Sports</div>
+            <div data-value="beinsportes">BeiN Sports</div>
 <div data-value="beinsport_xtra_espanol">BeiN Sports Xtra</div>
 <div data-value="disney4">Disney 1</div>
 <div data-value="disney8">Disney 2</div>
@@ -530,45 +530,58 @@ function renderEnVi() {
   `;
   main.appendChild(container);
 
-  const iframe = document.getElementById('videoIframe');
-  const loader = document.getElementById('loader');
-  const badge = document.getElementById('liveBadge');
-  const reloadBtn = document.getElementById('reloadBtn');
+  // --- Referencias ---
+  const iframeContainer = container.querySelector('.iframe-container');
+  const iframe = container.querySelector('#videoIframe');
+  const loader = container.querySelector('#loader');
+  const badge = container.querySelector('#liveBadge');
 
-  // Cargar el canal guardado o el predeterminado
+  // --- Canal inicial ---
   const canalSaved = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
   iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
-
   iframe.onload = () => {
     loader.style.display = 'none';
     badge.classList.add('visible');
   };
 
-  // --- Recargar canal ---
-  reloadBtn.addEventListener('click', () => {
+  // --- Botón recargar ---
+  document.getElementById('reloadBtn').addEventListener('click', () => {
     loader.style.display = 'flex';
     badge.classList.remove('visible');
 
-    // 🔁 forzar recarga real
-    const currentSrc = iframe.src.split('?')[0];
-    iframe.src = `${currentSrc}?_=${Date.now()}`;
+    const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
+    const srcUrl = (canalActual.startsWith('http://') || canalActual.startsWith('https://'))
+      ? canalActual
+      : `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
 
-    // 🧩 Actualizar referencias en el selector
-    setTimeout(() => {
-      const newIframe = document.getElementById('videoIframe');
-      const custom = document.getElementById('canalSelectorCustom');
-      if (custom) {
-        custom.iframeRef = newIframe;
-        custom.loaderRef = loader;
-        custom.badgeRef = badge;
-      }
-    }, 400);
+    const newIframe = document.createElement('iframe');
+    newIframe.id = 'videoIframe';
+    newIframe.allow = 'picture-in-picture';
+    newIframe.setAttribute('playsinline', '');
+    newIframe.setAttribute('webkit-playsinline', '');
+    newIframe.setAttribute('allowfullscreen', '');
+    newIframe.style.width = '100%';
+    newIframe.style.height = '100%';
+    newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
+
+    newIframe.onload = () => {
+      loader.style.display = 'none';
+      badge.classList.add('visible');
+      console.log('Iframe recargado correctamente');
+    };
+
+    // Reemplazar el iframe viejo por el nuevo
+    iframeContainer.replaceChild(newIframe, iframe);
+
+    // ⚠️ Reasignar referencia global
+    window.videoIframe = newIframe;
   });
 
+  // Inicializar el selector después de crear todo
   initCustomSelector();
 }
 
-/* ---------------- Custom Selector (corregido) ---------------- */
+/* ---------------- Custom Selector ---------------- */
 function initCustomSelector() {
   const custom = document.getElementById('canalSelectorCustom');
   if (!custom) return;
@@ -576,6 +589,7 @@ function initCustomSelector() {
   const display = custom.querySelector('.selector-display');
   const options = custom.querySelector('.selector-options');
   const text = custom.querySelector('.selected-text');
+  let iframe = document.getElementById('videoIframe'); // <-- esta referencia se actualizará
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
   const toggleArrow = custom.querySelector('.arrow-toggle');
@@ -587,11 +601,15 @@ function initCustomSelector() {
   const canalSaved = localStorage.getItem('canalSeleccionado') || 'foxsports';
   let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
   if (currentIndex < 0) currentIndex = 0;
-  text.textContent = optionList[currentIndex]?.textContent || 'Canal';
-  optionList[currentIndex]?.classList.add('active-option');
 
+  text.textContent = optionList[currentIndex]?.textContent || 'Canal';
+  optionList[currentIndex].classList.add('active-option');
+
+  // === Actualizar selección ===
   const updateSelection = (index) => {
     if (index < 0 || index >= optionList.length) return;
+
+    // Actualizar visualmente
     optionList.forEach(o => o.classList.remove('active-option'));
     const selected = optionList[index];
     const value = selected.dataset.value;
@@ -599,25 +617,24 @@ function initCustomSelector() {
     text.textContent = selected.textContent;
     localStorage.setItem('canalSeleccionado', value);
 
-    // obtener el iframe actual *en el momento*
-    const iframeEl = document.getElementById('videoIframe');
-    if (!iframeEl) {
-      console.warn('No hay iframe en el DOM al intentar cambiar canal. Intenta recargar la página.');
-      return;
-    }
+    // Mostrar loader
+    loader.style.display = 'flex';
+    badge.classList.remove('visible');
 
-    // show loader + hide badge
-    if (loader) loader.style.display = 'flex';
-    if (badge) badge.classList.remove('visible');
+    // ⚠️ Asegurarnos de tener la referencia actualizada del iframe
+    iframe = document.getElementById('videoIframe');
 
-    // asignar nueva src (URL absoluta)
-    iframeEl.src = `https://la14hd.com/vivo/canales.php?stream=${encodeURIComponent(value)}&ts=${Date.now()}`;
+    // Cargar nuevo canal
+    iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
+    iframe.onload = () => {
+      loader.style.display = 'none';
+      badge.classList.add('visible');
+    };
 
-    // el onload del iframe existente se encargará de ocultar el loader y mostrar badge
     currentIndex = index;
   };
 
-  // Mostrar / ocultar lista (cerrada por defecto)
+  // Mostrar / ocultar lista
   display.addEventListener('click', () => {
     options.classList.toggle('hidden');
     toggleArrow.textContent = options.classList.contains('hidden') ? 'expand_more' : 'expand_less';
@@ -640,14 +657,14 @@ function initCustomSelector() {
     });
   });
 
-  /* --- Scroll manual corregido --- */
-  scrollUp?.addEventListener('click', (e) => {
+  // --- Scroll manual corregido ---
+  scrollUp.addEventListener('click', (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
     optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
   });
 
-  scrollDown?.addEventListener('click', (e) => {
+  scrollDown.addEventListener('click', (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
     const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
