@@ -124,7 +124,6 @@ height: auto;
     .card:hover, .card:active { background: var(--color-bg);}
     .card img{width:100%;height:145px;object-fit:cover;border-radius:8px;cursor:pointer}
     .card .iname{display:none}
-    .highlight { outline: 4px solid var(--highlight); border-radius:8px; box-shadow: 0 6px 18px rgba(255,216,77,0.16); }
 
     /* Notification & Video styles removed as requested */
 footer{
