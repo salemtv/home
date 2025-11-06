@@ -568,7 +568,7 @@ function renderEnVi() {
   initCustomSelector();
 }
 
-/* ---------------- Custom Selector ---------------- */
+/* ---------------- Custom Selector (corregido) ---------------- */
 function initCustomSelector() {
   const custom = document.getElementById('canalSelectorCustom');
   if (!custom) return;
@@ -578,25 +578,17 @@ function initCustomSelector() {
   const text = custom.querySelector('.selected-text');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
-  let iframe = document.getElementById('videoIframe');
   const toggleArrow = custom.querySelector('.arrow-toggle');
   const optionList = [...custom.querySelectorAll('.options-container div')];
   const scrollUp = custom.querySelector('.scroll-btn.up');
   const scrollDown = custom.querySelector('.scroll-btn.down');
   const optionsContainer = custom.querySelector('.options-container');
 
-  // Guardar referencias para reconectar tras recargar
-  custom.dataset.initialized = 'true';
-  custom.iframeRef = iframe;
-  custom.loaderRef = loader;
-  custom.badgeRef = badge;
-
-  // Cargar canal guardado
   const canalSaved = localStorage.getItem('canalSeleccionado') || 'foxsports';
   let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
   if (currentIndex < 0) currentIndex = 0;
   text.textContent = optionList[currentIndex]?.textContent || 'Canal';
-  optionList[currentIndex].classList.add('active-option');
+  optionList[currentIndex]?.classList.add('active-option');
 
   const updateSelection = (index) => {
     if (index < 0 || index >= optionList.length) return;
@@ -607,37 +599,31 @@ function initCustomSelector() {
     text.textContent = selected.textContent;
     localStorage.setItem('canalSeleccionado', value);
 
-    const oldIframe = custom.iframeRef || document.getElementById('videoIframe');
-    const newIframe = document.createElement('iframe');
-    newIframe.id = 'videoIframe';
-    newIframe.allow = 'picture-in-picture';
-    newIframe.playsInline = true;
-    newIframe.allowFullscreen = true;
-    newIframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
-
-    custom.loaderRef.style.display = 'flex';
-    custom.badgeRef.classList.remove('visible');
-
-    newIframe.onload = () => {
-      custom.loaderRef.style.display = 'none';
-      custom.badgeRef.classList.add('visible');
-    };
-
-    if (oldIframe && oldIframe.parentNode) {
-      oldIframe.parentNode.replaceChild(newIframe, oldIframe);
-      custom.iframeRef = newIframe; // ✅ actualizar referencia
+    // obtener el iframe actual *en el momento*
+    const iframeEl = document.getElementById('videoIframe');
+    if (!iframeEl) {
+      console.warn('No hay iframe en el DOM al intentar cambiar canal. Intenta recargar la página.');
+      return;
     }
+
+    // show loader + hide badge
+    if (loader) loader.style.display = 'flex';
+    if (badge) badge.classList.remove('visible');
+
+    // asignar nueva src (URL absoluta)
+    iframeEl.src = `https://la14hd.com/vivo/canales.php?stream=${encodeURIComponent(value)}&ts=${Date.now()}`;
+
+    // el onload del iframe existente se encargará de ocultar el loader y mostrar badge
+    currentIndex = index;
   };
 
-  // Mostrar / ocultar lista
+  // Mostrar / ocultar lista (cerrada por defecto)
   display.addEventListener('click', () => {
     options.classList.toggle('hidden');
-    toggleArrow.textContent = options.classList.contains('hidden')
-      ? 'expand_more'
-      : 'expand_less';
+    toggleArrow.textContent = options.classList.contains('hidden') ? 'expand_more' : 'expand_less';
   });
 
-  // Cerrar si se hace clic fuera
+  // Cerrar al hacer clic fuera
   document.addEventListener('click', (e) => {
     if (!custom.contains(e.target)) {
       options.classList.add('hidden');
@@ -654,14 +640,14 @@ function initCustomSelector() {
     });
   });
 
-  // --- Scroll manual mejorado ---
-  scrollUp.addEventListener('click', (e) => {
+  /* --- Scroll manual corregido --- */
+  scrollUp?.addEventListener('click', (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
     optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
   });
 
-  scrollDown.addEventListener('click', (e) => {
+  scrollDown?.addEventListener('click', (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
     const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
