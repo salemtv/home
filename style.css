@@ -513,6 +513,7 @@ font-size: 32px;
 .options-container {
   overflow-y: auto;
   max-height: 180px;
+  scroll-behavior: smooth;
 }
 
 .options-container div {
