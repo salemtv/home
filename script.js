@@ -469,7 +469,7 @@ function renderEnVi() {
       <div class="custom-selector" id="canalSelectorCustom">
         <div class="selector-display">
           <div class="selector-left">
-            <span style="font-size:20px" class="material-symbols-outlined">tv</span>
+            <span style="font-size:22px" class="material-symbols-outlined">home_max</span>
             <span class="selected-text highlight">L1 Max</span>
             <span id="liveBadge" class="live-badge"><span class="dot">●</span> LIVE</span>
           </div>
