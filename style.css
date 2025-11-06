@@ -113,22 +113,6 @@ height: auto;
     @keyframes spin{to{transform:rotate(360deg)}}
 
     .controls{display:flex;gap:8px;align-items:center;justify-content:space-between}
-/*
-    .selector-line{display:flex;align-items:center;gap:8px;background:var(--color-secondary);padding:0.6rem 1rem;border-radius:10px;width:100%;flex-wrap:wrap}
-    .selector{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
-    select{background:var(--color-button);color:white;border:none;padding:0.4rem 0.8rem;border-radius:6px;font-size:var(--font)}*/
-    .botonxtra{display:flex;align-items:center;gap:8px;justify-content:end;flex-direction:row;}
-    .live-badge{display: none;background:var(--color-accent);color:white;padding:4px 10px;border-radius:12px;font-size:var(--font-xs);font-weight:500;flex-shrink:0;}
-    .live-badge.visible{display:block}/**Arreglar en futuro**/
-.dot {
-  color: rgba(255,255,255,.9);
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
 
     .btn-icon{background:var(--color-secondary);color:white;padding:10px 12px;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;transition:background .3s}
     .btn-icon:active{transform: translateY(1px);background:var(--color-bg)}
@@ -252,55 +236,6 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 2px var(--color-bg); /* opcional, efecto sutil */
   outline: none !important;
 }
-
-/* === Selector personalizado moderno === */
-.custom-selector {
-  position: relative;
-  width: 100%;
-  user-select: none;
-}
-
-.selector-display {
-  background: var(--color-secondary);
-  border-radius: 10px;
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
-.selector-display .arrow {
-  font-size: 18px;
-  opacity: 0.7;
-}
-
-.selector-options {
-  position: absolute;
-  top: 105%;
-  left: 0;
-  right: 0;
-  background: var(--color-secondary);
-  border-radius: 10px;
-  box-shadow: 0 5px 18px rgba(0,0,0,0.3);
-  z-index: 99;
-  overflow: hidden;
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.selector-options div {
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.selector-options div:hover {
-  background: var(--color-bg);
-  color: white;
-}
-
-.hidden { display: none; }
 
 /* ===== Custom player styles (paste into your styles.css) ===== */
 .custom-player { position: relative; width:100%; height:100%; background:#000; overflow:hidden; display:flex; flex-direction:column; align-items:stretch; justify-content:center; }
@@ -482,38 +417,51 @@ font-size: 32px;
 }
 
 /* === Ajustes finales del selector === */
-
-.selected-text.highlight {
-  color: var(--color-accent);
-  font-weight: 600;
+/* === Selector personalizado moderno === */
+.custom-selector {
+  position: relative;
+  width: 100%;
+  user-select: none;
 }
 
-/* LIVE dentro del título */
+/* --- Encabezado del selector --- */
+.selector-display {
+  background: var(--color-secondary);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.selector-display:hover {
+  background: var(--color-bg);
+}
+
+/* --- Sección izquierda con texto e iconos --- */
 .selector-left {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.selector-display {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--color-secondary);
-  border-radius: 10px;
-  padding: 10px 12px;
-  cursor: pointer;
+.selected-text.highlight {
+  color: var(--color-accent);
+  font-weight: 600;
 }
 
+/* --- Flecha del encabezado --- */
 .arrow-toggle {
   font-size: 22px;
   opacity: 0.8;
   transition: transform 0.2s;
 }
 
-/* Dropdown relativo (no flotante) */
+/* --- Menú desplegable (modo relativo, empuja contenido) --- */
 .selector-options {
-  position: relative; /* en flujo */
+  position: relative; /* ya no flotante */
   background: var(--color-secondary);
   border-radius: 10px;
   box-shadow: 0 5px 18px rgba(0,0,0,0.3);
@@ -523,13 +471,14 @@ font-size: 32px;
   transition: max-height 0.3s ease;
 }
 
+/* Cuando está abierto */
 .selector-options:not(.hidden) {
   max-height: 250px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-/* Flechas dentro del menú */
+/* --- Flechas internas (scroll manual) --- */
 .scroll-btn {
   text-align: center;
   padding: 6px 0;
@@ -537,13 +486,18 @@ font-size: 32px;
   background: var(--color-accent);
   color: white;
   opacity: 0.9;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .scroll-btn:hover {
   opacity: 1;
+  background: var(--color-accent);
 }
 
+/* --- Contenedor de las opciones --- */
 .options-container {
   overflow-y: auto;
   max-height: 180px;
@@ -561,9 +515,49 @@ font-size: 32px;
   color: white;
 }
 
-/* Solo el seleccionado activo */
+/* Solo el seleccionado */
 .active-option {
   background: var(--color-accent);
   color: #fff;
 }
 
+/* Oculto */
+.hidden {
+  display: none;
+}
+
+/* --- LIVE Badge --- */
+.live-badge {
+  display: none;
+  background: var(--color-accent);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.live-badge.visible {
+  display: block;
+}
+
+/* Punto animado del LIVE */
+.dot {
+  color: rgba(255,255,255,.9);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* --- Contenedor extra de botones (como reload) --- */
+.botonxtra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: end;
+  flex-direction: row;
+}
