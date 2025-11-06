@@ -474,3 +474,85 @@ font-size: 32px;
   transform: scale(1.04);
   /**box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);**/
 }
+
+/* === Ajustes visuales nuevos === */
+/* Título de clase resaltado */
+.selected-text.highlight {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* LIVE dentro del título */
+.selector-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.selector-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-secondary);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.arrow-toggle {
+  font-size: 22px;
+  opacity: 0.8;
+  transition: transform 0.2s;
+}
+
+/* Botón remoto */
+#remoteBtn.active {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* Flechas dentro del menú desplegable */
+.selector-options {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  right: 0;
+  background: var(--color-secondary);
+  border-radius: 10px;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+  z-index: 99;
+  overflow: hidden;
+  max-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.selector-options .scroll-btn {
+  text-align: center;
+  padding: 6px 0;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.selector-options .scroll-btn:hover {
+  background: var(--color-bg);
+  opacity: 1;
+}
+
+.options-container {
+  overflow-y: auto;
+  max-height: 180px;
+}
+
+.options-container div {
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.options-container div:hover {
+  background: var(--color-bg);
+  color: white;
+}
+
