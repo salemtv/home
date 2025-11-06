@@ -545,24 +545,43 @@ function renderEnVi() {
   if (badge) badge.classList.remove('visible');
 
   const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
-  
+
+  // Asegurarnos de la URL completa (usa https:// si tu servidor usa https)
+  const srcUrl = (canalActual.startsWith('http://') || canalActual.startsWith('https://'))
+    ? canalActual
+    : `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
+
   // Crear un nuevo iframe limpio
   const newIframe = document.createElement('iframe');
   newIframe.id = 'videoIframe';
-  newIframe.allow = 'picture-in-picture';
-  newIframe.playsInline = true;
+  newIframe.setAttribute('allow', 'picture-in-picture');
+  newIframe.setAttribute('playsinline', '');
   newIframe.setAttribute('webkit-playsinline', '');
-  newIframe.allowFullscreen = true;
-  newIframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalActual}?reload=${Date.now()}`;
+  newIframe.setAttribute('allowfullscreen', '');
+  newIframe.style.width = '100%';
+  newIframe.style.height = '100%';
+  newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
 
-  // Reemplazar el iframe anterior
-  iframe.parentNode.replaceChild(newIframe, iframe);
-
-  // Actualizar la referencia y restaurar comportamiento del loader
+  // Manejadores para mostrar/ocultar loader y badge
   newIframe.onload = () => {
     if (loader) loader.style.display = 'none';
     if (badge) badge.classList.add('visible');
+    console.log('iframe cargado:', newIframe.src);
   };
+  newIframe.onerror = (err) => {
+    if (loader) loader.style.display = 'none';
+    console.error('Error al cargar iframe:', newIframe.src, err);
+  };
+
+  // Reemplazar el iframe anterior
+  const oldIframe = document.getElementById('videoIframe');
+  if (oldIframe && oldIframe.parentNode) {
+    oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+  } else {
+    // fallback: añadir donde estaba el .iframe-container
+    const containerEl = document.querySelector('.iframe-container');
+    if (containerEl) containerEl.appendChild(newIframe);
+  }
 });
 
   initCustomSelector();
