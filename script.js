@@ -477,7 +477,7 @@ function renderEnVi() {
         </div>
 
         <div class="selector-options hidden">
-          <span class="scroll-btn up material-symbols-outlined">expand_less</span>
+          <span class="scroll-btn up material-symbols-outlined">top_panel_open</span>
           <div class="options-container">
             <div data-value="beinsportes">BeiN Sports</div>
 <div data-value="beinsport_xtra_espanol">BeiN Sports Xtra</div>
@@ -517,7 +517,7 @@ function renderEnVi() {
 <div data-value="telefe">Telefe</div>
 <div data-value="tycsports">TyC Sports</div>
           </div>
-          <span class="scroll-btn down material-symbols-outlined">expand_more</span>
+          <span class="scroll-btn down material-symbols-outlined">top_panel_close</span>
         </div>
       </div>
 
