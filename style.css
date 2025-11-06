@@ -442,7 +442,7 @@ font-size: 32px;
 }
 
 .selector-display:hover {
-  background: var(--color-bg);
+  background: ;/**/
 }
 .selector-display:hover .live-badge {
     background: var(color-text);
@@ -506,7 +506,7 @@ font-size: 32px;
 
 .scroll-btn:hover {
   opacity: 1;
-  background: var(--color-accent);
+  background:;/**/
 }
 
 /* --- Contenedor de las opciones --- */
@@ -557,7 +557,7 @@ font-size: 32px;
 
 /* Punto animado del LIVE */
 .dot {
-  color: var(--color-bg);
+  color: white;
   animation: blink 1s infinite;
 }
 
