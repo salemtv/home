@@ -562,7 +562,6 @@ font-size: 32px;
 .dot {
   color: white;
   animation: blink 1s infinite;
-  font-size: 22px;
 }
 
 @keyframes blink {
