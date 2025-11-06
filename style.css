@@ -56,7 +56,7 @@ width: 100%;
     /* prevent image drag */
     img { -webkit-user-drag: none; user-drag: none; pointer-events: auto;}
 
-    /* Sticky Header */
+    /* Sticky Header
     header{
       background:var(--color-primary);
       padding:1rem;
@@ -92,6 +92,20 @@ height: auto;
       background:var(--color-blur);
       padding:8px 1rem;
       backdrop-filter: blur(4px);
+    }
+    .tabs img{height:40px}
+    .tabs .center {
+        position: relative;
+        }
+    .tabs .title {
+        background: var(--color-bg);
+        font-size: var(--font-xxs);
+        padding: 1px 3px;
+        position: absolute;
+        border-radius: 4px;
+        top: 1px;
+        right: -5px;
+        font-weight: bold;
     }
     .tabs-inner {
       max-width:1000px;margin:0 auto;display:flex;gap:8px;align-items:center;
