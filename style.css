@@ -556,7 +556,7 @@ font-size: 32px;
 
 /* Punto animado del LIVE */
 .dot {
-  color: rgba(255,255,255,.9);
+  color: var(--color-bg);
   animation: blink 1s infinite;
 }
 
