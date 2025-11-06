@@ -561,7 +561,7 @@ font-size: 32px;
 /* Punto animado del LIVE */
 .dot {
   color: white;
-  animation: blink 2s infinite;
+  animation: blink 1s infinite;
 }
 
 @keyframes blink {
