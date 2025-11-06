@@ -448,6 +448,10 @@ font-size: 32px;
 .selector-display:hover {
   background: var(--color-bg);
 }
+.selector-display:hover .live-badge {
+    background: var(color-text);
+    color: var(color-bg);
+    }
 
 /* --- Sección izquierda con texto e iconos --- */
 .selector-left {
@@ -542,9 +546,9 @@ font-size: 32px;
 /* --- LIVE Badge --- */
 .live-badge {
   display: none;
-  background: var(--color-text);
-  color: var(--color-secondary);
-  padding: 3px 7px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: 3px 5px;
   border-radius: 12px;
   font-size: var(--font-xxs);
   font-weight: 500;
