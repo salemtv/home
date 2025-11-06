@@ -456,10 +456,9 @@ document.head.appendChild(style);
   }catch(e){console.warn(e);}
 })();
 
-
 /* ---------------- EnVi ---------------- */
 function renderEnVi() {
-  const p = PAGES.envi || { title: 'Channels', defaultStream: 'foxsports' };
+  const p = PAGES.envi || { title: 'Class', defaultStream: 'foxsports' };
   const container = document.createElement('div');
   container.innerHTML = `
     <h3 style="margin-bottom:8px">${p.title}</h3>
@@ -481,7 +480,7 @@ function renderEnVi() {
         <div class="selector-options hidden">
           <span class="scroll-btn up material-symbols-outlined">expand_less</span>
           <div class="options-container">
-           <div data-value="beinsportes">BeiN Sports</div>
+            <div data-value="beinsportes">BeiN Sports</div>
 <div data-value="beinsport_xtra_espanol">BeiN Sports Xtra</div>
 <div data-value="disney4">Disney 1</div>
 <div data-value="disney8">Disney 2</div>
@@ -527,9 +526,6 @@ function renderEnVi() {
         <button class="btn-icon" id="reloadBtn" title="Recargar canal">
           <span class="material-symbols-outlined">autoplay</span>
         </button>
-        <button class="btn-icon" id="remoteBtn" title="Modo TV" style="display:none">
-          <span class="material-symbols-outlined">remote</span>
-        </button>
       </div>
     </div>
   `;
@@ -540,7 +536,10 @@ function renderEnVi() {
   const badge = document.getElementById('liveBadge');
   const canalSaved = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
   iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
-  iframe.onload = () => { if (loader) loader.style.display='none'; if (badge) badge.classList.add('visible'); }
+  iframe.onload = () => {
+    if (loader) loader.style.display = 'none';
+    if (badge) badge.classList.add('visible');
+  };
 
   document.getElementById('reloadBtn').addEventListener('click', () => {
     if (loader) loader.style.display = 'flex';
@@ -548,16 +547,11 @@ function renderEnVi() {
     iframe.src = iframe.src.split('?')[0] + '?_=' + Date.now();
   });
 
-  // Detectar si es TV o modo remoto
-  const isTV = /tv|smart|tizen|netcast|viera|bravia/i.test(navigator.userAgent);
-  const remoteBtn = document.getElementById('remoteBtn');
-  if (isTV) remoteBtn.style.display = 'flex';
-
-  initCustomSelector(isTV);
+  initCustomSelector();
 }
 
 /* ---------------- Custom Selector ---------------- */
-function initCustomSelector(isTV = false) {
+function initCustomSelector() {
   const custom = document.getElementById('canalSelectorCustom');
   if (!custom) return;
 
@@ -577,11 +571,14 @@ function initCustomSelector(isTV = false) {
   let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
   if (currentIndex < 0) currentIndex = 0;
   text.textContent = optionList[currentIndex]?.textContent || 'Canal';
+  optionList[currentIndex].classList.add('active-option');
 
   const updateSelection = (index) => {
     if (index < 0 || index >= optionList.length) return;
+    optionList.forEach(o => o.classList.remove('active-option'));
     const selected = optionList[index];
     const value = selected.dataset.value;
+    selected.classList.add('active-option');
     text.textContent = selected.textContent;
     localStorage.setItem('canalSeleccionado', value);
     loader.style.display = 'flex';
@@ -590,11 +587,12 @@ function initCustomSelector(isTV = false) {
     currentIndex = index;
   };
 
-  // Mostrar / ocultar lista
+  // Mostrar / ocultar lista (cerrada por defecto)
   display.addEventListener('click', () => {
-    const hidden = options.classList.contains('hidden');
     options.classList.toggle('hidden');
-    toggleArrow.textContent = hidden ? 'expand_less' : 'expand_more';
+    toggleArrow.textContent = options.classList.contains('hidden')
+      ? 'expand_more'
+      : 'expand_less';
   });
 
   // Cerrar al hacer clic fuera
@@ -605,7 +603,7 @@ function initCustomSelector(isTV = false) {
     }
   });
 
-  // Clic en opciones
+  // Seleccionar opción
   optionList.forEach((opt, i) => {
     opt.addEventListener('click', () => {
       updateSelection(i);
@@ -622,26 +620,6 @@ function initCustomSelector(isTV = false) {
   scrollDown.addEventListener('click', (e) => {
     e.stopPropagation();
     optionsContainer.scrollBy({ top: 40, behavior: 'smooth' });
-  });
-
-  // Teclas físicas (modo TV o activado)
-  const remoteBtn = document.getElementById('remoteBtn');
-  let remoteActive = false;
-
-  remoteBtn?.addEventListener('click', () => {
-    remoteActive = !remoteActive;
-    remoteBtn.classList.toggle('active', remoteActive);
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (!remoteActive) return;
-    if (e.key === 'ArrowUp') updateSelection(currentIndex - 1);
-    if (e.key === 'ArrowDown') updateSelection(currentIndex + 1);
-    if (e.key === 'Enter') {
-      const hidden = options.classList.contains('hidden');
-      options.classList.toggle('hidden');
-      toggleArrow.textContent = hidden ? 'expand_less' : 'expand_more';
-    }
   });
 }
 
