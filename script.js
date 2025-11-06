@@ -471,7 +471,7 @@ function renderEnVi() {
           <div class="selector-left">
             <span style="font-size:22px" class="material-symbols-outlined">home_max</span>
             <span class="selected-text highlight">L1 Max</span>
-            <span id="liveBadge" class="live-badge"><span class="dot">●</span> LIVE</span>
+            <span id="liveBadge" class="live-badge"><span class="dot">•</span> LIVE</span>
           </div>
           <span class="material-symbols-outlined arrow-toggle">expand_more</span>
         </div>
