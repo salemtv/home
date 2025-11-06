@@ -530,54 +530,60 @@ function renderEnVi() {
   `;
   main.appendChild(container);
 
-  // --- Referencias ---
-  const iframeContainer = container.querySelector('.iframe-container');
-  const iframe = container.querySelector('#videoIframe');
-  const loader = container.querySelector('#loader');
-  const badge = container.querySelector('#liveBadge');
-
-  // --- Canal inicial ---
+  const iframe = document.getElementById('videoIframe');
+  const loader = document.getElementById('loader');
+  const badge = document.getElementById('liveBadge');
   const canalSaved = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
   iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
   iframe.onload = () => {
-    loader.style.display = 'none';
-    badge.classList.add('visible');
+    if (loader) loader.style.display = 'none';
+    if (badge) badge.classList.add('visible');
   };
 
-  // --- Botón recargar ---
   document.getElementById('reloadBtn').addEventListener('click', () => {
-    loader.style.display = 'flex';
-    badge.classList.remove('visible');
+  if (loader) loader.style.display = 'flex';
+  if (badge) badge.classList.remove('visible');
 
-    const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
-    const srcUrl = (canalActual.startsWith('http://') || canalActual.startsWith('https://'))
-      ? canalActual
-      : `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
+  const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
 
-    const newIframe = document.createElement('iframe');
-    newIframe.id = 'videoIframe';
-    newIframe.allow = 'picture-in-picture';
-    newIframe.setAttribute('playsinline', '');
-    newIframe.setAttribute('webkit-playsinline', '');
-    newIframe.setAttribute('allowfullscreen', '');
-    newIframe.style.width = '100%';
-    newIframe.style.height = '100%';
-    newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
+  // Asegurarnos de la URL completa (usa https:// si tu servidor usa https)
+  const srcUrl = (canalActual.startsWith('http://') || canalActual.startsWith('https://'))
+    ? canalActual
+    : `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
 
-    newIframe.onload = () => {
-      loader.style.display = 'none';
-      badge.classList.add('visible');
-      console.log('Iframe recargado correctamente');
-    };
+  // Crear un nuevo iframe limpio
+  const newIframe = document.createElement('iframe');
+  newIframe.id = 'videoIframe';
+  newIframe.setAttribute('allow', 'picture-in-picture');
+  newIframe.setAttribute('playsinline', '');
+  newIframe.setAttribute('webkit-playsinline', '');
+  newIframe.setAttribute('allowfullscreen', '');
+  newIframe.style.width = '100%';
+  newIframe.style.height = '100%';
+  newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
 
-    // Reemplazar el iframe viejo por el nuevo
-    iframeContainer.replaceChild(newIframe, iframe);
+  // Manejadores para mostrar/ocultar loader y badge
+  newIframe.onload = () => {
+    if (loader) loader.style.display = 'none';
+    if (badge) badge.classList.add('visible');
+    console.log('iframe cargado:', newIframe.src);
+  };
+  newIframe.onerror = (err) => {
+    if (loader) loader.style.display = 'none';
+    console.error('Error al cargar iframe:', newIframe.src, err);
+  };
 
-    // ⚠️ Reasignar referencia global
-    window.videoIframe = newIframe;
-  });
+  // Reemplazar el iframe anterior
+  const oldIframe = document.getElementById('videoIframe');
+  if (oldIframe && oldIframe.parentNode) {
+    oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+  } else {
+    // fallback: añadir donde estaba el .iframe-container
+    const containerEl = document.querySelector('.iframe-container');
+    if (containerEl) containerEl.appendChild(newIframe);
+  }
+});
 
-  // Inicializar el selector después de crear todo
   initCustomSelector();
 }
 
@@ -589,7 +595,7 @@ function initCustomSelector() {
   const display = custom.querySelector('.selector-display');
   const options = custom.querySelector('.selector-options');
   const text = custom.querySelector('.selected-text');
-  let iframe = document.getElementById('videoIframe'); // <-- esta referencia se actualizará
+  const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
   const toggleArrow = custom.querySelector('.arrow-toggle');
@@ -601,43 +607,29 @@ function initCustomSelector() {
   const canalSaved = localStorage.getItem('canalSeleccionado') || 'foxsports';
   let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
   if (currentIndex < 0) currentIndex = 0;
-
   text.textContent = optionList[currentIndex]?.textContent || 'Canal';
   optionList[currentIndex].classList.add('active-option');
 
-  // === Actualizar selección ===
   const updateSelection = (index) => {
     if (index < 0 || index >= optionList.length) return;
-
-    // Actualizar visualmente
     optionList.forEach(o => o.classList.remove('active-option'));
     const selected = optionList[index];
     const value = selected.dataset.value;
     selected.classList.add('active-option');
     text.textContent = selected.textContent;
     localStorage.setItem('canalSeleccionado', value);
-
-    // Mostrar loader
     loader.style.display = 'flex';
     badge.classList.remove('visible');
-
-    // ⚠️ Asegurarnos de tener la referencia actualizada del iframe
-    iframe = document.getElementById('videoIframe');
-
-    // Cargar nuevo canal
     iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
-    iframe.onload = () => {
-      loader.style.display = 'none';
-      badge.classList.add('visible');
-    };
-
     currentIndex = index;
   };
 
-  // Mostrar / ocultar lista
+  // Mostrar / ocultar lista (cerrada por defecto)
   display.addEventListener('click', () => {
     options.classList.toggle('hidden');
-    toggleArrow.textContent = options.classList.contains('hidden') ? 'expand_more' : 'expand_less';
+    toggleArrow.textContent = options.classList.contains('hidden')
+      ? 'expand_more'
+      : 'expand_less';
   });
 
   // Cerrar al hacer clic fuera
@@ -657,19 +649,19 @@ function initCustomSelector() {
     });
   });
 
-  // --- Scroll manual corregido ---
-  scrollUp.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const optionHeight = optionList[0]?.offsetHeight || 40;
-    optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
-  });
+  /* --- Scroll manual corregido --- */
+scrollUp.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const optionHeight = optionList[0]?.offsetHeight || 40;
+  optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
+});
 
-  scrollDown.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const optionHeight = optionList[0]?.offsetHeight || 40;
-    const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
-    optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
-  });
+scrollDown.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const optionHeight = optionList[0]?.offsetHeight || 40;
+  const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
+  optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
+});
 }
 
 /* ---------------- EnVi 2 ---------------- */
