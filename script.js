@@ -469,7 +469,7 @@ function renderEnVi() {
       <div class="custom-selector" id="canalSelectorCustom">
         <div class="selector-display">
           <div class="selector-left">
-            <span style="font-size:22px" class="material-symbols-outlined">mimo</span>
+            <span style="font-size:22px" class="material-symbols-outlined">smart_display</span>
             <span class="selected-text highlight">L1 Max</span>
             <span id="liveBadge" class="live-badge"><span class="dot">LIVE</span></span>
           </div>
@@ -523,7 +523,7 @@ function renderEnVi() {
 
       <div class="botonxtra">
         <button class="btn-icon" id="reloadBtn" title="Recargar canal">
-          <span class="material-symbols-outlined">autoplay</span>
+          <span class="material-symbols-outlined">refresh</span>
         </button>
       </div>
     </div>
