@@ -469,15 +469,15 @@ function renderEnVi() {
       <div class="custom-selector" id="canalSelectorCustom">
         <div class="selector-display">
           <div class="selector-left">
-            <span style="font-size:22px" class="material-symbols-outlined">home_max</span>
+            <span style="font-size:22px" class="material-symbols-outlined">mimo</span>
             <span class="selected-text highlight">L1 Max</span>
             <span id="liveBadge" class="live-badge"><span class="dot">LIVE</span></span>
           </div>
-          <span class="material-symbols-outlined arrow-toggle">expand_more</span>
+          <span class="material-symbols-outlined arrow-toggle">top_panel_open</span>
         </div>
 
         <div class="selector-options hidden">
-          <span class="scroll-btn up material-symbols-outlined">top_panel_open</span>
+          <span class="scroll-btn up material-symbols-outlined">expand_more</span>
           <div class="options-container">
             <div data-value="beinsportes">BeiN Sports</div>
 <div data-value="beinsport_xtra_espanol">BeiN Sports Xtra</div>
@@ -517,7 +517,7 @@ function renderEnVi() {
 <div data-value="telefe">Telefe</div>
 <div data-value="tycsports">TyC Sports</div>
           </div>
-          <span class="scroll-btn down material-symbols-outlined">top_panel_close</span>
+          <span class="scroll-btn down material-symbols-outlined">expand_less</span>
         </div>
       </div>
 
@@ -590,15 +590,15 @@ function initCustomSelector() {
   display.addEventListener('click', () => {
     options.classList.toggle('hidden');
     toggleArrow.textContent = options.classList.contains('hidden')
-      ? 'expand_more'
-      : 'expand_less';
+      ? 'top_panel_open'
+      : 'top_panel_close';
   });
 
   // Cerrar al hacer clic fuera
   document.addEventListener('click', (e) => {
     if (!custom.contains(e.target)) {
       options.classList.add('hidden');
-      toggleArrow.textContent = 'expand_more';
+      toggleArrow.textContent = 'top_panel_open';
     }
   });
 
@@ -607,7 +607,7 @@ function initCustomSelector() {
     opt.addEventListener('click', () => {
       updateSelection(i);
       options.classList.add('hidden');
-      toggleArrow.textContent = 'expand_more';
+      toggleArrow.textContent = 'top_panel_open';
     });
   });
 
