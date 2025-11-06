@@ -547,7 +547,7 @@ font-size: 32px;
   display: none;
   background: var(--color-bg);
   color: var(--color-text);
-  padding: 2px 5px;
+  padding: 2px 6px;
   border-radius: 12px;
   font-size: var(--font-xxs);
   font-weight: 600;
@@ -561,7 +561,7 @@ font-size: 32px;
 /* Punto animado del LIVE */
 .dot {
   color: white;
-  animation: blink 1s infinite;
+  animation: blink 2s infinite;
 }
 
 @keyframes blink {
@@ -580,6 +580,6 @@ font-size: 32px;
 }
    .btn-icon{background:var(--color-secondary);color:white;padding:10px 12px;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;transition:background .3s}
     .btn-icon:active{transform: translateY(1px);background:var(--color-bg)}
-    .material-symbols-outlined{font-size:20px;display:inline-block}
+    .material-symbols-outlined{font-size:22px;display:inline-block}
 
  
