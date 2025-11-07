@@ -470,7 +470,7 @@ function renderEnVi() {
         <div class="selector-display">
           <div class="selector-left">
             <span style="font-size:22px" class="material-symbols-outlined">mimo</span>
-            <span class="selected-text highlight">L1 Max</span>
+            <span class="selected-text highlight">Fox Sports</span>
             <span id="liveBadge" class="live-badge"><span class="dot">LIVE</span></span>
           </div>
           <span class="material-symbols-outlined arrow-toggle">expand_more</span>
@@ -660,11 +660,10 @@ function initCustomSelector() {
 }
 
 /* ---------------- EnVi 2 ---------------- */
-function renderEnVi2(){
-  const p = {title:'Latam TV', defaultStream:'history'};
+function renderEnVi2() {
+  const p = PAGES.envi2 || { title: 'Channels', defaultStream: 'history' };
   const container = document.createElement('div');
   container.innerHTML = `
-    <h3 style="margin-bottom:8px">${p.title}</h3>
     <div class="iframe-container">
       <div class="loader" id="loader2"><span></span></div>
       <iframe id="videoIframe2" allow="picture-in-picture" playsinline webkit-playsinline allowfullscreen></iframe>
@@ -672,12 +671,18 @@ function renderEnVi2(){
     <div class="controls" style="margin-top:8px">
       <div class="custom-selector" id="canalSelectorCustom2">
         <div class="selector-display">
-          <span style="font-size: 20px" class="material-symbols-outlined">tv</span>
-          <span class="selected-text">History</span>
-          <span class="material-symbols-outlined arrow">expand_more</span>
+          <div class="selector-left">
+            <span style="font-size:22px" class="material-symbols-outlined">mimo</span>
+            <span class="selected-text highlight">History</span>
+            <span id="liveBadge2" class="live-badge"><span class="dot">LIVE</span></span>
+          </div>
+          <span class="material-symbols-outlined arrow-toggle">expand_more</span>
         </div>
+
         <div class="selector-options hidden">
-<div data-value="americatv">America TV</div>
+          <span class="scroll-btn up material-symbols-outlined">expand_less</span>
+          <div class="options-container">
+            <div data-value="americatv">America TV</div>
 <div data-value="animalplanet">Animal Planet</div>
 <div data-value="atv">ATV</div>
 <div data-value="axn">AXN</div>
@@ -691,7 +696,6 @@ function renderEnVi2(){
 <div data-value="disneychannel">Disney Channel</div>
 <div data-value="disneyjr">Disney Junior</div>
 <div data-value="fx">FX</div>
-
 <div data-value="goldenedge">GOLDEN EDGE</div>
 <div data-value="goldenplus">GOLDEN PLUS</div>
 <div data-value="goldenpremier">GOLDEN PREMIER</div>
@@ -713,12 +717,14 @@ function renderEnVi2(){
 <div data-value="tooncast">TOONCAST</div>
 <div data-value="universalchannel">UNIVERSAL TV</div>
 <div data-value="willax">Willax TV</div>
+          </div>
+          <span class="scroll-btn down material-symbols-outlined">expand_more</span>
         </div>
       </div>
+
       <div class="botonxtra">
-        <span id="liveBadge2" class="live-badge"><span class="dot">●</span> LIVE</span>
         <button class="btn-icon" id="reloadBtn2" title="Recargar canal">
-          <span class="material-symbols-outlined">autoplay</span>
+          <span class="material-symbols-outlined">refresh</span>
         </button>
       </div>
     </div>
@@ -729,13 +735,43 @@ function renderEnVi2(){
   const loader = document.getElementById('loader2');
   const badge = document.getElementById('liveBadge2');
   const canalSaved = localStorage.getItem('canalSeleccionado2') || p.defaultStream || 'history';
-  iframe.src = `https://embed.saohgdasregions.fun/embed/${canalSaved}.html`;
-  iframe.onload = () => { if (loader) loader.style.display='none'; if (badge) badge.classList.add('visible'); }
 
+  iframe.src = `https://embed.saohgdasregions.fun/embed/${canalSaved}.html`;
+  iframe.onload = () => {
+    if (loader) loader.style.display = 'none';
+    if (badge) badge.classList.add('visible');
+  };
+
+  // 🔁 Botón recargar (versión estable y compatible con menú)
   document.getElementById('reloadBtn2').addEventListener('click', () => {
     if (loader) loader.style.display = 'flex';
     if (badge) badge.classList.remove('visible');
-    iframe.src = iframe.src.split('?')[0] + '?_=' + Date.now();
+
+    const canalActual = localStorage.getItem('canalSeleccionado2') || p.defaultStream || 'history';
+    const srcUrl = `https://embed.saohgdasregions.fun/embed/${canalActual}.html`;
+
+    const newIframe = document.createElement('iframe');
+    newIframe.id = 'videoIframe2';
+    newIframe.allow = 'picture-in-picture';
+    newIframe.setAttribute('playsinline', '');
+    newIframe.setAttribute('webkit-playsinline', '');
+    newIframe.setAttribute('allowfullscreen', '');
+    newIframe.style.width = '100%';
+    newIframe.style.height = '100%';
+    newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
+
+    newIframe.onload = () => {
+      if (loader) loader.style.display = 'none';
+      if (badge) badge.classList.add('visible');
+    };
+
+    const oldIframe = document.getElementById('videoIframe2');
+    if (oldIframe && oldIframe.parentNode) {
+      oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+    }
+
+    // ✅ Re-inicializamos los eventos del selector con un pequeño retraso
+    setTimeout(() => initCustomSelector2(), 50);
   });
 
   initCustomSelector2();
@@ -745,37 +781,83 @@ function renderEnVi2(){
 function initCustomSelector2() {
   const custom = document.getElementById('canalSelectorCustom2');
   if (!custom) return;
+
   const display = custom.querySelector('.selector-display');
   const options = custom.querySelector('.selector-options');
   const text = custom.querySelector('.selected-text');
-  const iframe = document.getElementById('videoIframe2');
   const loader = document.getElementById('loader2');
   const badge = document.getElementById('liveBadge2');
+  const toggleArrow = custom.querySelector('.arrow-toggle');
+  const optionList = [...custom.querySelectorAll('.options-container div')];
+  const scrollUp = custom.querySelector('.scroll-btn.up');
+  const scrollDown = custom.querySelector('.scroll-btn.down');
+  const optionsContainer = custom.querySelector('.options-container');
 
   const canalSaved = localStorage.getItem('canalSeleccionado2') || 'history';
-  const currentOption = options.querySelector(`[data-value="${canalSaved}"]`);
-  if (currentOption) text.textContent = currentOption.textContent;
+  let currentIndex = optionList.findIndex(opt => opt.dataset.value === canalSaved);
+  if (currentIndex < 0) currentIndex = 0;
+  text.textContent = optionList[currentIndex]?.textContent || 'Canal';
+  optionList[currentIndex].classList.add('active-option');
 
-  display.addEventListener('click', () => {
+  const updateSelection = (index) => {
+    if (index < 0 || index >= optionList.length) return;
+
+    optionList.forEach(o => o.classList.remove('active-option'));
+    const selected = optionList[index];
+    const value = selected.dataset.value;
+    selected.classList.add('active-option');
+    text.textContent = selected.textContent;
+    localStorage.setItem('canalSeleccionado2', value);
+
+    if (loader) loader.style.display = 'flex';
+    if (badge) badge.classList.remove('visible');
+
+    const iframe = document.getElementById('videoIframe2');
+    if (iframe) {
+      iframe.src = `https://embed.saohgdasregions.fun/embed/${value}.html&v=${Date.now()}`;
+    }
+
+    currentIndex = index;
+  };
+
+  // Mostrar / ocultar lista
+  display.onclick = () => {
     options.classList.toggle('hidden');
-  });
+    toggleArrow.textContent = options.classList.contains('hidden')
+      ? 'expand_more'
+      : 'expand_less';
+  };
 
-  options.querySelectorAll('div').forEach(opt => {
-    opt.addEventListener('click', e => {
-      const value = e.target.dataset.value;
-      const label = e.target.textContent;
-      text.textContent = label;
+  // Cerrar al hacer clic fuera
+  document.addEventListener('click', (e) => {
+    if (!custom.contains(e.target)) {
       options.classList.add('hidden');
-      localStorage.setItem('canalSeleccionado2', value);
-      if (loader) loader.style.display = 'flex';
-      if (badge) badge.classList.remove('visible');
-      iframe.src = `https://embed.saohgdasregions.fun/embed/${value}.html`;
-    });
+      toggleArrow.textContent = 'expand_more';
+    }
   });
 
-  document.addEventListener('click', e => {
-    if (!custom.contains(e.target)) options.classList.add('hidden');
+  // Seleccionar opción
+  optionList.forEach((opt, i) => {
+    opt.onclick = () => {
+      updateSelection(i);
+      options.classList.add('hidden');
+      toggleArrow.textContent = 'expand_more';
+    };
   });
+
+  // Scroll manual
+  scrollUp.onclick = (e) => {
+    e.stopPropagation();
+    const optionHeight = optionList[0]?.offsetHeight || 40;
+    optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
+  };
+
+  scrollDown.onclick = (e) => {
+    e.stopPropagation();
+    const optionHeight = optionList[0]?.offsetHeight || 40;
+    const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
+    optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
+  };
 }
 /* ---------------- Tabs, history, swipe ---------------- */
 tabs.forEach(t => t.addEventListener('click', ()=> setActiveTab(t.dataset.tab)));
