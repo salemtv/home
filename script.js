@@ -736,7 +736,7 @@ function renderEnVi2() {
   const badge = document.getElementById('liveBadge2');
   const canalSaved = localStorage.getItem('canalSeleccionado2') || p.defaultStream || 'history';
 
-  iframe.src = `https://embed.saohgdasregions.fun/embed/${canalSaved}`;
+  iframe.src = `https://embed.saohgdasregions.fun/embed/${canalSaved}.html`;
   iframe.onload = () => {
     if (loader) loader.style.display = 'none';
     if (badge) badge.classList.add('visible');
@@ -747,7 +747,7 @@ function renderEnVi2() {
     if (badge) badge.classList.remove('visible');
 
     const canalActual = localStorage.getItem('canalSeleccionado2') || p.defaultStream || 'history';
-    const srcUrl = `https://embed.saohgdasregions.fun/embed/${canalActual}`;
+    const srcUrl = `https://embed.saohgdasregions.fun/embed/${canalActual}.html`;
 
     const newIframe = document.createElement('iframe');
     newIframe.id = 'videoIframe2';
@@ -813,7 +813,7 @@ function initCustomSelector2() {
 
     const iframe = document.getElementById('videoIframe2');
     if (iframe) {
-      iframe.src = `https://embed.saohgdasregions.fun/embed/${value}.html&v=${Date.now()}`;
+      iframe.src = `https://embed.saohgdasregions.fun/embed/${value}.html?v=${Date.now()}`;
     }
 
     currentIndex = index;
