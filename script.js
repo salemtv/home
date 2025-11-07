@@ -661,7 +661,7 @@ function initCustomSelector() {
 
 /* ---------------- EnVi 2 ---------------- */
 function renderEnVi2() {
-  const p = PAGES.envi2 || { title: 'Channels', defaultStream: 'history' };
+  const p = PAGES.envi2 || { title: 'Channels 2', defaultStream: 'history' };
   const container = document.createElement('div');
   container.innerHTML = `
     <div class="iframe-container">
@@ -736,19 +736,18 @@ function renderEnVi2() {
   const badge = document.getElementById('liveBadge2');
   const canalSaved = localStorage.getItem('canalSeleccionado2') || p.defaultStream || 'history';
 
-  iframe.src = `https://embed.saohgdasregions.fun/embed/${canalSaved}.html`;
+  iframe.src = `https://embed.saohgdasregions.fun/embed/${canalSaved}`;
   iframe.onload = () => {
     if (loader) loader.style.display = 'none';
     if (badge) badge.classList.add('visible');
   };
 
-  // 🔁 Botón recargar (versión estable y compatible con menú)
   document.getElementById('reloadBtn2').addEventListener('click', () => {
     if (loader) loader.style.display = 'flex';
     if (badge) badge.classList.remove('visible');
 
     const canalActual = localStorage.getItem('canalSeleccionado2') || p.defaultStream || 'history';
-    const srcUrl = `https://embed.saohgdasregions.fun/embed/${canalActual}.html`;
+    const srcUrl = `https://embed.saohgdasregions.fun/embed/${canalActual}`;
 
     const newIframe = document.createElement('iframe');
     newIframe.id = 'videoIframe2';
@@ -770,12 +769,12 @@ function renderEnVi2() {
       oldIframe.parentNode.replaceChild(newIframe, oldIframe);
     }
 
-    // ✅ Re-inicializamos los eventos del selector con un pequeño retraso
     setTimeout(() => initCustomSelector2(), 50);
   });
 
   initCustomSelector2();
 }
+
 
 /* ---------------- Custom Selector 2 ---------------- */
 function initCustomSelector2() {
@@ -820,7 +819,6 @@ function initCustomSelector2() {
     currentIndex = index;
   };
 
-  // Mostrar / ocultar lista
   display.onclick = () => {
     options.classList.toggle('hidden');
     toggleArrow.textContent = options.classList.contains('hidden')
@@ -828,7 +826,6 @@ function initCustomSelector2() {
       : 'expand_less';
   };
 
-  // Cerrar al hacer clic fuera
   document.addEventListener('click', (e) => {
     if (!custom.contains(e.target)) {
       options.classList.add('hidden');
@@ -836,7 +833,6 @@ function initCustomSelector2() {
     }
   });
 
-  // Seleccionar opción
   optionList.forEach((opt, i) => {
     opt.onclick = () => {
       updateSelection(i);
@@ -845,7 +841,6 @@ function initCustomSelector2() {
     };
   });
 
-  // Scroll manual
   scrollUp.onclick = (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
