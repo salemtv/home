@@ -541,7 +541,7 @@ function renderEnVi() {
     if (badge) badge.classList.add('visible');
   };
 
-  // 🔁 RECARGAR CANAL (mejorado)
+  // 🔁 Botón recargar (versión estable y compatible con menú)
   document.getElementById('reloadBtn').addEventListener('click', () => {
     if (loader) loader.style.display = 'flex';
     if (badge) badge.classList.remove('visible');
@@ -549,7 +549,6 @@ function renderEnVi() {
     const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
     const srcUrl = `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
 
-    // Crear nuevo iframe limpio
     const newIframe = document.createElement('iframe');
     newIframe.id = 'videoIframe';
     newIframe.allow = 'picture-in-picture';
@@ -570,8 +569,8 @@ function renderEnVi() {
       oldIframe.parentNode.replaceChild(newIframe, oldIframe);
     }
 
-    // 🔧 Reenlazar el selector al nuevo iframe dinámico
-    initCustomSelector();
+    // ✅ Re-inicializamos los eventos del selector con un pequeño retraso
+    setTimeout(() => initCustomSelector(), 50);
   });
 
   initCustomSelector();
@@ -612,7 +611,6 @@ function initCustomSelector() {
     if (loader) loader.style.display = 'flex';
     if (badge) badge.classList.remove('visible');
 
-    // 👇 Aquí el cambio: siempre obtener el iframe actual (nuevo o viejo)
     const iframe = document.getElementById('videoIframe');
     if (iframe) {
       iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}&v=${Date.now()}`;
@@ -621,13 +619,13 @@ function initCustomSelector() {
     currentIndex = index;
   };
 
-  // Mostrar / ocultar lista (se mantiene igual)
-  display.addEventListener('click', () => {
+  // Mostrar / ocultar lista
+  display.onclick = () => {
     options.classList.toggle('hidden');
     toggleArrow.textContent = options.classList.contains('hidden')
       ? 'expand_more'
       : 'expand_less';
-  });
+  };
 
   // Cerrar al hacer clic fuera
   document.addEventListener('click', (e) => {
@@ -639,26 +637,26 @@ function initCustomSelector() {
 
   // Seleccionar opción
   optionList.forEach((opt, i) => {
-    opt.addEventListener('click', () => {
+    opt.onclick = () => {
       updateSelection(i);
       options.classList.add('hidden');
       toggleArrow.textContent = 'expand_more';
-    });
+    };
   });
 
-  // Scroll manual (igual)
-  scrollUp.addEventListener('click', (e) => {
+  // Scroll manual
+  scrollUp.onclick = (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
     optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
-  });
+  };
 
-  scrollDown.addEventListener('click', (e) => {
+  scrollDown.onclick = (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
     const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
     optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
-  });
+  };
 }
 
 /* ---------------- EnVi 2 ---------------- */
