@@ -61,7 +61,7 @@ function renderPage(tabName){
 function renderImages(){
   const p = PAGES.images || {title:'Collections', items:[]};
   const container = document.createElement('div');
-  container.innerHTML = `<h3 style="margin-bottom:8px">${p.title}</h3>`;
+  container.innerHTML = ``;
   
   const searchWrap = document.createElement('div');
   searchWrap.style.marginBottom = '12px';
