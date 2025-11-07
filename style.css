@@ -498,7 +498,7 @@ font-size: 32px;
 }
 
 .selected-text.highlight {
-  color: var(--color-accent);
+  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -591,7 +591,7 @@ font-size: 32px;
   padding: 2px 6px;
   border-radius: 12px;
   font-size: var(--font-xxs);
-  font-weight: 600;
+  font-weight: bold;
   flex-shrink: 0;
 }
 
@@ -602,7 +602,7 @@ font-size: 32px;
 /* Punto animado del LIVE */
 .dot {
   color: white;
-  animation: blink 1s infinite;
+  /**animation: blink 1s infinite;**/
 }
 
 @keyframes blink {
