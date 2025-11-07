@@ -87,17 +87,23 @@ height: auto;
     /* Tabs sticky under header */
     .tabs {
       position:sticky;
-	  top:75px; /* header height ~72 */
+	  top:0; /* header height ~72 */
       z-index:50;
       background:var(--color-blur);
       padding:8px 1rem;
       backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    .tabs img{height:40px}
+    .tabs .center img{height:40px}
     .tabs .center {
-        position: relative;
+        position: relative!important;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         }
-    .tabs .title {
+    .tabs .center .title {
         background: var(--color-bg);
         font-size: var(--font-xxs);
         padding: 1px 3px;
@@ -108,7 +114,11 @@ height: auto;
         font-weight: bold;
     }
     .tabs-inner {
-      max-width:1000px;margin:0 auto;display:flex;gap:8px;align-items:center;
+      max-width:1000px;
+      margin:0 auto;
+      display:flex;
+      gap:8px;
+      align-items:center;
     }
     .tab {
       background:var(--color-secondary);
