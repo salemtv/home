@@ -301,9 +301,9 @@ document.head.appendChild(style);
         <div class="cp-info">${title}</div>
         <div class="cp-right">
           <button class="cp-btn cp-mute" title="Mute"><span class="material-symbols-outlined">volume_up</span></button>
-          ${showPip?`<button class="cp-btn cp-pip" title="Picture in Picture"><span class="material-symbols-outlined">picture_in_picture_alt</span></button>`:''}
-          ${transmitIcon?`<button class="cp-btn cp-cast" title="Transmitir"><span class="material-symbols-outlined">${transmitIcon}</span></button>`:''}
-          <button class="cp-btn cp-full" title="Fullscreen"><span class="material-symbols-outlined">fullscreen</span></button>
+          <!-- ${showPip?`<button class="cp-btn cp-pip" title="Picture in Picture"><span class="material-symbols-outlined">picture_in_picture_alt</span></button>`:''} -->
+          <!-- ${transmitIcon?`<button class="cp-btn cp-cast" title="Transmitir"><span class="material-symbols-outlined">${transmitIcon}</span></button>`:''} -->
+          <!-- <button class="cp-btn cp-full" title="Fullscreen"><span class="material-symbols-outlined">fullscreen</span></button> -->
         </div>
       </div>
     `;
@@ -341,7 +341,7 @@ document.head.appendChild(style);
     // --- Mute ---
     muteBtn.addEventListener('click',()=>{video.muted=!video.muted;muteBtn.firstElementChild.textContent=video.muted?'volume_off':'volume_up';});
 
-    // --- PiP ---
+    /* --- PiP ---
     if(pipBtn)pipBtn.addEventListener('click',async()=>{try{
       if(typeof video.requestPictureInPicture==='function'){
         if(document.pictureInPictureElement)await document.exitPictureInPicture();
@@ -352,13 +352,14 @@ document.head.appendChild(style);
         else video.webkitSetPresentationMode('picture-in-picture');
       }
     }catch(e){console.warn('pip err',e);}});
+    */
 
-    // --- AirPlay ---
+    /* --- AirPlay ---
     if(castBtn && isIOS()){
-      castBtn.addEventListener('click',()=>video.webkitShowPlaybackTargetPicker());
-    }
+    castBtn.addEventListener('click',()=>video.webkitShowPlaybackTargetPicker());
+    }*/
 
-    // --- Fullscreen nativo ---
+    /* --- Fullscreen nativo ---
     fullBtn.addEventListener('click',async()=>{
       try{
         if(document.fullscreenElement){if(document.exitFullscreen)await document.exitFullscreen();else if(document.webkitExitFullscreen)document.webkitExitFullscreen();fullBtn.firstElementChild.textContent='fullscreen';return;}
@@ -367,6 +368,7 @@ document.head.appendChild(style);
       }catch(e){console.warn('fullscreen err',e);}
     });
     document.addEventListener('fullscreenchange',()=>{const isFs=!!document.fullscreenElement;fullBtn.firstElementChild.textContent=isFs?'fullscreen_exit':'fullscreen';});
+    */
 
     // --- Auto-hide controls + close ---
     let hideTimer=null;
@@ -425,7 +427,7 @@ document.head.appendChild(style);
     }catch(e){console.warn('resume err',e);}
 
     // --- Gestos táctiles ---
-    if('ontouchstart'in window){
+    /*if('ontouchstart'in window){
       let lastTap=0,tapTimeout=null;
       wrap.addEventListener('touchend',(ev)=>{
         const target=ev.target;if(target.closest('.cp-btn')||target.closest('.cp-progress')||target.closest('.cp-bar'))return;
@@ -433,7 +435,7 @@ document.head.appendChild(style);
         if(dt<300&&dt>0){clearTimeout(tapTimeout);if(x<half)video.currentTime=Math.max(0,video.currentTime-10);else video.currentTime=Math.min(video.duration||Infinity,video.currentTime+10);lastTap=0;return;}
         tapTimeout=setTimeout(()=>{if(video.paused)video.play().catch(()=>{});else video.pause();},250);lastTap=now;
       },{passive:true});
-    }
+    }*/
 
     // --- Abrir modal ---
     modalFullEl.classList.add('active');
