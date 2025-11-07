@@ -533,19 +533,18 @@ function renderEnVi() {
   const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
-
   const canalSaved = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
-  iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
 
+  iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
   iframe.onload = () => {
-    loader.style.display = 'none';
-    badge.classList.add('visible');
+    if (loader) loader.style.display = 'none';
+    if (badge) badge.classList.add('visible');
   };
 
-  /* --- Botón recargar --- */
+  // 🔁 RECARGAR CANAL (mejorado)
   document.getElementById('reloadBtn').addEventListener('click', () => {
-    loader.style.display = 'flex';
-    badge.classList.remove('visible');
+    if (loader) loader.style.display = 'flex';
+    if (badge) badge.classList.remove('visible');
 
     const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
     const srcUrl = `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
@@ -559,25 +558,22 @@ function renderEnVi() {
     newIframe.setAttribute('allowfullscreen', '');
     newIframe.style.width = '100%';
     newIframe.style.height = '100%';
-    newIframe.src = srcUrl + `&reload=${Date.now()}`;
+    newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
 
-    // Cuando cargue, ocultar loader
     newIframe.onload = () => {
-      loader.style.display = 'none';
-      badge.classList.add('visible');
+      if (loader) loader.style.display = 'none';
+      if (badge) badge.classList.add('visible');
     };
 
-    // Reemplazar iframe anterior
     const oldIframe = document.getElementById('videoIframe');
     if (oldIframe && oldIframe.parentNode) {
       oldIframe.parentNode.replaceChild(newIframe, oldIframe);
     }
 
-    // 🔁 Vuelve a enlazar los eventos del selector al nuevo iframe
+    // 🔧 Reenlazar el selector al nuevo iframe dinámico
     initCustomSelector();
   });
 
-  // Inicializamos el selector
   initCustomSelector();
 }
 
@@ -606,29 +602,31 @@ function initCustomSelector() {
   const updateSelection = (index) => {
     if (index < 0 || index >= optionList.length) return;
 
-    // Actualiza visualmente la opción seleccionada
     optionList.forEach(o => o.classList.remove('active-option'));
     const selected = optionList[index];
     const value = selected.dataset.value;
     selected.classList.add('active-option');
     text.textContent = selected.textContent;
-
-    // Guarda y recarga el canal
     localStorage.setItem('canalSeleccionado', value);
-    loader.style.display = 'flex';
-    badge.classList.remove('visible');
 
-    // ⚡ Siempre obtiene el iframe actual, por si fue reemplazado
+    if (loader) loader.style.display = 'flex';
+    if (badge) badge.classList.remove('visible');
+
+    // 👇 Aquí el cambio: siempre obtener el iframe actual (nuevo o viejo)
     const iframe = document.getElementById('videoIframe');
-    iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}&v=${Date.now()}`;
+    if (iframe) {
+      iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}&v=${Date.now()}`;
+    }
 
     currentIndex = index;
   };
 
-  // Mostrar / ocultar lista
+  // Mostrar / ocultar lista (se mantiene igual)
   display.addEventListener('click', () => {
     options.classList.toggle('hidden');
-    toggleArrow.textContent = options.classList.contains('hidden') ? 'expand_more' : 'expand_less';
+    toggleArrow.textContent = options.classList.contains('hidden')
+      ? 'expand_more'
+      : 'expand_less';
   });
 
   // Cerrar al hacer clic fuera
@@ -648,7 +646,7 @@ function initCustomSelector() {
     });
   });
 
-  // Scroll manual
+  // Scroll manual (igual)
   scrollUp.addEventListener('click', (e) => {
     e.stopPropagation();
     const optionHeight = optionList[0]?.offsetHeight || 40;
