@@ -1,0 +1,254 @@
+{
+  "title": "Collections",
+  "items": [
+    {
+      "id": ["El hombre araña 3", "Spiderman 3", "Spider-Man 3"],
+      "title": "Spider-Man 3",
+      "tag": "2007",
+      "image": "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      "video": "https://cdn.flick.vip/559/index.m3u8?v=3354455653"
+    },
+    {
+      "id": ["El hombre araña 2", "Spiderman 2", "Spider-Man 2"],
+      "title": "Spider-Man 2",
+      "tag": "2004",
+      "image": "https://image.tmdb.org/t/p/original/aGuvNAaaZuWXYQQ6N2v7DeuP6mB.jpg",
+      "video": "https://cdn.flick.vip/558/index.m3u8?v=4022266861"
+    },
+    {
+      "id": ["El hombre araña", "Spiderman", "Spider-Man"],
+      "title": "Spider-Man",
+      "tag": "2002",
+      "image": "https://image.tmdb.org/t/p/original/39cmjIbz1Exa50IpmF7eI3XuRe0.jpg",
+      "video": "https://cdn.flick.vip/557/index.m3u8?v=3291482721"
+    },
+    {
+      "id": "Riesgo bajo Cero: Venganza",
+      "title": "Riesgo bajo Cero: Venganza",
+      "tag": "2025",
+      "image": "https://image.tmdb.org/t/p/original/5Wb1sOZvFulzzJE5JDWCnFSCvJ5.jpg",
+      "video": "https://cdn.flick.vip/1119878/index.m3u8?v=2835128126",
+      "featured": true
+    },
+    {
+      "id": "Terrifier 3: Payaso Siniestro",
+      "title": "Terrifier 3: Payaso Siniestro",
+      "tag": "2024",
+      "image": "https://image.tmdb.org/t/p/original/63xYQj1BwRFielxsBDXvHIJyXVm.jpg",
+      "video": "https://cdn.flick.vip/1034541/index.m3u8?v=2942992052"
+    },
+    {
+      "id": "Terrifier 2: El Payaso Siniestro",
+      "title": "Terrifier 2: El Payaso Siniestro",
+      "tag": "2022",
+      "image": "https://image.tmdb.org/t/p/original/mUEojN1bfXS8mk4D6Pf0Q1JYwMJ.jpg",
+      "video": "https://cdn.flick.vip/663712/index.m3u8?v=4572408306"
+    },
+    {
+      "id": "Terrifier",
+      "title": "Terrifier",
+      "tag": "2018",
+      "image": "https://image.tmdb.org/t/p/original/4lwh4MX2yCogHflyAYMRbfdnpnm.jpg",
+      "video": "https://cdn.flick.vip/420634/index.m3u8?v=2511171590"
+    },
+    {
+      "id": "Extraterritorial",
+      "title": "Extraterritorial",
+      "tag": "2025 Netflix",
+      "image": "https://image.tmdb.org/t/p/original/7tWkxxiqraVx1IzYd4DHv6FIvhS.jpg",
+      "video": "https://cdn.flick.vip/1233069/index.m3u8?v=1439441577",
+      "featured": true
+    },
+    {
+      "id": ["Avengers: ENDGAME", "Vengadores: ENDGAME"],
+      "title": "Avengers: ENDGAME",
+      "tag": "2019",
+      "image": "https://image.tmdb.org/t/p/original/1ELa9bm6zxIADz8u71VZtvNzx3k.jpg",
+      "video": "https://cdn.flick.vip/299534/index.m3u8?v=1996975999"
+    },
+    {
+      "id": ["Avengers: INFINITY WAR", "Vengadores: INFINITY WAR"],
+      "title": "Avengers: INFINITY WAR",
+      "tag": "2018",
+      "image": "https://image.tmdb.org/t/p/original/xOlrOeL8uaujmzm3Rkw3qCd8Puk.jpg",
+      "video": "https://cdn.flick.vip/299536/index.m3u8?v=1479569937"
+    },
+    {
+      "id": ["Avengers 2: Era de Ultrón", "Vengadores 2: Era de Ultron"],
+      "title": "Avengers 2: Era de Ultrón",
+      "tag": "2015",
+      "image": "https://image.tmdb.org/t/p/original/yfv7RPuritgsnmXlwOIulsuC1mf.jpg",
+      "video": "https://cdn.flick.vip/99861/index.m3u8?v=1607529179"
+    },
+    {
+      "id": ["Avengers: Los Vengadores", "Vengadores: Los Vengadores"],
+      "title": "Avengers: Los Vengadores",
+      "tag": "2012",
+      "image": "https://image.tmdb.org/t/p/original/ugX4WZJO3jEvTOerctAWJLinujo.jpg",
+      "video": "https://cdn.flick.vip/24428/index.m3u8?v=2384847048"
+    },
+    {
+      "id": ["Spider-Man: No way Home", "Spider-Man: Sin camino a casa"],
+      "title": "Spider-Man: No Way Home",
+      "tag": "2021",
+      "image": "https://image.tmdb.org/t/p/original/wXkA8mWFpAq8leESmKg9s1wunBj.jpg",
+      "video": "https://cdn.flick.vip/634649/index.m3u8?v=1490598639"
+    },
+    {
+      "id": "Shang-Chi y la leyenda de los Diez Anillos",
+      "title": "Shang-Chi y la leyenda de los Diez Anillos",
+      "tag": "2021",
+      "image": "https://image.tmdb.org/t/p/original/9VqajJXm29uprSaxOcEh7O0d6E9.jpg",
+      "video": "https://cdn.flick.vip/566525/index.m3u8?v=1275581819"
+    },
+    {
+      "id": ["Número Desconocido: Un escándalo de ciberacoso escolar","Numero Desconocido: Un escandalo de ciberacoso escolar"],
+      "title": "Número Desconocido: Un Escándalo de Ciberacoso Escolar",
+      "tag": "2025 Netflix",
+      "image": "https://image.tmdb.org/t/p/original/7TrQb6A2W1SVNuDt9Qqmf0HgJp8.jpg",
+      "video": "https://cdn.flick.vip/1517772/index.m3u8?v=1906628925",
+      "featured": true
+    },
+    {
+      "id": "Una Pareja Explosiva 3",
+      "title": "Una Pareja Explosiva 3",
+      "tag": "2007",
+      "image": "https://image.tmdb.org/t/p/original/2UeIKPirME0l4UeUuv5TklDezR4.jpg",
+      "video": "https://cdn.flick.vip/5174/index.m3u8?v=2889895162"
+    },
+    {
+      "id": "Una Pareja Explosiva 2",
+      "title": "Una Pareja Explosiva 2",
+      "tag": "2001",
+      "image": "https://image.tmdb.org/t/p/original/rqquHoHee73YSV5xqAcpEf8dU2s.jpg",
+      "video": "https://cdn.flick.vip/5175/index.m3u8?v=9753464484"
+    },
+    {
+      "id": "Una Pareja Explosiva",
+      "title": "Una Pareja Explosiva",
+      "tag": "2000",
+      "image": "https://image.tmdb.org/t/p/original/kZyMWQutqBfVYFxnhypGt0YaKcD.jpg",
+      "video": "https://cdn.flick.vip/2109/index.m3u8?v=8924759767"
+    },
+    {
+      "id": ["Rapidos y Furiosos X", "Rápidos y Furiosos X"],
+      "title": "Rápidos y Furiosos X",
+      "tag": "2023",
+      "image": "https://image.tmdb.org/t/p/original/egGtD6oAHY6qXy0QZ2fr8tDECSp.jpg",
+      "video": "https://cdn.flick.vip/385687/index.m3u8?v=2836462118"
+    },
+    {
+      "id": ["Rapidos y Furiosos 9", "Rápidos y Furiosos 9"],
+      "title": "Rápidos y Furiosos 9",
+      "tag": "2021",
+      "image": "https://image.tmdb.org/t/p/original/aktMX3z3F2zfSFR1nm5CEWlC25o.jpg",
+      "video": "https://cdn.flick.vip/385128/index.m3u8?v=1046846081"
+    },
+    {
+      "id": ["Rapidos y Furiosos: Hobbs y Shaw", "Rápidos y Furiosos: Hobbs y Shaw"],
+      "title": "Rápidos y Furiosos: Hobbs y Shaw",
+      "tag": "2019",
+      "image": "https://image.tmdb.org/t/p/original/3E8bBvitg3LeaDsSE8fOnJUHU8T.jpg",
+      "video": "https://cdn.flick.vip/384018/index.m3u8?v=2353646608"
+    },
+    {
+      "id": ["Rapidos y Furiosos 8", "Rápidos y Furiosos 8"],
+      "title": "Rápidos y Furiosos 8",
+      "tag": "2017",
+      "image": "https://image.tmdb.org/t/p/original/q0iFgE8Ad8AAeabKor4czkWiuRL.jpg",
+      "video": "https://cdn.flick.vip/337339/index.m3u8?v=795069570"
+    },
+    {
+      "id": ["Rapidos y Furiosos 7", "Rápidos y Furiosos 7"],
+      "title": "Rápidos y Furiosos 7",
+      "tag": "2015",
+      "image": "https://image.tmdb.org/t/p/original/jP0DU7uNkpnelNvH1LI3MCHEFgz.jpg",
+      "video": "https://cdn.flick.vip/168259/index.m3u8?v=1357546711"
+    },
+    {
+      "id": ["Rapidos y Furiosos 6", "Rápidos y Furiosos 6"],
+      "title": "Rápidos y Furiosos 6",
+      "tag": "2013",
+      "image": "https://image.tmdb.org/t/p/original/xR9qP1Yhymsl7XmtZ4N3YSsOzh4.jpg",
+      "video": "https://cdn.flick.vip/82992/index.m3u8?v=990451038"
+    },
+    {
+      "id": ["Rapidos y Furiosos: 5in Control", "Rápidos y Furiosos: 5in Control"],
+      "title": "Rápidos y Furiosos: 5in Control",
+      "tag": "2011",
+      "image": "https://image.tmdb.org/t/p/original/k1OKkkn6dekDTaZqzZK7sVI44eg.jpg",
+      "video": "https://cdn.flick.vip/51497/index.m3u8?v=1379117124"
+    },
+    {
+      "id": ["Rapidos y Furiosos 4", "Rápidos y Furiosos 4"],
+      "title": "Rápidos y Furiosos 4",
+      "tag": "2009",
+      "image": "https://image.tmdb.org/t/p/original/bBioDtcG94rhvWnBE45yPUdgExi.jpg",
+      "video": "https://cdn.flick.vip/13804/index.m3u8?v=6543632054"
+    },
+    {
+      "id": ["Rapido y Furioso: Reto Tokyo", "Rápido y Furioso: Reto Tokyo"],
+      "title": "Rápido y Furioso: Reto Tokyo",
+      "tag": "2006",
+      "image": "https://image.tmdb.org/t/p/original/hkHDmkL5abn3P005v6xfEG3ZyYT.jpg",
+      "video": "https://cdn.flick.vip/9615/index.m3u8?v=920888986"
+    },
+    {
+      "id": ["Mas Rapido, Mas Furioso", "Más Rápido , Más Furioso"],
+      "title": "Más Rápido, Más Furioso",
+      "tag": "2003",
+      "image": "https://image.tmdb.org/t/p/original/8o3Py5qAgOUm0seWHmxpLwQmb1L.jpg",
+      "video": "https://cdn.flick.vip/584/index.m3u8?v=1031811144"
+    },
+    {
+      "id": ["Rápido y Furioso", "Rapido y Furioso"],
+      "title": "Rápido y Furioso",
+      "tag": "2001",
+      "image": "https://image.tmdb.org/t/p/original/zFR949B0hxdgi0vljf8tCJiZ65z.jpg",
+      "video": "https://cdn.flick.vip/9799/index.m3u8?v=795114391"
+    },
+    {
+      "id": "El Conjuro 4",
+      "title": "El Conjuro 4",
+      "tag": "2025",
+      "image": "https://image.tmdb.org/t/p/original/dyW5mX4wwDoZWgTYObx6pg9V0i9.jpg",
+      "video": "https://cdn.flick.vip/1038392/index.m3u8?v=3290578986",
+      "featured": true
+    },
+    {
+      "id": "El Conjuro 3",
+      "title": "El Conjuro 3",
+      "tag": "2021",
+      "image": "https://image.tmdb.org/t/p/original/k8HN29t4VxiOagq9jaVVwZJ6wIB.jpg",
+      "video": "https://cdn.flick.vip/423108/index.m3u8?v=2149819213"
+    },
+    {
+      "id": "El Conjuro 2",
+      "title": "El Conjuro 2",
+      "tag": "2016",
+      "image": "https://image.tmdb.org/t/p/original/x4jUJ0fF60SSOeUUTkaRtmnDvwG.jpg",
+      "video": "https://cdn.flick.vip/259693/index.m3u8?v=2106441825"
+    },
+    {
+      "id": "El Conjuro",
+      "title": "El Conjuro",
+      "tag": "2013",
+      "image": "https://image.tmdb.org/t/p/original/10ir0eISr3p1MF1mjZwGTx7u4vv.jpg",
+      "video": "https://cdn.flick.vip/138843/index.m3u8?v=1248680745"
+    },
+    {
+      "id": "La casa bajo el Agua",
+      "title": "La casa bajo el Agua",
+      "tag": "2021",
+      "image": "https://image.tmdb.org/t/p/original/dNjqvdsSulP3FjCwTcCUinQ6nvO.jpg",
+      "video": "https://cdn.flick.vip/672582/index.m3u8?v=1749890549"
+    },
+    {
+      "id": "La Mujer Rey",
+      "title": "La Mujer Rey",
+      "tag": "2022",
+      "image": "https://image.tmdb.org/t/p/original/jny1jvCkgpzc3C0axQsX9ADYcAl.jpg",
+      "video": "https://cdn.flick.vip/724495/index.m3u8?v=2970974384"
+    }
+  ]
+}
