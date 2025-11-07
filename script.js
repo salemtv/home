@@ -533,57 +533,51 @@ function renderEnVi() {
   const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
+
   const canalSaved = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
   iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
+
   iframe.onload = () => {
-    if (loader) loader.style.display = 'none';
-    if (badge) badge.classList.add('visible');
+    loader.style.display = 'none';
+    badge.classList.add('visible');
   };
 
+  /* --- Botón recargar --- */
   document.getElementById('reloadBtn').addEventListener('click', () => {
-  if (loader) loader.style.display = 'flex';
-  if (badge) badge.classList.remove('visible');
+    loader.style.display = 'flex';
+    badge.classList.remove('visible');
 
-  const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
+    const canalActual = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
+    const srcUrl = `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
 
-  // Asegurarnos de la URL completa (usa https:// si tu servidor usa https)
-  const srcUrl = (canalActual.startsWith('http://') || canalActual.startsWith('https://'))
-    ? canalActual
-    : `https://la14hd.com/vivo/canales.php?stream=${canalActual}`;
+    // Crear nuevo iframe limpio
+    const newIframe = document.createElement('iframe');
+    newIframe.id = 'videoIframe';
+    newIframe.allow = 'picture-in-picture';
+    newIframe.setAttribute('playsinline', '');
+    newIframe.setAttribute('webkit-playsinline', '');
+    newIframe.setAttribute('allowfullscreen', '');
+    newIframe.style.width = '100%';
+    newIframe.style.height = '100%';
+    newIframe.src = srcUrl + `&reload=${Date.now()}`;
 
-  // Crear un nuevo iframe limpio
-  const newIframe = document.createElement('iframe');
-  newIframe.id = 'videoIframe';
-  newIframe.setAttribute('allow', 'picture-in-picture');
-  newIframe.setAttribute('playsinline', '');
-  newIframe.setAttribute('webkit-playsinline', '');
-  newIframe.setAttribute('allowfullscreen', '');
-  newIframe.style.width = '100%';
-  newIframe.style.height = '100%';
-  newIframe.src = srcUrl + (srcUrl.includes('?') ? '&' : '?') + 'reload=' + Date.now();
+    // Cuando cargue, ocultar loader
+    newIframe.onload = () => {
+      loader.style.display = 'none';
+      badge.classList.add('visible');
+    };
 
-  // Manejadores para mostrar/ocultar loader y badge
-  newIframe.onload = () => {
-    if (loader) loader.style.display = 'none';
-    if (badge) badge.classList.add('visible');
-    console.log('iframe cargado:', newIframe.src);
-  };
-  newIframe.onerror = (err) => {
-    if (loader) loader.style.display = 'none';
-    console.error('Error al cargar iframe:', newIframe.src, err);
-  };
+    // Reemplazar iframe anterior
+    const oldIframe = document.getElementById('videoIframe');
+    if (oldIframe && oldIframe.parentNode) {
+      oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+    }
 
-  // Reemplazar el iframe anterior
-  const oldIframe = document.getElementById('videoIframe');
-  if (oldIframe && oldIframe.parentNode) {
-    oldIframe.parentNode.replaceChild(newIframe, oldIframe);
-  } else {
-    // fallback: añadir donde estaba el .iframe-container
-    const containerEl = document.querySelector('.iframe-container');
-    if (containerEl) containerEl.appendChild(newIframe);
-  }
-});
+    // 🔁 Vuelve a enlazar los eventos del selector al nuevo iframe
+    initCustomSelector();
+  });
 
+  // Inicializamos el selector
   initCustomSelector();
 }
 
@@ -595,7 +589,6 @@ function initCustomSelector() {
   const display = custom.querySelector('.selector-display');
   const options = custom.querySelector('.selector-options');
   const text = custom.querySelector('.selected-text');
-  const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
   const toggleArrow = custom.querySelector('.arrow-toggle');
@@ -612,24 +605,30 @@ function initCustomSelector() {
 
   const updateSelection = (index) => {
     if (index < 0 || index >= optionList.length) return;
+
+    // Actualiza visualmente la opción seleccionada
     optionList.forEach(o => o.classList.remove('active-option'));
     const selected = optionList[index];
     const value = selected.dataset.value;
     selected.classList.add('active-option');
     text.textContent = selected.textContent;
+
+    // Guarda y recarga el canal
     localStorage.setItem('canalSeleccionado', value);
     loader.style.display = 'flex';
     badge.classList.remove('visible');
-    iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}`;
+
+    // ⚡ Siempre obtiene el iframe actual, por si fue reemplazado
+    const iframe = document.getElementById('videoIframe');
+    iframe.src = `https://la14hd.com/vivo/canales.php?stream=${value}&v=${Date.now()}`;
+
     currentIndex = index;
   };
 
-  // Mostrar / ocultar lista (cerrada por defecto)
+  // Mostrar / ocultar lista
   display.addEventListener('click', () => {
     options.classList.toggle('hidden');
-    toggleArrow.textContent = options.classList.contains('hidden')
-      ? 'expand_more'
-      : 'expand_less';
+    toggleArrow.textContent = options.classList.contains('hidden') ? 'expand_more' : 'expand_less';
   });
 
   // Cerrar al hacer clic fuera
@@ -649,19 +648,19 @@ function initCustomSelector() {
     });
   });
 
-  /* --- Scroll manual corregido --- */
-scrollUp.addEventListener('click', (e) => {
-  e.stopPropagation();
-  const optionHeight = optionList[0]?.offsetHeight || 40;
-  optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
-});
+  // Scroll manual
+  scrollUp.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const optionHeight = optionList[0]?.offsetHeight || 40;
+    optionsContainer.scrollTop = Math.max(0, optionsContainer.scrollTop - optionHeight);
+  });
 
-scrollDown.addEventListener('click', (e) => {
-  e.stopPropagation();
-  const optionHeight = optionList[0]?.offsetHeight || 40;
-  const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
-  optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
-});
+  scrollDown.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const optionHeight = optionList[0]?.offsetHeight || 40;
+    const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
+    optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
+  });
 }
 
 /* ---------------- EnVi 2 ---------------- */
