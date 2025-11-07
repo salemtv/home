@@ -86,47 +86,64 @@ height: auto;
     }
     /* Tabs sticky under header */
     .tabs {
-      position:sticky;
-	  top:0; /* header height ~72 */
-      z-index:50;
-      background:var(--color-blur);
-      padding:8px 1rem;
-      backdrop-filter: blur(4px);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .tabs .center img{height:40px}
-    .tabs .center {
-        position: relative!important;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        }
-    .tabs .center .title {
-        background: var(--color-bg);
-        font-size: var(--font-xxs);
-        padding: 1px 3px;
-        position: absolute;
-        border-radius: 4px;
-        top: 1px;
-        right: -5px;
-        font-weight: bold;
-    }
-    .tabs-inner {
-      max-width:1000px;
-      margin:0 auto;
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .tab {
-      background:var(--color-secondary);
-      padding:8px 12px;border-radius:10px;cursor:pointer;color:var(--color-text); display:flex;gap:8px;align-items:center;
-      user-select:none;
-    }
-    .tab.active { background:var(--color-bg); font-weight:600; }
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--color-blur);
+  padding: 8px 1rem;
+  backdrop-filter: blur(4px);
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --- Logo y título --- */
+.center {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.center img {
+  height: 40px;
+}
+
+.center .title {
+  background: var(--color-bg);
+  font-size: var(--font-xxs);
+  padding: 1px 4px;
+  border-radius: 4px;
+  position: absolute;
+  top: 2px;
+  right: -8px;
+  font-weight: bold;
+}
+
+/* --- Contenedor de pestañas --- */
+.tabs-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Pestañas individuales --- */
+.tab {
+  background: var(--color-secondary);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.tab.active {
+  background: var(--color-bg);
+  font-weight: 600;
+}
     main{
       flex:1;padding:1rem;display:flex;flex-direction:column;gap:1rem;
       width:100%;max-width:1000px;margin:0 auto;
