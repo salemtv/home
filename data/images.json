@@ -2,6 +2,13 @@
   "title": "Collections",
   "items": [
     {
+      "id": ["L1 MAX", "LIGA 1 MAX"],
+      "title": "L1 MAX",
+      "tag": "TV",
+      "image": "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      "video": "https://agvyby.fubohd.com:443/liga1max/mono.m3u8?token=1f9ea4d0ffbdb519f5ed842906e24809848722f7-3a-1762846890-1762828890"
+    },
+    {
       "id": ["El hombre araña 3", "Spiderman 3", "Spider-Man 3"],
       "title": "Spider-Man 3",
       "tag": "2007",
