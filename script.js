@@ -465,7 +465,7 @@ function renderEnVi() {
   container.innerHTML = `
     <div class="iframe-container">
       <div class="loader" id="loader"><span></span></div>
-      <iframe id="videoIframe" allow="picture-in-picture" playsinline webkit-playsinline allowfullscreen></iframe>
+      <iframe id="videoIframe" allow="autoplay; picture-in-picture" playsinline webkit-playsinline allowfullscreen></iframe>
     </div>
     <div class="controls" style="margin-top:8px">
       <div class="custom-selector" id="canalSelectorCustom">
@@ -527,6 +527,16 @@ function renderEnVi() {
         <button class="btn-icon" id="reloadBtn" title="Recargar canal">
           <span class="material-symbols-outlined">refresh</span>
         </button>
+
+        <!-- 🎚️ Nuevo botón: Mute / Unmute -->
+        <button class="btn-icon" id="muteBtn" title="Silenciar / Activar sonido">
+          <span class="material-symbols-outlined">volume_up</span>
+        </button>
+
+        <!-- ▶️ Nuevo botón: Play / Pause -->
+        <button class="btn-icon" id="playPauseBtn" title="Reproducir / Pausar">
+          <span class="material-symbols-outlined">play_arrow</span>
+        </button>
       </div>
     </div>
   `;
@@ -535,6 +545,9 @@ function renderEnVi() {
   const iframe = document.getElementById('videoIframe');
   const loader = document.getElementById('loader');
   const badge = document.getElementById('liveBadge');
+  const reloadBtn = document.getElementById('reloadBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const playPauseBtn = document.getElementById('playPauseBtn');
   const canalSaved = localStorage.getItem('canalSeleccionado') || p.defaultStream || 'foxsports';
 
   iframe.src = `https://la14hd.com/vivo/canales.php?stream=${canalSaved}`;
@@ -543,8 +556,8 @@ function renderEnVi() {
     if (badge) badge.classList.add('visible');
   };
 
-  // 🔁 Botón recargar (versión estable y compatible con menú)
-  document.getElementById('reloadBtn').addEventListener('click', () => {
+  // 🔁 Botón recargar
+  reloadBtn.addEventListener('click', () => {
     if (loader) loader.style.display = 'flex';
     if (badge) badge.classList.remove('visible');
 
@@ -553,7 +566,7 @@ function renderEnVi() {
 
     const newIframe = document.createElement('iframe');
     newIframe.id = 'videoIframe';
-    newIframe.allow = 'picture-in-picture';
+    newIframe.allow = 'autoplay; picture-in-picture';
     newIframe.setAttribute('playsinline', '');
     newIframe.setAttribute('webkit-playsinline', '');
     newIframe.setAttribute('allowfullscreen', '');
@@ -571,11 +584,16 @@ function renderEnVi() {
       oldIframe.parentNode.replaceChild(newIframe, oldIframe);
     }
 
-    // ✅ Re-inicializamos los eventos del selector con un pequeño retraso
-    setTimeout(() => initCustomSelector(), 50);
+    // ✅ Re-inicializamos los eventos del selector y botones
+    setTimeout(() => {
+      initCustomSelector();
+      initIframeControls();
+    }, 80);
   });
 
+  // 🔊 Inicializar controles
   initCustomSelector();
+  initIframeControls();
 }
 
 /* ---------------- Custom Selector ---------------- */
@@ -659,6 +677,47 @@ function initCustomSelector() {
     const maxScroll = optionsContainer.scrollHeight - optionsContainer.clientHeight;
     optionsContainer.scrollTop = Math.min(maxScroll, optionsContainer.scrollTop + optionHeight);
   };
+}
+
+/* ---------------- Iframe Controls (Play / Mute) ---------------- */
+function initIframeControls() {
+  const iframe = document.getElementById('videoIframe');
+  const muteBtn = document.getElementById('muteBtn');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  if (!iframe) return;
+
+  // ⚙️ Simulación de control por compatibilidad (no todos los iframes permiten control directo)
+  let isMuted = false;
+  let isPlaying = true;
+
+  // 🔊 Mute / Unmute
+  muteBtn.addEventListener('click', () => {
+    isMuted = !isMuted;
+    muteBtn.querySelector('span').textContent = isMuted ? 'volume_off' : 'volume_up';
+
+    try {
+      const innerVideo = iframe.contentWindow.document.querySelector('video');
+      if (innerVideo) innerVideo.muted = isMuted;
+    } catch (e) {
+      console.warn('Cross-origin: mute visual only.');
+    }
+  });
+
+  // ▶️ Play / Pause
+  playPauseBtn.addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    playPauseBtn.querySelector('span').textContent = isPlaying ? 'pause' : 'play_arrow';
+
+    try {
+      const innerVideo = iframe.contentWindow.document.querySelector('video');
+      if (innerVideo) {
+        if (isPlaying) innerVideo.play();
+        else innerVideo.pause();
+      }
+    } catch (e) {
+      console.warn('Cross-origin: play/pause visual only.');
+    }
+  });
 }
 
 /* ---------------- EnVi 2 ---------------- */
