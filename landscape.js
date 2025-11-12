@@ -46,3 +46,33 @@ document.addEventListener("DOMContentLoaded", () => {
 // Escucha rotaciones y redimensionamiento
 window.addEventListener("orientationchange", enforceLandscape);
 window.addEventListener("resize", enforceLandscape);
+
+//Pantalla encendida//
+let wakeLock = null;
+
+async function keepScreenAwake() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log("✅ Pantalla bloqueada encendida");
+      // Si el bloqueo se libera (por ejemplo, al minimizar la app)
+      wakeLock.addEventListener('release', () => {
+        console.log("⚠️ WakeLock liberado");
+      });
+    } else {
+      console.warn("WakeLock no soportado en este navegador");
+    }
+  } catch (err) {
+    console.error("Error al solicitar WakeLock:", err);
+  }
+}
+
+// Reactiva si vuelve a ser visible
+document.addEventListener("visibilitychange", () => {
+  if (wakeLock !== null && document.visibilityState === "visible") {
+    keepScreenAwake();
+  }
+});
+
+// Llamar una vez, después de interacción del usuario
+document.addEventListener("click", keepScreenAwake, { once: true });
