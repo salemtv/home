@@ -10,6 +10,10 @@ function enforceLandscape() {
       overlay.id = overlayId;
       overlay.style.cssText = `
         position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
         inset: 0;
         background: black;
         color: white;
@@ -18,12 +22,12 @@ function enforceLandscape() {
         justify-content: center;
         flex-direction: column;
         text-align: center;
-        font-size: 1.2rem;
+        font-size: var(--font);
         z-index: 99999;
       `;
       overlay.innerHTML = `
-        <p>📺 Esta app funciona solo en modo horizontal</p>
-        <p>Gira tu dispositivo, por favor</p>
+        <p><b>Esta app funciona solo en modo horizontal</b></p>
+        <p>Por favor, Gira tu dispositivo.</p>
       `;
       document.body.appendChild(overlay);
     }
