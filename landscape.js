@@ -27,7 +27,7 @@ function enforceLandscape() {
       `;
       overlay.innerHTML = `
         <p><b>Esta app funciona solo en modo horizontal</b></p>
-        <p>Por favor, Gira tu dispositivo.</p>
+        <p>Por favor, gira tu dispositivo.</p>
       `;
       document.body.appendChild(overlay);
     }
