@@ -1,0 +1,207 @@
+{
+  "channels": [
+	{
+      "id": "dsports",
+      "name": "DSports",
+      "number": 1,
+      "image": "https://placehold.co/80x80/5f1e3a/ffffff?text=DS",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "PRO HD 1080p",
+          "url": "https://esvidzypro.sbs/dsportsl.php"
+        },
+		{
+          "label": "LA HD 1080p",
+          "url": "https://la16hd.com/dsportslatam.php"
+        },
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=dsports"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=dsports"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "dsports2",
+      "name": "DSports 2",
+      "number": 2,
+      "image": "https://placehold.co/80x80/5f1e3a/ffffff?text=DS",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "PRO HD 1080p",
+          "url": "https://esvidzypro.sbs/dsports2l.php"
+        },
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=dsports2"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=dsports2"
+        }
+      ],
+      "tag": "canal"
+    },
+{
+      "id": "dsportsplus",
+      "name": "DSports Plus",
+      "number": 3,
+      "image": "https://placehold.co/80x80/5f1e3a/ffffff?text=DS",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "PRO HD 1080p",
+          "url": "https://esvidzypro.sbs/dsportsplusl.php"
+        },
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=dsportsplus"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=dsportsplus"
+        }
+      ],
+      "tag": "canal"
+    },
+
+
+    {
+      "id": "l1max",
+      "name": "Liga 1 Max",
+      "number": 4,
+      "image": "https://next-liga1.fanatiz.com/liga1/strapi/production/small_image_LIGA_1_MAX_fabe3155b8.png",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=liga1max"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=liga1max"
+        }
+      ],
+      "tag": "canal"
+    },
+
+    {
+      "id": "espn",
+      "name": "ESPN",
+      "number": 5,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp.sbs//global1.php?stream=espn"
+        },
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=espn"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=espn"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "espn2",
+      "name": "ESPN 2",
+      "number": 6,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN 2",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp.sbs//global1.php?stream=espn2"
+        },
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=espn2"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=espn2"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "espn3",
+      "name": "ESPN 3",
+      "number": 7,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN 3",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp.sbs//global1.php?stream=espn3"
+        },
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=espn3"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=espn3"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "espn4",
+      "name": "ESPN 4",
+      "number": 8,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN 4",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp.sbs//global1.php?stream=espn4"
+        },
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=espn4"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=espn4"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "telefe",
+      "name": "Telefe",
+      "number": 9,
+      "image": "https://placehold.co/80x80/041e3a/ffffff?text=Telefe",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "TV 720p",
+          "url": "https://tvhd2.com/vivo/canales.php?stream=telefe"
+        },
+		{
+          "label": "OP 720p",
+          "url": "https://la20hd.com/vivo/canales.php?stream=telefe"
+        }
+      ],
+      "tag": "canal"
+    }
+
+  ]
+}
