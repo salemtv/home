@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STV Player</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+        #player-root { width: 100%; height: 100%; }
+        iframe, video { width: 100%; height: 100%; border: none; display: block; }
+        .error {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 100%; color: #fff; font-family: sans-serif;
+            flex-direction: column; gap: 12px; text-align: center; padding: 24px;
+        }
+        .error span { font-size: 48px; color: #ff3b30; }
+    </style>
+</head>
+<body>
+    <div id="player-root"></div>
+    <script>
+    (function() {
+        const params = new URLSearchParams(location.search);
+        const rawUrl = params.get('url');
+        const root = document.getElementById('player-root');
+
+        if (!rawUrl) {
+            root.innerHTML = '<div class="error"><span>▶</span><p>No video URL provided</p></div>';
+            return;
+        }
+
+        const url = decodeURIComponent(rawUrl);
+        const lower = url.toLowerCase();
+
+        // YouTube
+        if (lower.includes('youtube.com/watch?v=')) {
+            try {
+                const videoId = new URL(url).searchParams.get('v');
+                if (videoId) {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1';
+                    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+                    iframe.allowFullscreen = true;
+                    root.appendChild(iframe);
+                    return;
+                }
+            } catch(e) {}
+        }
+        if (lower.includes('youtu.be/')) {
+            const videoId = url.split('youtu.be/')[1].split('?')[0];
+            if (videoId) {
+                const iframe = document.createElement('iframe');
+                iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+                iframe.allowFullscreen = true;
+                root.appendChild(iframe);
+                return;
+            }
+        }
+
+        // Direct video files
+        const videoExts = ['.mp4', '.m3u8', '.webm', '.mkv', '.avi', '.mov', '.ts', '.m3u', '.mpd'];
+        const isVideoFile = videoExts.some(ext => lower.endsWith(ext) || lower.includes(ext + '?'));
+
+        if (isVideoFile) {
+            const video = document.createElement('video');
+            video.src = url;
+            video.controls = true;
+            video.autoplay = true;
+            video.playsInline = true;
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.objectFit = 'contain';
+            root.appendChild(video);
+            video.play().catch(function(){});
+            return;
+        }
+
+        // Everything else: iframe (PHP pages, HTML embeds, any URL)
+        // SIN sandbox ni referrerPolicy para que PHP streaming funcione correctamente
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture; camera; microphone';
+        iframe.allowFullscreen = true;
+        root.appendChild(iframe);
+    })();
+    </script>
+</body>
+</html>
