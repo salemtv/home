@@ -11,7 +11,8 @@ const ASSETS_TO_CACHE = [
     "/player.html",
     "/styles.css",
     "/app.js",
-    "/manifest.json"
+    "/manifest.json",
+	"/MaterialSymbolsRounded.woff2"
 ];
 
 self.addEventListener("install", function(event) {
