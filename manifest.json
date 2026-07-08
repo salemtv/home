@@ -1,8 +1,8 @@
 {
-    "name": "STV",
+    "name": "Salem TV",
     "short_name": "STV",
-    "description": "STV - Streaming TV and Cinema Companion",
-    "start_url": "/home.html",
+    "description": "Online",
+    "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#0a0a0a",
     "theme_color": "#0a0a0a",
