@@ -2,10 +2,10 @@
 /* STV - SERVICE WORKER                         */
 /* ============================================ */
 
-const CACHE_NAME = "stv-cache-v4";
+const CACHE_NAME = "stv-cache-v5";
 const ASSETS_TO_CACHE = [
     "/",
-    "/home.html",
+    "/index.html",
     "/tv.html",
     "/cinema.html",
     "/player.html",
