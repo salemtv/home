@@ -1,7 +1,35 @@
 {
   "movies": [
+	{
+      "id": "mv7",
+      "name": "Los Simpson: Simpsley",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/qkJefER6Ym4v2KC1v4qK34AlcVo.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-vuizkuloy8aw.html"
+        }
+      ]
+    },
+	{
+      "id": "mv6",
+      "name": "La Posesión de la Momia",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/sKYkjA9H4Qlzz5M1oqGCFVsTOfL.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-rm46q7vy3t52.html"
+        }
+      ]
+    },
     {
-      "id": "mvnew2",
+      "id": "mv5",
       "name": "Michael",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/b5guzsMUf9vNaw1jqMSLBHG6DhE.jpg",
@@ -15,7 +43,7 @@
       ]
     },
 	{
-      "id": "mvnew1",
+      "id": "mv4",
       "name": "Mortal Kombat II",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/lGamD2f6xEZJSoXlntAd5wvQnWZ.jpg",
@@ -29,19 +57,43 @@
       ]
     },
     {
-      "id": "mv1",
-      "name": "Super Mario Bros. La película",
-      "year": 2023,
-      "image": "https://m.media-amazon.com/images/M/MV5BZDkyMDBiN2EtYTM2Ni00ZjRjLWFmZWQtZDdkZDBhNTQzYTU4XkEyXkFqcGc@._V1_.jpg",
+      "id": "mv3",
+      "name": "Super Mario Galaxy",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/4Js0gYWxuvTN6b8iAaSF1cSQzBs.jpg",
       "isFavorite": true,
       "tag": "pelicula",
       "options": [
         {
           "label": "HD",
           "url": "https://vimeos.net/embed-v7hdakih9470.html"
-        },
+        }
+      ]
+    },
+	{
+      "id": "mv2",
+      "name": "Deadpool & Wolverine",
+      "year": 2024,
+      "image": "https://image.tmdb.org/t/p/original/uxBHXaoOvAwy4NpPpP7nNx2rXYQ.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
         {
-          "label": "HD 2",
+          "label": "HD",
+          "url": "https://vimeos.net/embed-tmbjqufb955w.html"
+        }
+      ]
+    },
+	{
+      "id": "mv1",
+      "name": "Super Mario Bros",
+      "year": 2023,
+      "image": "https://image.tmdb.org/t/p/original/zNKs1T0VZuJiVuhuL5GSCNkGdxf.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
           "url": "https://vimeos.net/embed-51n3og15gi9x.html"
         }
       ]
