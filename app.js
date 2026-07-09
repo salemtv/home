@@ -52,37 +52,15 @@
     }
 
     function detectOS() {
-    const ua = navigator.userAgent.toLowerCase();
-    
-    // 1. Detectar Android PRIMERO (antes que Linux)
-    const isAndroid = /android/.test(ua);
-    
-    // 2. Detectar iOS
-    const isIOS = /iphone|ipad|ipod/.test(ua);
-    
-    // 3. Android TV (debe ir después de isAndroid)
-    const isAndroidTV = isAndroid && (/tv|smarttv|googletv|appletv|hbbtv|pov_tv|netcast.tv/.test(ua) || screen.width > 960);
-    
-    // 4. Mac (excluyendo iOS)
-    const isMac = /macintosh|mac os x/.test(ua) && !/iphone|ipad|ipod/.test(ua);
-    
-    // 5. Windows
-    const isWindows = /windows/.test(ua);
-    
-    // 6. Linux (¡IMPORTANTE: excluir Android explícitamente!)
-    const isLinux = /linux/.test(ua) && !isAndroid;
-    
-    // 7. SOPORTE: incluir Linux también, o quitarlo si no quieres soporte Linux
-    return { 
-        supported: isAndroid || isIOS || isAndroidTV || isMac || isWindows || isLinux, 
-        isAndroid, 
-        isIOS, 
-        isAndroidTV, 
-        isMac, 
-        isWindows, 
-        isLinux 
-    };
-}
+        const ua = navigator.userAgent.toLowerCase();
+        const isAndroid = /android/.test(ua);
+        const isIOS = /iphone|ipad|ipod/.test(ua);
+        const isAndroidTV = isAndroid && (/tv|smarttv|googletv|appletv|hbbtv|pov_tv|netcast.tv/.test(ua) || screen.width > 960);
+        const isMac = /macintosh|mac os x/.test(ua) && !/iphone|ipad|ipod/.test(ua);
+        const isWindows = /windows/.test(ua);
+        const isLinux = /linux/.test(ua) && !isAndroid;
+        return { supported: isAndroid || isIOS || isAndroidTV || isMac, isWindows, isLinux };
+    }
 
     function initApp() {
         const os = detectOS();
