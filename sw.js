@@ -5,6 +5,7 @@
 const CACHE_NAME = "stv-cache-v5";
 const ASSETS_TO_CACHE = [
     "/",
+    "/MaterialSymbolsRounded.woff2"
     "/index.html",
     "/tv.html",
     "/cinema.html",
@@ -12,7 +13,7 @@ const ASSETS_TO_CACHE = [
     "/styles.css",
     "/app.js",
     "/manifest.json",
-	"/MaterialSymbolsRounded.woff2"
+	"/stv.png"
 ];
 
 self.addEventListener("install", function(event) {
