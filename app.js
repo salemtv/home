@@ -399,58 +399,26 @@
                 refreshList(type, activeTab, filterText, currentPage);
             });
 
-
-
-                        // [NUEVO] Expandir/ocultar al tocar TODA la fila (list-row)
-            // El botón options-toggle sigue funcionando igual
-            function toggleOptions(ev) {
-                // No hacer nada si se tocó el botón de favorito
-                if (ev && ev.target.closest(".fav-btn")) return;
-                
+            el.querySelector(".options-toggle").addEventListener("click", e => {
+                e.stopPropagation();
                 const list = el.querySelector(".options-list");
                 const btn = el.querySelector(".options-toggle");
                 const wasOpen = list.classList.contains("open");
-                
-                // Cerrar todos los demás items abiertos
                 container.querySelectorAll(".options-list.open").forEach(l => {
                     l.classList.remove("open");
                     const b = l.previousElementSibling?.querySelector(".options-toggle");
                     if (b) b.classList.remove("open");
                 });
-                
-                // Resetear temporadas/episodios si estaban abiertos
-                container.querySelectorAll(".season-episodes").forEach(s => s.classList.remove("open"));
-                container.querySelectorAll(".season-toggle").forEach(b => b.classList.remove("open"));
-                container.querySelectorAll(".episode-options").forEach(d => d.classList.remove("open"));
-                container.querySelectorAll(".episode-toggle").forEach(b => b.classList.remove("open"));
-                container.dataset.openSeason = "";
-                container.dataset.openEpisode = "";
-                
                 if (!wasOpen) {
                     list.classList.add("open");
                     btn.classList.add("open");
                     container.dataset.openId = item.id;
                 } else {
                     container.dataset.openId = "";
+                    container.dataset.openSeason = "";
+                    container.dataset.openEpisode = "";
                 }
-            }
-
-            // Click en toda la fila expande/oculta
-            el.querySelector(".list-row").addEventListener("click", function(e) {
-                // Si se tocó el fav-btn, no hacer toggle
-                if (e.target.closest(".fav-btn")) return;
-                toggleOptions(e);
             });
-
-            // Click en el botón toggle también funciona (igual que antes)
-            el.querySelector(".options-toggle").addEventListener("click", function(e) {
-                e.stopPropagation();
-                toggleOptions(e);
-            });
-
-
-
-
 
             if (isSeries) {
                 el.querySelectorAll(".season-toggle").forEach(btn => {
@@ -1016,7 +984,7 @@
         if (!newsSection || !closeBtn) return;
 
         const STORAGE_KEY = "stv_news_dismissed";
-        const HOURS_HIDDEN = 48; // ← Edita esto para cambiar las horas
+        const HOURS_HIDDEN = 24; // ← Edita esto para cambiar las horas
 
         function shouldShow() {
             const dismissedAt = load(STORAGE_KEY, null);
@@ -1067,49 +1035,12 @@
 
 
 
-    /* ============================================ */
-    /* [NUEVO] BLOQUEAR TRADUCCIÓN DE ICONOS        */
-    /* Google Translate traduce los textos dentro   */
-    /* de los spans, rompiendo los iconos.          */
-    /* ============================================ */
-
-    function initNoTranslate() {
-        // Aplicar a todos los iconos existentes
-        document.querySelectorAll(".material-symbols-rounded").forEach(function(el) {
-            el.setAttribute("translate", "no");
-            el.setAttribute("lang", "zxx");  // zxx = sin contenido lingüístico
-        });
-
-        // Observar nuevos iconos que se agreguen dinámicamente
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                mutation.addedNodes.forEach(function(node) {
-                    if (node.nodeType === 1) {  // Element node
-                        if (node.classList && node.classList.contains("material-symbols-rounded")) {
-                            node.setAttribute("translate", "no");
-                            node.setAttribute("lang", "zxx");
-                        }
-                        // También revisar hijos
-                        if (node.querySelectorAll) {
-                            node.querySelectorAll(".material-symbols-rounded").forEach(function(child) {
-                                child.setAttribute("translate", "no");
-                                child.setAttribute("lang", "zxx");
-                            });
-                        }
-                    }
-                });
-            });
-        });
-
-        observer.observe(document.body, { childList: true, subtree: true });
-    }
 
 
     function boot() {
         initApp();
         /* [NUEVO] Inicializar capa de precarga antes de todo lo demás */
         initPageLoader();
-		initNoTranslate();
         initNewsDismiss();   // ← NUEVO
         initDonateModal();   // ← NUEVO
         initSecurity();
