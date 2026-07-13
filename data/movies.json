@@ -1,6 +1,20 @@
 {
   "movies": [
 	{
+      "id": "mv8",
+      "name": "El dia de la Revelación",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/8yQ7RDPPBlHMYdIo4ihPkHkOfnY.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "Ripcam",
+          "url": "https://vimeos.net/embed-qa4cn6c7ok3p.html"
+        }
+      ]
+    },
+	{
       "id": "mv7",
       "name": "Los Simpson: Simpsley",
       "year": 2026,
