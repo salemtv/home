@@ -6,7 +6,9 @@
     <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="STV - Your Streaming Companion">
+    <meta name="description" content="Online">
+    <!-- Evitar traducción de iconos Material Symbols -->
+    <meta name="google" content="notranslate">
     <link rel="manifest" href="manifest.json">
     <!-- ============================================ -->
     <!-- [NUEVO] FAVICON Y APPLE TOUCH ICON - PNG reales -->
@@ -14,7 +16,14 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- ============================================ -->
+    <!-- [NUEVO] PRELOAD FUENTE LOCAL + FALLBACK CDN  -->
+    <!-- Preload crítico para evitar FOUT             -->
+    <!-- ============================================ -->
+    <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <!-- Prefetch de otras páginas para navegación fluida -->
+    <link rel="prefetch" href="index.html">
+    <link rel="prefetch" href="tv.html">
     <link rel="stylesheet" href="styles.css">
     <title>STV - Cine</title>
 </head>
@@ -46,9 +55,8 @@
             </header>
 
             <!-- ============================================ -->
-            <!-- [NUEVO] CAPA DE PRECARGA / PAGE LOADER -->
-            <!-- Se muestra mientras carga el JSON de peliculas -->
-            <!-- Se oculta con MutationObserver cuando renderList() inserta .list-item -->
+            <!-- [NUEVO] CAPA DE PRECARGA / PAGE LOADER REAL -->
+            <!-- Espera fonts + datos + render antes de ocultar -->
             <!-- ============================================ -->
             <div class="page-loader" id="page-loader">
                 <div class="loader-content">
@@ -84,6 +92,7 @@
                     </div>
 
                     <div id="list-container" data-tab="all"></div>
+                    <div id="pagination"></div>
 
                 </section>
             </main>

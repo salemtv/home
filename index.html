@@ -6,7 +6,9 @@
     <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="STV - Your Streaming Companion">
+    <meta name="description" content="Online">
+    <!-- Evitar traducción de iconos Material Symbols -->
+    <meta name="google" content="notranslate">
     <link rel="manifest" href="manifest.json">
     <!-- ============================================ -->
     <!-- [NUEVO] FAVICON Y APPLE TOUCH ICON - PNG reales -->
@@ -16,7 +18,14 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- ============================================ -->
+    <!-- [NUEVO] PRELOAD FUENTE LOCAL + FALLBACK CDN  -->
+    <!-- Preload crítico para evitar FOUT             -->
+    <!-- ============================================ -->
+    <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <!-- Prefetch de otras páginas para navegación fluida -->
+    <link rel="prefetch" href="tv.html">
+    <link rel="prefetch" href="cinema.html">
     <link rel="stylesheet" href="styles.css">
     <title>Salem TV</title>
 </head>
@@ -51,10 +60,8 @@
             </header>
 
             <!-- ============================================ -->
-            <!-- [NUEVO] CAPA DE PRECARGA / PAGE LOADER -->
-            <!-- Se muestra mientras el contenido carga -->
-            <!-- Se oculta con JS cuando el DOM está listo -->
-            <!-- top: 56px para no cubrir el top-bar -->
+            <!-- [NUEVO] CAPA DE PRECARGA / PAGE LOADER REAL -->
+            <!-- Espera fonts + datos + render antes de ocultar -->
             <!-- ============================================ -->
             <div class="page-loader" id="page-loader">
                 <div class="loader-content">
@@ -74,7 +81,7 @@
 <!-- ============================================ -->
 <button class="donate-top-btn" id="donate-top-btn">
     <span class="material-symbols-rounded">volunteer_activism</span>
-    Apoyar a Salem via Yape
+    Apoyar a Salem via Yape!
 </button>
 
 <!-- ============================================ -->
@@ -92,11 +99,9 @@
         </button>
     </div>
     <div class="news-content" id="news-content">
-        <p>Se recomienda descargar <b>Brave Navegador</b> o apps como <b>AdGuard</b> (Android) y <b>AdBlock Pro</b> (IOS) para mejorar la experiencia sin anuncios.</p>
+        <p>Se recomienda descargar <b>Brave Navegador</b> o apps como <b>AdGuard</b> (Android/iOS) para mejorar la experiencia sin anuncios.</p>
     </div>
-    <div class="tag-guide" id="tag-guidecambiaresto" style="font-size: 8px;color:#aaa;">
-Todo el contenido y anuncios provienen exclusivamente de dominios externos no afiliados. No alojamos ni transmitimos archivos multimedia. No somos propietarios.
-</div>
+
 </div>
 
 
@@ -132,13 +137,27 @@ Todo el contenido y anuncios provienen exclusivamente de dominios externos no af
                         </button>
                     </div>
                     <div class="card-row" id="cinema-history-row"></div>
-                </section>
+
+</section>
+
+
+<div class="legal-section" id="legal-section">
+    <div class="legal-header">
+        <div class="legal-title">
+            <span class="material-symbols-rounded">brightness_alert</span>
+            Aclaración sobre el contenido
+        </div>
+	</div>
+<div class="legal-content" id="legal-content">
+Queremos enfatizar que Salem TV no produce ni aloja contenido ilegal. Todo el material disponible en nuestro sitio proviene de fuentes públicas y gratuitas, y se incorpora automáticamente sin moderación previa. Asimismo, STV no almacena copias ilegales de obras protegidas por derechos de autor. Todo el contenido y anuncios provienen de dominios externos no afiliados. No somos propietarios.
+</div>
+</div>
+
+
+
+
             </main>
         </div>
-
-
-
-
 
 
 
@@ -149,17 +168,27 @@ Todo el contenido y anuncios provienen exclusivamente de dominios externos no af
         <div class="donate-modal" id="donate-modal">
             <div class="donate-modal-backdrop" id="donate-modal-backdrop"></div>
             <div class="donate-modal-content">
-                <button class="donate-modal-close" id="donate-modal-close">
-                    <span class="material-symbols-rounded">close</span>
-                </button>
+
                 <div class="donate-modal-body">
                     <img src="data/yape.jpeg" alt="QR Donación" class="donate-qr-img">
-                    <p class="donate-text">Escanea el código QR</p>
-                    <p class="donate-sub"><b>Este proyecto tiene un propósito de creación</b></br>Tu contribución ayudará a Salem en sus tratamientos post cirugias y cuidados.</br>Se agradece tu apoyo. </br>¡Gracias por mantener STV activo!</p>
+<p class="donate-text">Escanea el código QR</p>
+          <p class="donate-sub">
+<span class="material-symbols-rounded">
+pets</span>
+<span class="material-symbols-rounded">health_metrics</span>
+<span class="material-symbols-rounded">
+digital_wellbeing</span>
+<br />
+<b>Donaciones & Ayuda</b>
+<br />Tu contribución ayudará a Salem en sus tratamientos post cirugias y cuidados.
+<br />También ayudará a mantener STV activo.
+<br />¡Gracias por tu apoyo!</p>
                 </div>
+<button class="donate-modal-close" id="donate-modal-close">
+                   Cancelar
+                </button>
             </div>
         </div>
-
 
 
 

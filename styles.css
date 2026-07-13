@@ -7,11 +7,21 @@
     font-style: normal;
     font-weight: 100 700;
     src: url('MaterialSymbolsRounded.woff2') format('woff2');
-    font-display: block;  /* ← Espera a que cargue, no muestra texto */
+    font-display: optional;
 }
 
+/* Fallback CDN font-face (loaded via JS if local fails) */
+@font-face {
+    font-family: 'Material Symbols Rounded CDN';
+    font-style: normal;
+    font-weight: 100 700;
+    src: url('https://fonts.gstatic.com/s/materialsymbolsrounded/v226/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvLgyidz7i4kGnqOczT1h40N9Yg.woff2') format('woff2');
+    font-display: optional;
+}
+
+/* Ocultar iconos hasta que la fuente esté lista */
 .material-symbols-rounded {
-    font-family: 'Material Symbols Rounded';
+    font-family: 'Material Symbols Rounded', 'Material Symbols Rounded CDN', sans-serif;
     font-weight: normal;
     font-style: normal;
     font-size: 24px;
@@ -25,8 +35,25 @@
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
+    translate: no;
+    -webkit-translate: no;
+    /* Ocultar texto hasta que la fuente cargue */
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
+/* Cuando las fuentes están cargadas, mostrar iconos */
+.fonts-loaded .material-symbols-rounded,
+.material-symbols-rounded.fonts-ready {
+    opacity: 1;
+}
+
+/* Fallback: si después de 3s no cargan, mostrar igual */
+@media (prefers-reduced-motion: reduce) {
+    .material-symbols-rounded {
+        opacity: 1;
+    }
+}
 
 
 
@@ -139,6 +166,11 @@ html, body {
     overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
     padding: var(--space-md);
     padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.main-content.content-ready {
+    opacity: 1;
 }
 .tab-panel { width: 100%; min-height: 100%; animation: fadeIn 0.3s ease; }
 .tab-panel.hidden { display: none; }
@@ -331,7 +363,7 @@ html, body {
 .list-row {
     display: flex; align-items: center; gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md); 
-padding-left: var(--space-sm);cursor: pointer; min-height: 56px;
+padding-left: 9px;cursor: pointer; min-height: 56px;
 }
 
 .fav-btn {
@@ -467,7 +499,7 @@ width: 100vw;
 }
 
 .news-section {
-    background: var(--bg-surface);
+    background:  linear-gradient(135deg, #262a33 0%, var(--bg-surface) 100%);
 	border-radius: 0;
 	padding: var(--space-md);
     margin-bottom: var(--space-lg);
@@ -480,8 +512,33 @@ width: 100vw;
     font-size: var(--text-subtitle); font-weight: 700; margin-bottom: 0;
     display: flex; align-items: center; gap: var(--space-sm);
 }
-.news-section .news-title span { color: var(--accent); font-size: 24px; }
-.news-content { color: var(--text-secondary); font-size: var(--text-global); line-height: 1.6; min-height: 60px; }
+.news-section .news-title span { color: cornflowerblue; font-size: 24px; }
+.news-content { color: #8D99AE; font-size: var(--text-global); line-height: 1.6; min-height: 60px; }
+
+/**/
+.legal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+.legal-section {
+	border-top: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+	border-radius: 0;
+	padding: var(--space-md);
+    margin-top: var(--space-lg);
+	margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));
+	width: 100vw;
+}
+.legal-section .legal-title {
+    color: var(--text-secondary);font-size: var(--text-subtitle); font-weight: 700; margin-bottom: 0;
+    display: flex; align-items: center; gap: var(--space-sm);
+}
+.legal-section .legal-title span { color: var(--text-secondary); font-size: 24px; }
+.legal-content { color: var(--text-secondary); font-size: var(--text-global); line-height: 1.6; min-height: 60px; }
+/**/
 
 .empty-state {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -780,28 +837,31 @@ width: 100vw;
 /* ============================================ */
 /* [NUEVO] PAGE LOADER - Capa de precarga       */
 /* ============================================ */
-/* Se muestra mientras carga el contenido de cada pestaña */
-/* Se oculta con JS cuando los datos están listos y renderizados */
-/* top: 56px para NO cubrir el top-bar */
-/* overflow: hidden para evitar scroll fantasma */
+/* Loader REAL: cubre TODA la pantalla incluyendo */
+/* top-bar, logo y tabs. Espera fonts + datos   */
+/* + render completo antes de desaparecer.       */
+/* ============================================ */
 
 .page-loader {
     position: fixed;
-    top: 56px;                    /* Debajo del top-bar (altura exacta) */
+    top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 56px);    /* Resto de la pantalla, NO 100vh */
+    height: 100%;
     background: var(--bg-primary);
-    z-index: 90;                  /* Por encima del contenido, debajo del top-bar (z:100) */
+    /* z-index por encima del top-bar (100) y del modal (200) */
+    /* Usamos 250 para estar por encima de todo excepto modales abiertos */
+    z-index: 250;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-    /* Sin overflow para evitar scroll fantasma */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
     overflow: hidden;
     pointer-events: auto;
+    /* Safe area para iOS notch en la parte superior */
+    padding-top: env(safe-area-inset-top);
 }
 
 .page-loader.hidden {
@@ -810,7 +870,8 @@ width: 100vw;
     pointer-events: none;
 }
 
-.loader-content {
+/* Estado de carga: muestra spinner */
+.page-loader .loader-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -818,23 +879,35 @@ width: 100vw;
     animation: loaderFadeIn 0.3s ease;
 }
 
-.loader-logo {
+.page-loader .loader-logo {
     width: 80px;
     height: 80px;
     border-radius: var(--radius-lg);
     object-fit: cover;
     -webkit-user-drag: none;
-    animation: loaderPulse .5s ease-in-out infinite;
+    animation: loaderPulse 1.2s ease-in-out infinite;
 }
 
-.loader-spinner {
+.page-loader .loader-spinner {
 	display: none;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border: 3px solid rgba(255, 59, 48, 0.15);
     border-top-color: var(--accent);
     border-radius: 50%;
     animation: loaderSpin 0.8s linear infinite;
+}
+
+/* Estado de error: si algo falla después de 8s */
+.page-loader.loader-error .loader-spinner {
+    border-color: var(--text-muted);
+    border-top-color: var(--text-muted);
+    animation: none;
+}
+
+.page-loader.loader-error .loader-logo {
+    animation: none;
+    opacity: 0.5;
 }
 
 @keyframes loaderFadeIn {
@@ -850,8 +923,6 @@ width: 100vw;
 @keyframes loaderSpin {
     to { transform: rotate(360deg); }
 }
-
-
 
 
 
@@ -917,7 +988,7 @@ position: sticky;
     border: none;
     border-radius: var(--radius-full);
     background: transparent;
-    color: var(--text-muted);
+    color: #8D99AE;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -965,7 +1036,7 @@ position: sticky;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.2s ease, visibility 0.3s ease;
     pointer-events: none;
 }
 
@@ -1006,11 +1077,9 @@ position: sticky;
 }
 
 .donate-modal-close {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-sm);
-    width: 32px;
-    height: 32px;
+    position: relative;
+    width: 100%;
+    height: 40px;
     border: none;
     border-radius: var(--radius-full);
     background: var(--bg-elevated);
@@ -1019,18 +1088,15 @@ position: sticky;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all var(--transition-fast);
     z-index: 2;
+	font-weight: 700;
+	margin-top: var(--space-lg);
+	font-size: var(--text-global);
 }
 
 .donate-modal-close:hover {
     background: var(--accent);
     color: #fff;
-    transform: rotate(90deg);
-}
-
-.donate-modal-close span {
-    font-size: 18px;
 }
 
 .donate-modal-body {
@@ -1057,7 +1123,7 @@ position: sticky;
 }
 
 .donate-sub {
-    font-size: var(--text-mini);
+    font-size: 13px;
     color: var(--text-muted);
     margin: 0;
 }
@@ -1071,13 +1137,10 @@ body.modal-open {
 
 
 
-
-
-
 /* Safe area para iOS notch */
 @supports (padding-top: env(safe-area-inset-top)) {
     .page-loader {
-        top: calc(56px + env(safe-area-inset-top));
-        height: calc(100% - 56px - env(safe-area-inset-top));
+        /* El padding-top ya está en la clase base */
+        height: 100%;
     }
 }
