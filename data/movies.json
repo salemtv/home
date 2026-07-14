@@ -1,7 +1,7 @@
 {
   "movies": [
 	{
-      "id": "mv8",
+      "id": "mv11",
       "name": "El dia de la Revelación",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/8yQ7RDPPBlHMYdIo4ihPkHkOfnY.jpg",
@@ -11,6 +11,48 @@
         {
           "label": "Ripcam",
           "url": "https://vimeos.net/embed-qa4cn6c7ok3p.html"
+        }
+      ]
+    },
+	{
+      "id": "mv10",
+      "name": "El sonido de la Muerte",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/cApRXj6meulAQMYQrhjfVvZEItl.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-y2b4bmk3iqti.html"
+        }
+      ]
+    },
+	{
+      "id": "mv9",
+      "name": "Sangre Asesina",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/16TvbhCP8CfiGEbxcbtQLYWO6WG.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "Flix HD",
+          "url": "https://vimeos.net/embed-7b9qdv5hsvpj.html"
+        }
+      ]
+    },
+	{
+      "id": "mv8",
+      "name": "El Susurro",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/evDvchrDRS2i9jKcLJpixSLjx45.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-69ubzeriksdk.html"
         }
       ]
     },
