@@ -7,8 +7,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Online">
-    <!-- Evitar traducción de iconos Material Symbols -->
-    <meta name="google" content="notranslate">
+<!-- Evitar traducción de iconos Material Symbols -->
+<meta name="google" content="notranslate">
     <link rel="manifest" href="manifest.json">
     <!-- ============================================ -->
     <!-- [NUEVO] FAVICON Y APPLE TOUCH ICON - PNG reales -->
@@ -18,14 +18,7 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <!-- ============================================ -->
-    <!-- [NUEVO] PRELOAD FUENTE LOCAL + FALLBACK CDN  -->
-    <!-- Preload crítico para evitar FOUT             -->
-    <!-- ============================================ -->
-    <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-    <!-- Prefetch de otras páginas para navegación fluida -->
-    <link rel="prefetch" href="tv.html">
-    <link rel="prefetch" href="cinema.html">
+    <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css">
     <title>Salem TV</title>
 </head>
@@ -60,8 +53,10 @@
             </header>
 
             <!-- ============================================ -->
-            <!-- [NUEVO] CAPA DE PRECARGA / PAGE LOADER REAL -->
-            <!-- Espera fonts + datos + render antes de ocultar -->
+            <!-- [NUEVO] CAPA DE PRECARGA / PAGE LOADER -->
+            <!-- Se muestra mientras el contenido carga -->
+            <!-- Se oculta con JS cuando el DOM está listo -->
+            <!-- top: 56px para no cubrir el top-bar -->
             <!-- ============================================ -->
             <div class="page-loader" id="page-loader">
                 <div class="loader-content">
@@ -101,7 +96,7 @@
     <div class="news-content" id="news-content">
         <p>Se recomienda descargar <b>Brave Navegador</b> o apps como <b>AdGuard</b> (Android/iOS) para mejorar la experiencia sin anuncios.</p>
     </div>
-
+  
 </div>
 
 
@@ -168,7 +163,7 @@ Queremos enfatizar que Salem TV no produce ni aloja contenido ilegal. Todo el ma
         <div class="donate-modal" id="donate-modal">
             <div class="donate-modal-backdrop" id="donate-modal-backdrop"></div>
             <div class="donate-modal-content">
-
+                
                 <div class="donate-modal-body">
                     <img src="data/yape.jpeg" alt="QR Donación" class="donate-qr-img">
 <p class="donate-text">Escanea el código QR</p>
@@ -189,6 +184,7 @@ digital_wellbeing</span>
                 </button>
             </div>
         </div>
+
 
 
 

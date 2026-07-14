@@ -1,6 +1,5 @@
 /* ============================================ */
-/* STV - MAIN JAVASCRIPT (Optimized)            */
-/* Cache de datos, loader real, FOUT fix       */
+/* STV - MAIN JAVASCRIPT (Final + Updates)      */
 /* ============================================ */
 
 (function() {
@@ -14,19 +13,10 @@
         newSnapshot: "stv_new_snapshot",
         newResetDate: "stv_new_reset_date",
         newsContent: "stv_news_content",
-        lastPlaying: "stv_last_playing",
-        // NUEVO: Cache de datos JSON
-        cachedChannels: "stv_cached_channels",
-        cachedMovies: "stv_cached_movies",
-        cachedChannelsTime: "stv_cached_channels_time",
-        cachedMoviesTime: "stv_cached_movies_time",
-        // NUEVO: Cache de estado UI
-        uiStateTv: "stv_ui_state_tv",
-        uiStateCinema: "stv_ui_state_cinema"
+        lastPlaying: "stv_last_playing"
     };
 
     const ITEMS_PER_PAGE = 30;
-    const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 horas
 
     function $(sel) { return document.querySelector(sel); }
     function $$(sel) { return document.querySelectorAll(sel); }
@@ -43,50 +33,6 @@
     async function fetchJSON(url) {
         const res = await fetch(url);
         return res.json();
-    }
-
-    /* ============================================ */
-    /* [NUEVO] CACHE DE DATOS JSON                  */
-    /* Carga desde localStorage primero, luego      */
-    /* actualiza en background desde red            */
-    /* ============================================ */
-
-    async function fetchJSONWithCache(url, cacheKey, cacheTimeKey) {
-        const cached = load(cacheKey, null);
-        const cachedTime = load(cacheTimeKey, 0);
-        const nowTime = Date.now();
-        const isFresh = cached && (nowTime - cachedTime) < CACHE_MAX_AGE_MS;
-
-        // Si hay cache fresco, devolver inmediatamente y actualizar en background
-        if (isFresh && cached) {
-            // Actualizar en background silenciosamente
-            fetchJSON(url).then(data => {
-                save(cacheKey, data);
-                save(cacheTimeKey, Date.now());
-            }).catch(() => {});
-            return cached;
-        }
-
-        // Si no hay cache o está vieja, esperar fetch
-        const data = await fetchJSON(url);
-        save(cacheKey, data);
-        save(cacheTimeKey, Date.now());
-        return data;
-    }
-
-    /* ============================================ */
-    /* [NUEVO] CACHE DE ESTADO UI                   */
-    /* Guarda/restaura tab, página, búsqueda        */
-    /* ============================================ */
-
-    function saveUIState(type, tab, page, filterText) {
-        const key = type === "tv" ? STORAGE.uiStateTv : STORAGE.uiStateCinema;
-        save(key, { tab, page, filterText, timestamp: Date.now() });
-    }
-
-    function loadUIState(type) {
-        const key = type === "tv" ? STORAGE.uiStateTv : STORAGE.uiStateCinema;
-        return load(key, { tab: "all", page: 1, filterText: "" });
     }
 
     function getPlayerUrl(url) {
@@ -108,25 +54,25 @@
 
     function detectOS() {
     const ua = navigator.userAgent.toLowerCase();
-
+    
     // 1. Detectar Android PRIMERO (antes que Linux)
     const isAndroid = /android/.test(ua);
-
+    
     // 2. Detectar iOS
     const isIOS = /iphone|ipad|ipod/.test(ua);
-
+    
     // 3. Android TV (debe ir después de isAndroid)
     const isAndroidTV = isAndroid && (/tv|smarttv|googletv|appletv|hbbtv|pov_tv|netcast.tv/.test(ua) || screen.width > 960);
-
+    
     // 4. Mac (excluyendo iOS)
     const isMac = /macintosh|mac os x/.test(ua) && !/iphone|ipad|ipod/.test(ua);
-
+    
     // 5. Windows
     const isWindows = /windows/.test(ua);
-
+    
     // 6. Linux (¡IMPORTANTE: excluir Android explícitamente!)
     const isLinux = /linux/.test(ua) && !isAndroid;
-
+    
     // 7. SOPORTE: incluir Linux también, o quitarlo si no quieres soporte Linux
     return { 
         supported: isAndroid || isIOS || isAndroidTV || isMac || isWindows || isLinux, 
@@ -379,7 +325,7 @@
                 : `<span>${item.year || ""}</span>`;
 
             const playingIndicator = isPlaying
-                ? `<div class="playing-indicator"><span class="material-symbols-rounded" style="font-size:12px;">play_arrow</span>Reproduciendo</div>`
+                ? `<div class="playing-indicator"><span class="material-symbols-rounded" style="font-size:14px;">play_arrow</span>Reproduciendo</div>`
                 : "";
 
             let optionsHTML = "";
@@ -484,18 +430,18 @@
             function toggleOptions(ev) {
                 // No hacer nada si se tocó el botón de favorito
                 if (ev && ev.target.closest(".fav-btn")) return;
-
+                
                 const list = el.querySelector(".options-list");
                 const btn = el.querySelector(".options-toggle");
                 const wasOpen = list.classList.contains("open");
-
+                
                 // Cerrar todos los demás items abiertos
                 container.querySelectorAll(".options-list.open").forEach(l => {
                     l.classList.remove("open");
                     const b = l.previousElementSibling?.querySelector(".options-toggle");
                     if (b) b.classList.remove("open");
                 });
-
+                
                 // Resetear temporadas/episodios si estaban abiertos
                 container.querySelectorAll(".season-episodes").forEach(s => s.classList.remove("open"));
                 container.querySelectorAll(".season-toggle").forEach(b => b.classList.remove("open"));
@@ -503,7 +449,7 @@
                 container.querySelectorAll(".episode-toggle").forEach(b => b.classList.remove("open"));
                 container.dataset.openSeason = "";
                 container.dataset.openEpisode = "";
-
+                
                 if (!wasOpen) {
                     list.classList.add("open");
                     btn.classList.add("open");
@@ -668,9 +614,6 @@
                 container.scrollIntoView({ behavior: "smooth", block: "start" });
             });
         }
-
-        // Guardar estado UI
-        saveUIState(type, tab, page, filterText);
     }
 
     function restorePlaying(type) {
@@ -705,24 +648,13 @@
     }
 
     async function initTV() {
-        const data = await fetchJSONWithCache("data/channels.json", STORAGE.cachedChannels, STORAGE.cachedChannelsTime);
+        const data = await fetchJSON("data/channels.json");
         window._stvData = data.channels || [];
         restorePlaying("tv");
 
         const subTabs = $$(".sub-tab");
         let currentTab = "all";
         let filterText = "";
-
-        // Restaurar estado UI previo
-        const savedState = loadUIState("tv");
-        if (savedState) {
-            currentTab = savedState.tab || "all";
-            // Activar tab visualmente
-            subTabs.forEach(t => {
-                t.classList.toggle("active", t.dataset.tab === currentTab);
-            });
-        }
-
         subTabs.forEach(tab => {
             tab.addEventListener("click", () => {
                 subTabs.forEach(t => t.classList.remove("active"));
@@ -737,35 +669,20 @@
                 filterText = e.target.value.trim();
                 refreshList("tv", currentTab, filterText, 1);
             });
-            // Restaurar texto de búsqueda
-            if (savedState && savedState.filterText) {
-                searchInput.value = savedState.filterText;
-                filterText = savedState.filterText;
-            }
         }
         initSearch();
         initReloadButton();
-        refreshList("tv", currentTab, filterText, savedState ? savedState.page : 1);
+        refreshList("tv", currentTab, "", 1);
     }
 
     async function initCinema() {
-        const data = await fetchJSONWithCache("data/movies.json", STORAGE.cachedMovies, STORAGE.cachedMoviesTime);
+        const data = await fetchJSON("data/movies.json");
         window._stvData = data.movies || [];
         restorePlaying("movie");
 
         const subTabs = $$(".sub-tab");
         let currentTab = "all";
         let filterText = "";
-
-        // Restaurar estado UI previo
-        const savedState = loadUIState("cinema");
-        if (savedState) {
-            currentTab = savedState.tab || "all";
-            subTabs.forEach(t => {
-                t.classList.toggle("active", t.dataset.tab === currentTab);
-            });
-        }
-
         subTabs.forEach(tab => {
             tab.addEventListener("click", () => {
                 subTabs.forEach(t => t.classList.remove("active"));
@@ -780,14 +697,10 @@
                 filterText = e.target.value.trim();
                 refreshList("movie", currentTab, filterText, 1);
             });
-            if (savedState && savedState.filterText) {
-                searchInput.value = savedState.filterText;
-                filterText = savedState.filterText;
-            }
         }
         initSearch();
         initReloadButton();
-        refreshList("movie", currentTab, filterText, savedState ? savedState.page : 1);
+        refreshList("movie", currentTab, "", 1);
     }
 
     function renderHomeHistory(allChannels, allMovies) {
@@ -886,8 +799,8 @@
     }
 
     async function initHome() {
-        const chData = await fetchJSONWithCache("data/channels.json", STORAGE.cachedChannels, STORAGE.cachedChannelsTime).catch(() => ({channels: []}));
-        const mvData = await fetchJSONWithCache("data/movies.json", STORAGE.cachedMovies, STORAGE.cachedMoviesTime).catch(() => ({movies: []}));
+        const chData = await fetchJSON("data/channels.json").catch(() => ({channels: []}));
+        const mvData = await fetchJSON("data/movies.json").catch(() => ({movies: []}));
         const allChannels = chData.channels || [];
         const allMovies = mvData.movies || [];
 
@@ -1027,104 +940,92 @@
     }
 
     /* ============================================ */
-    /* [NUEVO] FONT LOADER - Elimina FOUT         */
-    /* Carga fuente local primero, fallback CDN     */
-    /* Oculta iconos hasta que la fuente esté lista */
+    /* [NUEVO] PAGE LOADER - Capa de precarga     */
     /* ============================================ */
+    /* Se muestra mientras carga el contenido de cada pestaña */
+    /* Home: se oculta tras 300ms (carga rápida, no depende de fetch) */
+    /* TV/Cinema: usa MutationObserver para detectar cuando renderList() */
+    /* inserta .list-item en #list-container, luego oculta con fade suave */
+    /* Fallback de 5 segundos por si algo falla */
 
-    function initFontLoader() {
-        return new Promise(function(resolve) {
-            // Timeout de seguridad: si en 4s no carga, mostrar igual
-            const safetyTimeout = setTimeout(function() {
-                document.body.classList.add("fonts-loaded");
-                resolve(false);
-            }, 4000);
-
-            // Intentar cargar fuente local primero
-            const localFont = new FontFace("Material Symbols Rounded", "url('MaterialSymbolsRounded.woff2') format('woff2')", {
-                weight: "100 700",
-                style: "normal",
-                display: "optional"
-            });
-
-            localFont.load().then(function(font) {
-                document.fonts.add(font);
-                clearTimeout(safetyTimeout);
-                document.body.classList.add("fonts-loaded");
-                resolve(true);
-            }).catch(function() {
-                // Fallback: cargar desde CDN
-                const link = document.createElement("link");
-                link.rel = "stylesheet";
-                link.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
-                link.onload = function() {
-                    clearTimeout(safetyTimeout);
-                    document.body.classList.add("fonts-loaded");
-                    resolve(true);
-                };
-                link.onerror = function() {
-                    clearTimeout(safetyTimeout);
-                    document.body.classList.add("fonts-loaded");
-                    resolve(false);
-                };
-                document.head.appendChild(link);
-            });
-        });
-    }
-
-    /* ============================================ */
-    /* [NUEVO] PAGE LOADER REAL                     */
-    /* Espera: fonts + datos + render completo      */
-    /* Se oculta solo cuando TODO está listo        */
-    /* ============================================ */
-
-    function initPageLoaderReal() {
+    function initPageLoader() {
         const loader = document.getElementById("page-loader");
         const mainContent = document.querySelector(".main-content");
-        if (!loader || !mainContent) return Promise.resolve();
+        if (!loader || !mainContent) return;
 
-        // El contenido principal empieza oculto (opacity 0 via CSS)
-        mainContent.classList.remove("content-ready");
+        // Ocultar el contenido principal mientras carga
+        mainContent.style.opacity = "0";
+        mainContent.style.transition = "opacity 0.3s ease";
 
-        // Timeout de error: si tarda más de 8s, mostrar igual
-        const errorTimeout = setTimeout(function() {
-            loader.classList.add("loader-error");
-            setTimeout(function() {
-                hideLoader();
-            }, 1000);
-        }, 8000);
-
+        // Función para quitar el loader
         function hideLoader() {
-            clearTimeout(errorTimeout);
-            // Primero mostrar el contenido con fade-in
-            mainContent.classList.add("content-ready");
-            // Luego quitar el loader (que tapa todo incluyendo top-bar)
-            // Pequeño delay para que el contenido empiece a pintarse antes
-            requestAnimationFrame(function() {
-                loader.classList.add("hidden");
+            loader.classList.add("hidden");
+            mainContent.style.opacity = "1";
+            // Limpiar el transition después para no afectar futuras animaciones
+            setTimeout(() => {
+                mainContent.style.transition = "";
+            }, 350);
+        }
+
+        // Caso 1: Si la página NO necesita fetch (home ya tiene datos en localStorage o no depende de JSON)
+        const page = document.body.dataset.page;
+        if (page === "home") {
+            // Home carga rápido, esperamos un poco para que el DOM se pinte
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setTimeout(hideLoader, 300);
+                });
+            });
+            return;
+        }
+
+        // Caso 2: TV y Cinema dependen de fetchJSON
+        // Creamos un MutationObserver para detectar cuando el list-container recibe contenido
+        const listContainer = document.getElementById("list-container");
+        if (!listContainer) {
+            hideLoader();
+            return;
+        }
+
+        let observer;
+        let timeoutId;
+
+        function onContentLoaded() {
+            if (timeoutId) clearTimeout(timeoutId);
+            if (observer) observer.disconnect();
+            // Pequeña espera para que el navegador termine de renderizar
+            requestAnimationFrame(() => {
+                setTimeout(hideLoader, 2250);
             });
         }
 
-        // Exponer globalmente para que initTV/initCinema/initHome lo llamen
-        window._stvHideLoader = hideLoader;
-        window._stvLoader = loader;
-
-        return new Promise(function(resolve) {
-            window._stvResolveLoader = function() {
-                hideLoader();
-                resolve();
-            };
+        // Observer: detecta cuando se insertan nodos en el list-container
+        observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+                    // Verificar que no sea solo el empty-state inicial
+                    const hasRealContent = listContainer.querySelector(".list-item");
+                    if (hasRealContent) {
+                        onContentLoaded();
+                        break;
+                    }
+                }
+            }
         });
+
+        observer.observe(listContainer, { childList: true, subtree: true });
+
+        // Fallback: si después de 5 segundos no cargó, quitar loader igual
+        timeoutId = setTimeout(() => {
+            observer.disconnect();
+            hideLoader();
+        }, 5000);
     }
 
-    function markLoaderComplete() {
-        if (window._stvResolveLoader) {
-            // Pequeña espera para que el navegador termine de pintar
-            requestAnimationFrame(function() {
-                setTimeout(window._stvResolveLoader, 100);
-            });
-        }
-    }
+
+
+
+
 
     /* ============================================ */
     /* [NUEVO] NOTICIAS CON CIERRE TEMPORAL         */
@@ -1228,61 +1129,24 @@
     }
 
 
-    /* ============================================ */
-    /* [NUEVO] PREFETCH DE PÁGINAS                  */
-    /* Precarga las otras páginas para navegación */
-    /* más fluida entre pestañas                    */
-    /* ============================================ */
-
-    function initPrefetch() {
-        const page = document.body.dataset.page;
-        const pages = {
-            home: ["tv.html", "cinema.html"],
-            tv: ["index.html", "cinema.html"],
-            cinema: ["index.html", "tv.html"]
-        };
-        const toPrefetch = pages[page] || [];
-        toPrefetch.forEach(function(url) {
-            const link = document.createElement("link");
-            link.rel = "prefetch";
-            link.href = url;
-            document.head.appendChild(link);
-        });
-    }
-
-
-    async function boot() {
+    function boot() {
         initApp();
-        initPrefetch();
+        /* [NUEVO] Inicializar capa de precarga antes de todo lo demás */
+        initPageLoader();
+		initNoTranslate();
+        initNewsDismiss();   // ← NUEVO
+        initDonateModal();   // ← NUEVO
         initSecurity();
         initPWA();
         initTouch();
-
-        // Iniciar loader real ANTES de todo
-        const loaderPromise = initPageLoaderReal();
-
-        // Cargar fuentes en paralelo
-        const fontPromise = initFontLoader();
-
-        // Esperar que las fuentes estén listas
-        await fontPromise;
-        initNoTranslate();
-        initNewsDismiss();
-        initDonateModal();
         updateBadge();
-
         const page = document.body.dataset.page;
         if (page === "tv") {
-            await initTV();
-            handleUrlParams("tv");
-            markLoaderComplete();
+            initTV().then(() => handleUrlParams("tv"));
         } else if (page === "cinema") {
-            await initCinema();
-            handleUrlParams("movie");
-            markLoaderComplete();
+            initCinema().then(() => handleUrlParams("movie"));
         } else if (page === "home") {
-            await initHome();
-            markLoaderComplete();
+            initHome();
         }
     }
 
