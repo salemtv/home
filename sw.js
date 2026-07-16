@@ -1,9 +1,11 @@
 /* ============================================ */
-/* STV - SERVICE WORKER                         */
+/* STV - SERVICE WORKER (Optimizado)            */
 /* ============================================ */
 
-const CACHE_NAME = "stv-cache-v5";
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = "stv-cache-v6";
+const DATA_CACHE_NAME = "stv-data-v1";
+
+const STATIC_ASSETS = [
     "/",
     "/index.html",
     "/tv.html",
@@ -12,14 +14,27 @@ const ASSETS_TO_CACHE = [
     "/styles.css",
     "/app.js",
     "/manifest.json",
-	"/MaterialSymbolsRounded.woff2"
+    "/MaterialSymbolsRounded.woff2"
+];
+
+// [FIX] JSON de datos ahora cacheados para soporte offline real
+const DATA_ASSETS = [
+    "/data/channels.json",
+    "/data/movies.json"
 ];
 
 self.addEventListener("install", function(event) {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(function(cache) {
-            return cache.addAll(ASSETS_TO_CACHE);
-        }).catch(function(){})
+        Promise.all([
+            caches.open(CACHE_NAME).then(function(cache) {
+                return cache.addAll(STATIC_ASSETS);
+            }),
+            caches.open(DATA_CACHE_NAME).then(function(cache) {
+                return cache.addAll(DATA_ASSETS).catch(function(err) {
+                    console.log("STV SW: No se pudieron precachear datos:", err);
+                });
+            })
+        ])
     );
     self.skipWaiting();
 });
@@ -29,7 +44,9 @@ self.addEventListener("activate", function(event) {
         caches.keys().then(function(cacheNames) {
             return Promise.all(
                 cacheNames.map(function(name) {
-                    if (name !== CACHE_NAME) return caches.delete(name);
+                    if (name !== CACHE_NAME && name !== DATA_CACHE_NAME) {
+                        return caches.delete(name);
+                    }
                 })
             );
         })
@@ -37,11 +54,94 @@ self.addEventListener("activate", function(event) {
     self.clients.claim();
 });
 
+/* ============================================ */
+/* [FIX] Estrategias de caché por tipo de recurso */
+/* ============================================ */
+
 self.addEventListener("fetch", function(event) {
-    event.respondWith(
-        caches.match(event.request).then(function(response) {
-            if (response) return response;
-            return fetch(event.request).catch(function(){});
-        })
-    );
+    const { request } = event;
+    const url = new URL(request.url);
+
+    // 1. JSON de datos: Network First (siempre fresco, fallback a cache)
+    if (url.pathname.endsWith('.json') && url.pathname.includes('/data/')) {
+        event.respondWith(networkFirst(request, DATA_CACHE_NAME));
+        return;
+    }
+
+    // 2. Assets estáticos de la app: Cache First (rápido, confiable)
+    if (isStaticAsset(url.pathname)) {
+        event.respondWith(cacheFirst(request, CACHE_NAME));
+        return;
+    }
+
+    // 3. Todo lo demás (imágenes, iframes, etc.): Stale While Revalidate
+    event.respondWith(staleWhileRevalidate(request, CACHE_NAME));
 });
+
+function isStaticAsset(pathname) {
+    return STATIC_ASSETS.includes(pathname) || 
+           pathname.endsWith('.css') || 
+           pathname.endsWith('.js') ||
+           pathname.endsWith('.html') ||
+           pathname.endsWith('.woff2');
+}
+
+// [FIX] Cache First: rápido, siempre sirve algo
+function cacheFirst(request, cacheName) {
+    return caches.open(cacheName).then(function(cache) {
+        return cache.match(request).then(function(response) {
+            if (response) return response;
+            return fetch(request).then(function(networkResponse) {
+                if (networkResponse && networkResponse.status === 200) {
+                    cache.put(request, networkResponse.clone());
+                }
+                return networkResponse;
+            }).catch(function() {
+                // [FIX] Si fetch falla y no hay cache, devolver página offline
+                return new Response(
+                    '<html><body style="background:#0a0a0a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;"><div style="text-align:center;"><h1>STV</h1><p>Sin conexión. Algunos contenidos pueden no estar disponibles.</p></div></body></html>',
+                    { headers: { 'Content-Type': 'text/html' } }
+                );
+            });
+        });
+    });
+}
+
+// [FIX] Network First: intenta red primero, fallback a cache
+function networkFirst(request, cacheName) {
+    return caches.open(cacheName).then(function(cache) {
+        return fetch(request).then(function(networkResponse) {
+            if (networkResponse && networkResponse.status === 200) {
+                cache.put(request, networkResponse.clone());
+            }
+            return networkResponse;
+        }).catch(function() {
+            return cache.match(request).then(function(cachedResponse) {
+                if (cachedResponse) return cachedResponse;
+                // Si no hay cache ni red, devolver JSON vacío para no romper la app
+                return new Response(
+                    JSON.stringify({ error: "offline", channels: [], movies: [] }),
+                    { headers: { 'Content-Type': 'application/json' } }
+                );
+            });
+        });
+    });
+}
+
+// [FIX] Stale While Revalidate: sirve cache inmediatamente, actualiza en background
+function staleWhileRevalidate(request, cacheName) {
+    return caches.open(cacheName).then(function(cache) {
+        return cache.match(request).then(function(cachedResponse) {
+            const fetchPromise = fetch(request).then(function(networkResponse) {
+                if (networkResponse && networkResponse.status === 200) {
+                    cache.put(request, networkResponse.clone());
+                }
+                return networkResponse;
+            }).catch(function() {
+                return cachedResponse;
+            });
+
+            return cachedResponse || fetchPromise;
+        });
+    });
+}

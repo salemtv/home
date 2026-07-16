@@ -326,7 +326,7 @@ html, body {
 .list-item.playing { background: var(--bg-active); border-color: rgba(255,59,48,0.2); }
 .list-item.playing .item-name { color: var(--accent); }
 .list-item.playing .playing-indicator {
-    display: flex; align-items: center; gap: 4px; color: var(--accent); font-size: 9px; font-weight: 700;
+    display: flex; align-items: center; gap: 4px; color: var(--accent); font-size: 11px; font-weight: 500;
     text-transform: uppercase; letter-spacing: 0.5px;
 }
 
@@ -379,12 +379,9 @@ padding-left: 9px;cursor: pointer; min-height: 56px;
 .options-toggle span:first-child { font-size: var(--text-mini); }
 .options-toggle span:last-child { font-size: 18px; transition: transform var(--transition-smooth); }
 .options-toggle.open span:last-child { transform: rotate(180deg); }
+/****AQUI**/
 
-.options-list {
-    max-height: 0; overflow: hidden; transition: max-height var(--transition-smooth), padding var(--transition-smooth);
-    background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.03);
-}
-.options-list.open { max-height: 300px; padding: var(--space-sm) var(--space-md); }
+/****/
 
 .option-btn {
     width: 100%; display: flex; align-items: center; justify-content: space-between;
@@ -731,19 +728,8 @@ width: 100vw;
 }
 
 /* [FIX] Eliminada la barra roja vertical. Mismo padding que options-list */
-.season-episodes {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height var(--transition-smooth), padding var(--transition-smooth);
-    padding: 0 var(--space-md);
-    /* [REMOVIDO] border-left: 2px solid rgba(255,59,48,0.2); */
-    /* [REMOVIDO] margin-left: var(--space-md); */
-}
-.season-episodes.open {
-    max-height: 900px;
-    padding: var(--space-sm) var(--space-md);
-}
 
+/***/
 .episode-group {
     margin-bottom: var(--space-xs);
 }
@@ -759,16 +745,9 @@ width: 100vw;
 .episode-toggle.open span:last-child {
     transform: rotate(180deg);
 }
-.episode-options {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height var(--transition-smooth), padding var(--transition-smooth);
-    padding: 0 var(--space-sm);
-}
-.episode-options.open {
-    max-height: 400px;
-    padding: var(--space-sm);
-}
+/***/
+
+/***/
 .episode-btn {
     background: rgba(0,0,0,0.1) !important;
 }
@@ -778,6 +757,72 @@ width: 100vw;
     border-style: dashed !important;
     margin-bottom: 4px !important;
 }
+
+
+
+/* ============================================ */
+/* [NUEVO] ACORDEÓN FLUIDO CON GRID           */
+/* ============================================ */
+/* grid-template-rows anima EXACTAMENTE al     */
+/* alto real del contenido. Nunca sobra ni     */
+/* falta espacio. El padding va en el nieto    */
+/* (.accordion-body) para que el grid colapse  */
+/* completamente a 0 sin residuos visibles.    */
+
+.options-list,
+.season-episodes,
+.episode-options {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
+}
+
+.options-list.open,
+.season-episodes.open,
+.episode-options.open {
+    grid-template-rows: 1fr;
+}
+
+/* Hijo del grid: recorte limpio, sin padding */
+.accordion-inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Nieto: aquí va el padding, el borde y el fade */
+.accordion-body {
+    padding: var(--space-sm) var(--space-md);
+    border-top: 1px solid rgba(255,255,255,0.03);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.35s ease;
+}
+
+/* Episodios: padding más compacto */
+.episode-options .accordion-body {
+    padding: var(--space-sm);
+}
+
+/* Al abrir: desvanecimiento suave con delay */
+.options-list.open .accordion-body,
+.season-episodes.open .accordion-body,
+.episode-options.open .accordion-body {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.4s ease 0.06s, transform 0.45s cubic-bezier(0.32, 0.72, 0, 1) 0.06s;
+}
+
+/* Al cerrar: el fade es más rápido que el grid */
+/* para que el contenido se desvanezca mientras */
+/* el contenedor aún tiene espacio, evitando el */
+/* "corte" brusco.                              */
+.options-list:not(.open) .accordion-body,
+.season-episodes:not(.open) .accordion-body,
+.episode-options:not(.open) .accordion-body {
+    transition: opacity 0.2s ease, transform 0.25s ease;
+}
+
 
 /* ============================================ */
 /* CÍRCULO DE NÚMERO DE CAPÍTULO                */
@@ -1102,4 +1147,90 @@ body.modal-open {
         top: calc(0px + env(safe-area-inset-top));
         height: calc(100% - 0px - env(safe-area-inset-top));
     }
+}
+
+
+/* ============================================ */
+/* [NUEVO] METADATOS DE PELÍCULAS              */
+/* ============================================ */
+
+.movie-meta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: 1px;
+    flex-wrap: wrap;
+}
+
+.movie-genre {
+    font-size: 12px;
+	min-width: auto;
+    height: auto;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Clasificación por edad - 3 niveles simples */
+.movie-rating {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: auto;
+    height: auto;
+    padding: 0 4px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: ;/**0.5px;**/
+}
+
+/* Todo Público - Verde */
+.movie-rating[data-rating="TP"],
+.movie-rating[data-rating="G"],
+.movie-rating[data-rating="TV-Y"] {
+    background: #34c75980;
+}
+
+/* +13 / Guía Parental - Naranja */
+.movie-rating[data-rating="+13"],
+.movie-rating[data-rating="PG-13"],
+.movie-rating[data-rating="TV-14"],
+.movie-rating[data-rating="PG"] {
+    background: #ff950080;
+}
+
+/* +18 / Adultos - Rojo */
+.movie-rating[data-rating="+18"],
+.movie-rating[data-rating="R"],
+.movie-rating[data-rating="TV-MA"],
+.movie-rating[data-rating="NC-17"] {
+    background: #ff3b3080;
+}
+
+/* Por defecto si no coincide: rojo */
+.movie-rating:not([data-rating="TP"]):not([data-rating="G"]):not([data-rating="TV-Y"]):not([data-rating="+13"]):not([data-rating="PG-13"]):not([data-rating="TV-14"]):not([data-rating="PG"]):not([data-rating="+18"]):not([data-rating="R"]):not([data-rating="TV-MA"]):not([data-rating="NC-17"]) {
+    background: var(--accent);
+}
+
+
+/* Descripción de película */
+.movie-description {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding: 0px;
+	text-align: center;
+    border: 0;
+    margin-bottom: var(--space-md);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.options-list.open .movie-description {
+    -webkit-line-clamp: unset;
+    display: block;
 }

@@ -5,6 +5,12 @@
 (function() {
     "use strict";
 
+    // [FIX] Datos privados en closure, NO expuestos globalmente
+    // window._stvData era accesible desde cualquier script externo
+    let _stvData = [];
+    function getStvData() { return _stvData; }
+    function setStvData(data) { _stvData = data || []; }
+
     const STORAGE = {
         favChannels: "stv_fav_channels",
         favMovies: "stv_fav_movies",
@@ -30,24 +36,27 @@
     function todayStr() { return new Date().toISOString().split("T")[0]; }
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
-    async function fetchJSON(url) {
-        const res = await fetch(url);
-        return res.json();
+    async function fetchJSON(url, signal) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        try {
+            const res = await fetch(url, { signal: signal || controller.signal });
+            clearTimeout(timeoutId);
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        } catch (err) {
+            clearTimeout(timeoutId);
+            if (err.name === 'AbortError') console.log('STV: Request abortado o timeout');
+            throw err;
+        }
     }
 
     function getPlayerUrl(url) {
         if (!url) return null;
-        const lower = url.toLowerCase();
-        if (lower.includes('youtube.com/watch?v=')) {
-            try {
-                const id = new URL(url).searchParams.get('v');
-                if (id) return 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1';
-            } catch(e) {}
-        }
-        if (lower.includes('youtu.be/')) {
-            const id = url.split('youtu.be/')[1].split('?')[0];
-            if (id) return 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1';
-        }
+        // [FIX] Toda la lógica de detección de YouTube y tipos de video
+        // ahora vive ÚNICAMENTE en player.html. Esto evita duplicación
+        // de código y asegura que cualquier fix se aplique en un solo lugar.
+        // app.js solo construye la URL del player con el parámetro.
         return 'player.html?url=' + encodeURIComponent(url);
     }
 
@@ -75,7 +84,7 @@
     
     // 7. SOPORTE: incluir Linux también, o quitarlo si no quieres soporte Linux
     return { 
-        supported: isAndroid || isIOS || isAndroidTV || isMac || isWindows || isLinux, 
+        supported: !isWindows,  // [FIX] Único bloqueado: Windows. Linux SÍ soportado. 
         isAndroid, 
         isIOS, 
         isAndroidTV, 
@@ -180,8 +189,11 @@
         save(STORAGE.movieProgress, all);
     }
 
-    function setPlaying(type, id, optIdx, url, seasonIdx, episodeIdx) {
-        save(STORAGE.lastPlaying, { type, id, optIdx, url, seasonIdx, episodeIdx, time: Date.now() });
+    function setPlaying(type, id, optIdx, url, seasonIdx, episodeIdx, optionLabel) {
+        // [FIX] No almacenar la URL completa en localStorage para evitar
+        // consumo excesivo de espacio. Se reconstruye desde getStvData()
+        // [NUEVO] Almacenar el nombre/label de la opción para mostrar en el indicador
+        save(STORAGE.lastPlaying, { type, id, optIdx, seasonIdx, episodeIdx, optionLabel, time: Date.now() });
     }
     function getPlaying() { return load(STORAGE.lastPlaying, null); }
     function clearPlaying() { localStorage.removeItem(STORAGE.lastPlaying); }
@@ -194,7 +206,8 @@
         if (!container) return;
         container.innerHTML = `<iframe src="${playerUrl}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
         addHistory(type, item, opt.label, optionIdx);
-        setPlaying(type, item.id, optionIdx, opt.url);
+        // [NUEVO] Pasar el label de la opción para el indicador visual
+        setPlaying(type, item.id, optionIdx, opt.url, null, null, opt.label);
         showReloadButton();
     }
 
@@ -211,7 +224,8 @@
         container.innerHTML = `<iframe src="${playerUrl}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
         const label = `T${season.seasonNumber} E${episodeIdx + 1}${episode.name ? ' - ' + episode.name : ''}`;
         addHistory(type, item, label, optionIdx, seasonIdx, episodeIdx);
-        setPlaying(type, item.id, optionIdx, opt.url, seasonIdx, episodeIdx);
+        // [NUEVO] Pasar el label de la opción para el indicador visual
+        setPlaying(type, item.id, optionIdx, opt.url, seasonIdx, episodeIdx, opt.label);
         showReloadButton();
     }
 
@@ -324,8 +338,20 @@
                 ? `<span>Canal ${item.number}</span>`
                 : `<span>${item.year || ""}</span>`;
 
+            // [NUEVO] Metadatos de películas: género y clasificación por edad
+            const movieMeta = type !== "tv" ? `
+                <div class="movie-meta-row">
+                    ${item.genre ? `<span class="movie-genre">${item.genre}</span>` : ""}
+                    ${item.rating ? `<span class="movie-rating" data-rating="${item.rating}">${item.rating}</span>` : ""}
+                </div>
+            ` : "";
+
+            // [NUEVO] Mostrar el nombre de la opción que se está reproduciendo
+            const playingOptionLabel = isPlaying && lastPlaying.optionLabel 
+                ? lastPlaying.optionLabel 
+                : (isPlaying ? "Reproduciendo" : "");
             const playingIndicator = isPlaying
-                ? `<div class="playing-indicator"><span class="material-symbols-rounded" style="font-size:14px;">play_arrow</span>Reproduciendo</div>`
+                ? `<div class="playing-indicator"><span class="material-symbols-rounded" style="font-size:12px;">play_arrow</span>${playingOptionLabel}</div>`
                 : "";
 
             let optionsHTML = "";
@@ -367,8 +393,14 @@
                                         <span class="opt-label"><span class="ep-num-circle">${epNum}</span>${ep.name || ''}</span>
                                         <span class="material-symbols-rounded">expand_more</span>
                                     </button>
-                                    <div class="episode-options ${isEpOpen ? "open" : ""}">${epOptionsHTML}</div>
-                                </div>
+                                                                                                            <div class="episode-options ${isEpOpen ? "open" : ""}">
+                                        <div class="accordion-inner">
+                                            <div class="accordion-body">
+                                                ${epOptionsHTML}
+                                            </div>
+                                      </div>
+                                    </div>
+
                             `;
                         }
                     }).join("");
@@ -380,8 +412,14 @@
                                 <span class="season-count">${epCount}</span>
                                 <span class="material-symbols-rounded">expand_more</span>
                             </button>
-                            <div class="season-episodes ${isSeasonOpen ? "open" : ""}">${episodesHTML}</div>
-                        </div>
+                                                                                    <div class="season-episodes ${isSeasonOpen ? "open" : ""}">
+                                <div class="accordion-inner">
+                                    <div class="accordion-body">
+                                        ${episodesHTML}
+                                    </div>
+                                </div>
+                            </div>
+
                     `;
                 }).join("");
             } else {
@@ -394,6 +432,11 @@
                 }).join("");
             }
 
+            // [NUEVO] Descripción de película (solo cine, oculta hasta expandir)
+            const movieDescription = type !== "tv" && item.description ? `
+                <div class="movie-description">${item.description}</div>
+            ` : "";
+
             el.innerHTML = `
                 <div class="item-tag ${tag}"></div>
                 <div class="list-row">
@@ -403,6 +446,7 @@
                     ${imgBox}
                     <div class="item-info">
                         <div class="item-name">${item.name}</div>
+                        ${movieMeta}
                         <div class="item-meta">${meta}${playingIndicator}</div>
                     </div>
                     <button class="options-toggle ${isOpen ? "open" : ""}" data-id="${item.id}">
@@ -410,7 +454,15 @@
                         <span class="material-symbols-rounded">expand_more</span>
                     </button>
                 </div>
-                <div class="options-list ${isOpen ? "open" : ""}">${optionsHTML}</div>
+                                <div class="options-list ${isOpen ? "open" : ""}">
+                    <div class="accordion-inner">
+                        <div class="accordion-body">
+                            ${movieDescription}
+                            ${optionsHTML}
+                        </div>
+                    </div>
+                </div>
+
             `;
 
             el.querySelector(".fav-btn").addEventListener("click", e => {
@@ -595,7 +647,13 @@
         const container = $("#list-container");
         const paginationContainer = $("#pagination");
         if (!container) return;
-        const allItems = window._stvData || [];
+
+        // [OPTIMIZADO] Preservar estado de acordeones abiertos antes de re-renderizar
+        const openId = container.dataset.openId || "";
+        const openSeason = container.dataset.openSeason || "";
+        const openEpisode = container.dataset.openEpisode || "";
+
+        const allItems = getStvData();
         let items = allItems;
         if (tab === "favorites") items = allItems.filter(it => isFav(type, it.id));
         if (filterText) items = items.filter(it => it.name.toLowerCase().includes(filterText.toLowerCase()));
@@ -606,6 +664,12 @@
 
         container.dataset.tab = tab;
         container.dataset.page = page;
+
+        // [OPTIMIZADO] Restaurar estado de acordeones después de renderizar
+        container.dataset.openId = openId;
+        container.dataset.openSeason = openSeason;
+        container.dataset.openEpisode = openEpisode;
+
         renderList(container, paginatedItems, type, filterText);
 
         if (paginationContainer) {
@@ -619,7 +683,7 @@
     function restorePlaying(type) {
         const last = getPlaying();
         if (!last || last.type !== type) return;
-        const item = (window._stvData || []).find(it => it.id === last.id);
+        const item = getStvData().find(it => it.id === last.id);
         if (!item) return;
 
         if (item.isSeries && item.seasons && last.seasonIdx !== undefined) {
@@ -649,7 +713,7 @@
 
     async function initTV() {
         const data = await fetchJSON("data/channels.json");
-        window._stvData = data.channels || [];
+        setStvData(data.channels);
         restorePlaying("tv");
 
         const subTabs = $$(".sub-tab");
@@ -673,11 +737,13 @@
         initSearch();
         initReloadButton();
         refreshList("tv", currentTab, "", 1);
+        // [OPTIMIZADO] Llamar handleUrlParams DESPUÉS de que los datos están listos
+        handleUrlParams("tv");
     }
 
     async function initCinema() {
         const data = await fetchJSON("data/movies.json");
-        window._stvData = data.movies || [];
+        setStvData(data.movies);
         restorePlaying("movie");
 
         const subTabs = $$(".sub-tab");
@@ -701,6 +767,8 @@
         initSearch();
         initReloadButton();
         refreshList("movie", currentTab, "", 1);
+        // [OPTIMIZADO] Llamar handleUrlParams DESPUÉS de que los datos están listos
+        handleUrlParams("movie");
     }
 
     function renderHomeHistory(allChannels, allMovies) {
@@ -799,8 +867,35 @@
     }
 
     async function initHome() {
-        const chData = await fetchJSON("data/channels.json").catch(() => ({channels: []}));
-        const mvData = await fetchJSON("data/movies.json").catch(() => ({movies: []}));
+        // [FIX] Manejo de errores con feedback visual para el usuario
+        let chData, mvData, fetchError = null;
+        try {
+            chData = await fetchJSON("data/channels.json");
+        } catch (err) {
+            fetchError = "canales";
+            chData = { channels: [] };
+            console.error("STV: Error cargando canales:", err);
+        }
+        try {
+            mvData = await fetchJSON("data/movies.json");
+        } catch (err) {
+            fetchError = fetchError ? "canales y películas" : "películas";
+            mvData = { movies: [] };
+            console.error("STV: Error cargando películas:", err);
+        }
+
+        // [FIX] Mostrar mensaje de error si algún fetch falló
+        if (fetchError) {
+            const newsContent = $("#news-content");
+            if (newsContent) {
+                const errorMsg = document.createElement('p');
+                errorMsg.style.color = 'var(--accent)';
+                errorMsg.style.fontWeight = '600';
+                errorMsg.textContent = `⚠️ Error al cargar ${fetchError}. Verifica tu conexión.`;
+                newsContent.insertBefore(errorMsg, newsContent.firstChild);
+            }
+        }
+
         const allChannels = chData.channels || [];
         const allMovies = mvData.movies || [];
 
@@ -812,10 +907,14 @@
             resetTV.dataset.initialized = "true";
             resetTV.addEventListener("click", () => {
                 if (!hasHistory("tv")) {
-                    alert("No se encontró historial para reiniciar.");
+                    // [FIX] Reemplazado alert() por confirm() directo con mensaje integrado
+                    // para evitar doble bloqueo del main thread
+                    if (confirm("No hay historial de TV para borrar. ¿Deseas continuar?")) {
+                        return;
+                    }
                     return;
                 }
-                if (confirm("¿Borrar todo el historial de TV?")) {
+                if (confirm("¿Borrar todo el historial de TV? Esta acción no se puede deshacer.")) {
                     clearHistory("tv");
                     renderHomeHistory(allChannels, allMovies);
                 }
@@ -827,10 +926,13 @@
             resetCinema.dataset.initialized = "true";
             resetCinema.addEventListener("click", () => {
                 if (!hasHistory("movie")) {
-                    alert("No se encontró historial para reiniciar.");
+                    // [FIX] Reemplazado alert() por confirm() directo
+                    if (confirm("No hay historial de Cinema para borrar. ¿Deseas continuar?")) {
+                        return;
+                    }
                     return;
                 }
-                if (confirm("¿Borrar todo el historial de Cinema?")) {
+                if (confirm("¿Borrar todo el historial de Cinema? Esta acción no se puede deshacer.")) {
                     clearHistory("movie");
                     renderHomeHistory(allChannels, allMovies);
                 }
@@ -839,8 +941,10 @@
 
         const newsContent = $("#news-content");
         if (newsContent) {
+            // [FIX] Usar textContent en lugar de innerHTML para prevenir XSS
+            // El contenido se guarda como texto plano, no como HTML
             const saved = load(STORAGE.newsContent, null);
-            if (saved) newsContent.innerHTML = saved;
+            if (saved) newsContent.textContent = saved;
             newsContent.addEventListener("dblclick", () => {
                 newsContent.contentEditable = true;
                 newsContent.focus();
@@ -849,7 +953,8 @@
             newsContent.addEventListener("blur", () => {
                 newsContent.contentEditable = false;
                 newsContent.style.outline = "none";
-                save(STORAGE.newsContent, newsContent.innerHTML);
+                // [FIX] Guardar como textContent para evitar inyección de scripts
+                save(STORAGE.newsContent, newsContent.textContent);
             });
         }
     }
@@ -858,6 +963,9 @@
     /* [FIX] handleUrlParams ahora maneja series  */
     /* correctamente: abre temporada, capítulo y  */
     /* marca la opción seleccionada               */
+    /* [OPTIMIZADO] Eliminado setInterval de      */
+    /* polling. Ahora se ejecuta directamente     */
+    /* después de que initTV/initCinema termina   */
     /* ============================================ */
     function handleUrlParams(type) {
         const params = new URLSearchParams(location.search);
@@ -867,37 +975,30 @@
         const epIdx = params.get('ep');
         if (!gotoId || optIdx === null) return;
 
-        const checkAndPlay = setInterval(() => {
-            const container = $("#list-container");
-            if (!container || !window._stvData) return;
-            const item = window._stvData.find(it => it.id === gotoId);
-            if (!item) return;
+        const container = $("#list-container");
+        if (!container || !getStvData().length) return;
 
-            if (item.isSeries && item.seasons && seasonIdx !== null && epIdx !== null) {
-                const sIdx = parseInt(seasonIdx);
-                const eIdx = parseInt(epIdx);
-                const oIdx = parseInt(optIdx);
-                const season = item.seasons[sIdx];
-                if (season && season.episodes[eIdx] && season.episodes[eIdx].options[oIdx]) {
-                    clearInterval(checkAndPlay);
+        const item = getStvData().find(it => it.id === gotoId);
+        if (!item) return;
 
-                    // Abrir la serie, temporada y capítulo correctos
-                    container.dataset.openId = gotoId;
-                    container.dataset.openSeason = `${gotoId}-${sIdx}`;
-                    container.dataset.openEpisode = `${gotoId}-${sIdx}-${eIdx}`;
-
-                    playSeriesVideo(type, item, sIdx, eIdx, oIdx);
-                    refreshList(type, "all", "", 1);
-                    history.replaceState({}, document.title, location.pathname);
-                }
-            } else if (item.options && item.options[parseInt(optIdx)]) {
-                clearInterval(checkAndPlay);
-                playVideo(type, item, parseInt(optIdx));
+        if (item.isSeries && item.seasons && seasonIdx !== null && epIdx !== null) {
+            const sIdx = parseInt(seasonIdx);
+            const eIdx = parseInt(epIdx);
+            const oIdx = parseInt(optIdx);
+            const season = item.seasons[sIdx];
+            if (season && season.episodes[eIdx] && season.episodes[eIdx].options[oIdx]) {
+                container.dataset.openId = gotoId;
+                container.dataset.openSeason = `${gotoId}-${sIdx}`;
+                container.dataset.openEpisode = `${gotoId}-${sIdx}-${eIdx}`;
+                playSeriesVideo(type, item, sIdx, eIdx, oIdx);
                 refreshList(type, "all", "", 1);
                 history.replaceState({}, document.title, location.pathname);
             }
-        }, 200);
-        setTimeout(() => clearInterval(checkAndPlay), 5000);
+        } else if (item.options && item.options[parseInt(optIdx)]) {
+            playVideo(type, item, parseInt(optIdx));
+            refreshList(type, "all", "", 1);
+            history.replaceState({}, document.title, location.pathname);
+        }
     }
 
     function initSecurity() {
@@ -908,6 +1009,8 @@
             if ((e.ctrlKey || e.metaKey) && e.key === "u") { e.preventDefault(); return false; }
         });
         document.addEventListener("dragstart", e => { if (e.target.tagName === "IMG") e.preventDefault(); });
+        // [FIX] Eliminado setInterval permanente que consumía CPU cada 2 segundos
+        // La detección de DevTools ahora es pasiva (solo en resize)
         let devtoolsOpen = false;
         const threshold = 160;
         function checkDevTools() {
@@ -917,7 +1020,7 @@
             else { devtoolsOpen = false; }
         }
         window.addEventListener("resize", checkDevTools);
-        setInterval(() => { checkDevTools(); (function(){}).constructor("debugger")(); }, 2000);
+        // [FIX] Eliminado: setInterval con constructor("debugger") que causaba micro-stutters
     }
 
     function initPWA() {
@@ -967,15 +1070,34 @@
             }, 350);
         }
 
-        // Caso 1: Si la página NO necesita fetch (home ya tiene datos en localStorage o no depende de JSON)
+        // Caso 1: Home depende de fetchJSON para canales y películas
         const page = document.body.dataset.page;
         if (page === "home") {
-            // Home carga rápido, esperamos un poco para que el DOM se pinte
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    setTimeout(hideLoader, 300);
-                });
+            // [FIX] Home ahora espera a que initHome() termine antes de ocultar el loader
+            // El loader se ocultará cuando el contenido realmente esté renderizado
+            // El observer detectará cuando #tv-history-row o #cinema-history-row reciban contenido
+            const homeObserver = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+                        const hasContent = $("#tv-history-row")?.children.length > 0 || 
+                                           $("#cinema-history-row")?.children.length > 0 ||
+                                           $("#new-row")?.children.length > 0;
+                        if (hasContent) {
+                            homeObserver.disconnect();
+                            requestAnimationFrame(() => {
+                                hideLoader();
+                            });
+                            break;
+                        }
+                    }
+                }
             });
+            homeObserver.observe(mainContent, { childList: true, subtree: true });
+            // Fallback de 3 segundos por si algo falla
+            setTimeout(() => {
+                homeObserver.disconnect();
+                hideLoader();
+            }, 3000);
             return;
         }
 
@@ -993,9 +1115,10 @@
         function onContentLoaded() {
             if (timeoutId) clearTimeout(timeoutId);
             if (observer) observer.disconnect();
-            // Pequeña espera para que el navegador termine de renderizar
+            // [FIX] Eliminado delay artificial de 2250ms. 
+            // Ahora el loader desaparece inmediatamente cuando el contenido está listo
             requestAnimationFrame(() => {
-                setTimeout(hideLoader, 2250);
+                hideLoader();
             });
         }
 
@@ -1003,9 +1126,11 @@
         observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-                    // Verificar que no sea solo el empty-state inicial
-                    const hasRealContent = listContainer.querySelector(".list-item");
-                    if (hasRealContent) {
+                    // [FIX] Detectar tanto .list-item como .empty-state
+                    // Un empty-state significa que la búsqueda terminó (0 resultados)
+                    const hasContent = listContainer.querySelector(".list-item") || 
+                                       listContainer.querySelector(".empty-state");
+                    if (hasContent) {
                         onContentLoaded();
                         break;
                     }
@@ -1142,9 +1267,11 @@
         updateBadge();
         const page = document.body.dataset.page;
         if (page === "tv") {
-            initTV().then(() => handleUrlParams("tv"));
+            // [OPTIMIZADO] handleUrlParams ahora se llama dentro de initTV
+            initTV();
         } else if (page === "cinema") {
-            initCinema().then(() => handleUrlParams("movie"));
+            // [OPTIMIZADO] handleUrlParams ahora se llama dentro de initCinema
+            initCinema();
         } else if (page === "home") {
             initHome();
         }
