@@ -1,22 +1,62 @@
 {
   "movies": [
 	{
-      "id": "mv11",
+      "id": "mv13",
       "name": "El dia de la Revelación",
+	  "genre": "Ficción, Suspenso",
+	  "rating": "PG",
+	  "description": "Si descubrieras que no estamos solos, si alguien te abriera los ojos y te lo demostrase, ¿te asustarías?",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/8yQ7RDPPBlHMYdIo4ihPkHkOfnY.jpg",
       "isFavorite": true,
       "tag": "pelicula",
       "options": [
         {
-          "label": "Ripcam",
-          "url": "https://vimeos.net/embed-qa4cn6c7ok3p.html"
+          "label": "HD",
+          "url": "https://vimeos.net/embed-pbdftb6msgng.html"
+        }
+      ]
+    },
+	{
+      "id": "mv12",
+      "name": "Scary Movie: Terroríficamente incorrecta",
+	  "genre": "Comedia, Terror",
+	  "rating": "R",
+	  "description": "Veintiséis años después de conseguir escapar de un asesino enmascarado sospechosamente familiar, el Core Four están de vuelta en el punto de mira del asesino y ninguna película de terror está a salvo.",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/cAvdDPtiuVCauhjCwqK4EX2woHL.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-3ik1mrxf99gx.html"
+        }
+      ]
+    },
+	{
+      "id": "mv11",
+      "name": "Star Wars: The Mandalorian and Grogu",
+	  "genre": "Fantasía, Acción",
+	  "rating": "PG",
+	  "description": "Un solitario cazarrecompensas a la fuga protege a un codiciado bebé alienígena mientras evita ser capturado en una galaxia anárquica y peligrosa.",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/v8mnrbA4zXnq2RHGEWlSEA8GLjk.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-8ipcftz5j3ga.html"
         }
       ]
     },
 	{
       "id": "mv10",
       "name": "El sonido de la Muerte",
+	  "genre": "Terror, Misterio",
+	  "rating": "R",
+	  "description": "Un grupo inadaptado de estudiantes involuntarios de secundaria tropieza con un objeto maldito, un antiguo silbato de muerte azteca. Descubren que hacer sonar el silbato y el terrorífico sonido que emite convocará a sus futuras muertes para cazarlos.",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/cApRXj6meulAQMYQrhjfVvZEItl.jpg",
       "isFavorite": true,
@@ -31,6 +71,9 @@
 	{
       "id": "mv9",
       "name": "Sangre Asesina",
+	  "genre": "Acción, Romance",
+	  "rating": "R",
+	  "description": "Una mujer perseguida por su inusual tipo de sangre encuentra protección y amor en los brazos de un asesino letal. Juntos, luchan por sobrevivir.",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/16TvbhCP8CfiGEbxcbtQLYWO6WG.jpg",
       "isFavorite": true,
@@ -45,6 +88,9 @@
 	{
       "id": "mv8",
       "name": "El Susurro",
+	  "genre": "Terror",
+	  "rating": "R",
+	  "description": "Lucía y Adrián huyen de su padre violento a una mansión. Descubren una red de snuff y una maldición familiar.",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/evDvchrDRS2i9jKcLJpixSLjx45.jpg",
       "isFavorite": true,
@@ -59,6 +105,9 @@
 	{
       "id": "mv7",
       "name": "Los Simpson: Simpsley",
+	  "genre": "Comedia, Crimen",
+	  "rating": "PG",
+	  "description": "Cuando la estafadora sin dinero Marge Bouvier es enviada a Italia para convencer al rico Seymour Skinner de que regrese a casa, ella se siente tentada por las trampas de su estilo de vida acomodado. Pero hay una gran piedra en el camino: el huésped pegajoso y tonto de Skinner, Homero Simpsley. Las mentiras, la lujuria y la lira italiana abundan.",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/qkJefER6Ym4v2KC1v4qK34AlcVo.jpg",
       "isFavorite": true,
@@ -73,6 +122,9 @@
 	{
       "id": "mv6",
       "name": "La Posesión de la Momia",
+	  "genre": "Terror, Misterio",
+	  "rating": "R",
+	  "description": "La joven hija de un periodista desaparece en el desierto sin dejar rastro. Ocho años después, la familia rota se sorprende cuando ella regresa con ellos, mientras lo que debería ser una reunión alegre se convierte en una pesadilla viviente.",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/sKYkjA9H4Qlzz5M1oqGCFVsTOfL.jpg",
       "isFavorite": true,
@@ -87,6 +139,9 @@
     {
       "id": "mv5",
       "name": "Michael",
+	  "genre": "Música, Drama",
+	  "rating": "PG",
+	  "description": "Narra la vida de Michael Jackson más allá de la música, recorriendo su trayectoria desde el descubrimiento de su extraordinario talento como líder de los Jackson Five hasta convertirse en un artista visionario cuya ambición creativa le impulsó a convertirse en el artista más grande del mundo.",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/b5guzsMUf9vNaw1jqMSLBHG6DhE.jpg",
       "isFavorite": true,
@@ -101,6 +156,9 @@
 	{
       "id": "mv4",
       "name": "Mortal Kombat II",
+	  "genre": "Acción, Fantasía",
+	  "rating": "R",
+	  "description": "Los campeones favoritos de los fans —ahora acompañados por el mismísimo Johnny Cage— se enfrentan entre sí en la batalla definitiva, sangrienta y sin reglas, para derrotar el oscuro dominio de Shao Kahn, que amenaza con destruir el Reino de la Tierra y a sus defensores..",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/lGamD2f6xEZJSoXlntAd5wvQnWZ.jpg",
       "isFavorite": true,
@@ -115,6 +173,9 @@
     {
       "id": "mv3",
       "name": "Super Mario Galaxy",
+	  "genre": "Comedia, Fantasía",
+	  "rating": "G",
+	  "description": "Mario y Luigi se enfrentan una nueva amenaza: Bowser Jr., quién está decidido liberar a su padre del cautiverio y restaurar el legado familiar. Junto con nuevos y viejos compañeros, los hermanos viajan a través de las estrellas para detener la cruzada del joven heredero.",
       "year": 2026,
       "image": "https://image.tmdb.org/t/p/original/4Js0gYWxuvTN6b8iAaSF1cSQzBs.jpg",
       "isFavorite": true,
@@ -129,6 +190,9 @@
 	{
       "id": "mv2",
       "name": "Deadpool & Wolverine",
+	  "genre": "Comedia, Ficción",
+	  "rating": "R",
+	  "description": "Un Wade Wilson apático se esfuerza en la vida civil. Sus días como el mercenario moralmente flexible Deadpool quedaron atrás. Cuando su mundo natal se enfrenta a una amenaza existencial, Wade debe, a regañadientes, volver a la acción junto a un reacio Wolverine.",
       "year": 2024,
       "image": "https://image.tmdb.org/t/p/original/uxBHXaoOvAwy4NpPpP7nNx2rXYQ.jpg",
       "isFavorite": true,
@@ -143,6 +207,9 @@
 	{
       "id": "mv1",
       "name": "Super Mario Bros",
+	  "genre": "Comedia, Fantasía",
+	  "rating": "G",
+	  "description": "Mientras trabaja bajo tierra para arreglar una tubería de agua, los plomeros de Brooklyn Mario y su hermano Luigi son transportados por una misteriosa tubería y llegan a un nuevo mundo mágico.",
       "year": 2023,
       "image": "https://image.tmdb.org/t/p/original/zNKs1T0VZuJiVuhuL5GSCNkGdxf.jpg",
       "isFavorite": true,
