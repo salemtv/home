@@ -7,18 +7,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Play">
-<!-- Evitar traducción de iconos Material Symbols -->
-<meta name="google" content="notranslate">
+    <meta name="google" content="notranslate">
     <link rel="manifest" href="manifest.json">
-    <!-- ============================================ -->
-    <!-- [NUEVO] FAVICON Y APPLE TOUCH ICON - PNG reales -->
-    <!-- apple-touch-icon.png para iOS home screen -->
-    <!-- favicon-32x32.png y favicon-16x16.png para navegador -->
-    <!-- ============================================ -->
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0">
     <link rel="stylesheet" href="styles.css">
     <title>Salem TV</title>
 </head>
@@ -28,23 +23,21 @@
             <header class="top-bar">
                 <div class="top-bar-inner">
                     <div class="brand">
-                        <!-- ============================================ -->
-                        <!-- [NUEVO] Logo PNG en lugar de referencia anterior -->
-                        <!-- stv.png es el logo original, se mantiene -->
-                        <!-- ============================================ -->
-                        <img src="stv.png" alt="STV" class="logo-img">
+                        <a href="#" class="logo-link" onclick="switchPage('home'); return false;">
+                            <img src="stv.png" alt="STV" class="logo-img">
+                        </a>
                     </div>
                     <nav class="top-tabs">
-                        <a href="index.html" class="top-tab active">
+                        <a href="#" class="top-tab active" data-target="home">
                             <span class="material-symbols-rounded tab-icon">home</span>
                             <span class="tab-label mini">Inicio</span>
                             <span class="badge" id="home-badge" style="display:none;">0</span>
                         </a>
-                        <a href="tv.html" class="top-tab">
+                        <a href="#" class="top-tab" data-target="tv">
                             <span class="material-symbols-rounded tab-icon">live_tv</span>
                             <span class="tab-label mini">TV</span>
                         </a>
-                        <a href="cinema.html" class="top-tab">
+                        <a href="#" class="top-tab" data-target="cinema">
                             <span class="material-symbols-rounded tab-icon">theaters</span>
                             <span class="tab-label mini">Cine</span>
                         </a>
@@ -52,55 +45,40 @@
                 </div>
             </header>
 
-            <!-- ============================================ -->
-            <!-- [NUEVO] CAPA DE PRECARGA / PAGE LOADER -->
-            <!-- Se muestra mientras el contenido carga -->
-            <!-- Se oculta con JS cuando el DOM está listo -->
-            <!-- top: 56px para no cubrir el top-bar -->
-            <!-- ============================================ -->
             <div class="page-loader" id="page-loader">
                 <div class="loader-content">
                     <img src="icon-192x192.png" alt="STV" class="loader-logo">
                     <div class="loader-spinner"></div>
+                    <div class="loader-status" id="loader-status">Cargando recursos...</div>
+                    <div class="loader-error" id="loader-error" style="display:none;">
+                        <p class="loader-error-text">No se pudo cargar el contenido.<br>Verifica tu conexión.</p>
+                        <button class="loader-retry-btn" onclick="location.reload()">Actualizar página</button>
+                    </div>
                 </div>
             </div>
 
             <main class="main-content" id="main-content">
+                
                 <section class="tab-panel" id="tab-home">
+                    <button class="donate-top-btn" id="donate-top-btn">
+                        <span class="material-symbols-rounded">volunteer_activism</span>
+                        Apoyar a Salem via Yape!
+                    </button>
 
-
-
-
-<!-- ============================================ -->
-<!-- [NUEVO] BOTÓN DONAR - Ancho 100%, arriba    -->
-<!-- ============================================ -->
-<button class="donate-top-btn" id="donate-top-btn">
-    <span class="material-symbols-rounded">volunteer_activism</span>
-    Apoyar a Salem via Yape!
-</button>
-
-<!-- ============================================ -->
-<!-- [NUEVO] NOTICIAS CON CIERRE TEMPORAL        -->
-<!-- Se cierra con X y vuelve después de X horas -->
-<!-- ============================================ -->
-<div class="news-section" id="news-section">
-    <div class="news-header">
-        <div class="news-title">
-            <span class="material-symbols-rounded">campaign</span>
-            Importante
-        </div>
-        <button class="news-close-btn" id="news-close-btn" title="Cerrar">
-            <span class="material-symbols-rounded">close</span>
-        </button>
-    </div>
-    <div class="news-content" id="news-content">
-        <p>Se recomienda descargar <b>Brave Navegador</b> o apps como <b>AdGuard</b> (Android/iOS) para mejorar la experiencia sin anuncios.</p>
-    </div>
-  
-</div>
-
-
-
+                    <div class="news-section" id="news-section">
+                        <div class="news-header">
+                            <div class="news-title">
+                                <span class="material-symbols-rounded">campaign</span>
+                                Importante
+                            </div>
+                            <button class="news-close-btn" id="news-close-btn" title="Cerrar">
+                                <span class="material-symbols-rounded">close</span>
+                            </button>
+                        </div>
+                        <div class="news-content" id="news-content">
+                            <p>Se recomienda descargar <b>Brave Navegador</b> o apps como <b>AdGuard</b> (Android/iOS) para mejorar la experiencia sin anuncios.</p>
+                        </div>
+                    </div>
 
                     <div id="new-section" style="display:none;">
                         <div class="section-header">
@@ -112,93 +90,149 @@
                         </div>
                         <div class="card-row" id="new-row"></div>
                     </div>
+
                     <div class="section-header">
                         <h3 class="subtitle" style="display:flex;align-items:center;gap:8px;">
                             <span class="material-symbols-rounded" style="color:var(--accent);">live_tv</span>
                             Recién vistos en TV
                         </h3>
-                        <button class="reset-history-btn" id="reset-tv-history" title="Reiniciar historial TV">
+                        <button class="reset-history-btn" id="reset-tv-history" title="Reiniciar historial de TV">
                             <span class="material-symbols-rounded">delete_sweep</span>
                         </button>
                     </div>
                     <div class="card-row" id="tv-history-row"></div>
+
                     <div class="section-header">
                         <h3 class="subtitle" style="display:flex;align-items:center;gap:8px;">
                             <span class="material-symbols-rounded" style="color:var(--accent);">theaters</span>
                             Recién vistos en Cine
                         </h3>
-                        <button class="reset-history-btn" id="reset-cinema-history" title="Reiniciar historial Cinema">
+                        <button class="reset-history-btn" id="reset-cinema-history" title="Reiniciar historial de Cine">
                             <span class="material-symbols-rounded">delete_sweep</span>
                         </button>
                     </div>
                     <div class="card-row" id="cinema-history-row"></div>
 
-</section>
+                    <div class="legal-section" id="legal-section">
+                        <div class="legal-header">
+                            <div class="legal-title">
+                                <span class="material-symbols-rounded">brightness_alert</span>
+                                Aclaración sobre el contenido
+                            </div>
+                        </div>
+                        <div class="legal-content" id="legal-content">
+                            Queremos enfatizar que Salem TV no produce ni aloja contenido ilegal. Todo el material disponible en nuestro sitio proviene de fuentes públicas y gratuitas... No somos propietarios.
+                        </div>
+                    </div>
+                </section>
 
+                                <!-- ================== PESTAÑA TV ================== -->
+                <section class="tab-panel hidden" id="tab-tv">
+                    <!-- ZONA ESTÁTICA (Pegada arriba) -->
+                    <div class="sticky-player-area">
+                        <div class="video-section">
+                            <div class="video-container">
+                                <span class="material-symbols-rounded placeholder-icon">tv</span>
+                                <p class="placeholder-text">Selecciona un canal para reproducir</p>
+                            </div>
+                        </div>
 
-<div class="legal-section" id="legal-section">
-    <div class="legal-header">
-        <div class="legal-title">
-            <span class="material-symbols-rounded">brightness_alert</span>
-            Aclaración sobre el contenido
-        </div>
-	</div>
-<div class="legal-content" id="legal-content">
-Queremos enfatizar que Salem TV no produce ni aloja contenido ilegal. Todo el material disponible en nuestro sitio proviene de fuentes públicas y gratuitas, y se incorpora automáticamente sin moderación previa. Asimismo, STV no almacena copias ilegales de obras protegidas por derechos de autor. Todo el contenido y anuncios provienen de dominios externos no afiliados. No somos propietarios.
-</div>
-</div>
+                        <!-- CONTROLES EN UNA SOLA LÍNEA -->
+                        <div class="toolbar-row">
+                            <div class="sub-tabs compact-tabs">
+                                <button class="sub-tab active" data-tab="all" title="Todos">Todo</button>
+                                <button class="sub-tab" data-tab="favorites" title="Favoritos">
+                                    <span class="material-symbols-rounded">star</span>
+                                </button>
+                            </div>
 
+                            <div class="search-bar expandable-search">
+                                <span class="material-symbols-rounded search-icon">search</span>
+                                <input type="text" placeholder="Buscar..." autocomplete="off">
+                                <button class="clear-btn" type="button">
+                                    <span class="material-symbols-rounded">close</span>
+                                </button>
+                            </div>
 
+                            <button class="reload-btn icon-btn" type="button" title="Recargar video">
+                                <span class="material-symbols-rounded">refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ZONA ESCROLEABLE (La lista baja y sube) -->
+                    <div class="list-container" data-tab="all"></div>
+                </section>
+
+                <!-- ================== PESTAÑA CINE ================== -->
+                <section class="tab-panel hidden" id="tab-cinema">
+                    <!-- ZONA ESTÁTICA (Pegada arriba) -->
+                    <div class="sticky-player-area">
+                        <div class="video-section">
+                            <div class="video-container">
+                                <span class="material-symbols-rounded placeholder-icon">theaters</span>
+                                <p class="placeholder-text">Selecciona una película para reproducir</p>
+                            </div>
+                        </div>
+
+                        <!-- CONTROLES EN UNA SOLA LÍNEA -->
+                        <div class="toolbar-row">
+                            <div class="sub-tabs compact-tabs">
+                                <button class="sub-tab active" data-tab="all" title="Todas">Todo</button>
+                                <button class="sub-tab" data-tab="favorites" title="Favoritos">
+                                    <span class="material-symbols-rounded">star</span>
+                                </button>
+                            </div>
+
+                            <div class="search-bar expandable-search">
+                                <span class="material-symbols-rounded search-icon">search</span>
+                                <input type="text" placeholder="Buscar..." autocomplete="off">
+                                <button class="clear-btn" type="button">
+                                    <span class="material-symbols-rounded">close</span>
+                                </button>
+                            </div>
+
+                            <button class="reload-btn icon-btn" type="button" title="Recargar video">
+                                <span class="material-symbols-rounded">refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ZONA ESCROLEABLE (La lista baja y sube) -->
+                    <div class="list-container" data-tab="all"></div>
+                    <div class="pagination"></div>
+                </section>
 
 
             </main>
         </div>
 
-
-
-
-        <!-- ============================================ -->
-        <!-- [NUEVO] MODAL DE DONACIONES                  -->
-        <!-- ============================================ -->
         <div class="donate-modal" id="donate-modal">
             <div class="donate-modal-backdrop" id="donate-modal-backdrop"></div>
             <div class="donate-modal-content">
-                
                 <div class="donate-modal-body">
                     <img src="data/yape.jpeg" alt="QR Donación" class="donate-qr-img">
-<p class="donate-text">Escanea el código QR</p>
-          <p class="donate-sub">
-<span class="material-symbols-rounded">
-pets</span>
-<span class="material-symbols-rounded">health_metrics</span>
-<span class="material-symbols-rounded">
-digital_wellbeing</span>
-<br />
-<b>Donaciones & Ayuda</b>
-<br />Tu contribución ayudará a Salem en sus tratamientos post cirugias y cuidados.
-<br />También ayudará a mantener STV activo.
-<br />¡Gracias por tu apoyo!</p>
+                    <p class="donate-text">Escanea el código QR</p>
+                    <p class="donate-sub">
+                        <span class="material-symbols-rounded">pets</span>
+                        <span class="material-symbols-rounded">health_metrics</span>
+                        <span class="material-symbols-rounded">digital_wellbeing</span>
+                        <br /><b>Donaciones & Ayuda</b>
+                        <br />Tu contribución ayudará a Salem en sus tratamientos post cirugias y cuidados.
+                        <br />También ayudará a mantener STV activo.
+                        <br />¡Gracias por tu apoyo!
+                    </p>
                 </div>
-<button class="donate-modal-close" id="donate-modal-close">
-                   Cancelar
-                </button>
+                <button class="donate-modal-close" id="donate-modal-close">Cancelar</button>
             </div>
         </div>
-
-
-
-
-
-
-
-
 
         <div id="unsupported-content" style="display: none;">
             <div class="unsupported-wrapper">
                 <span class="material-symbols-rounded unsupported-icon">block</span>
                 <h2 class="title">No Disponible</h2>
-                <p class="subtitle">Esta aplicación solo está disponible para dispositivos móviles, tabletas, Android TV y macOS.</p>
-                <p class="global">Windows y Linux no son compatibles.</p>
+                <p class="subtitle">Esta aplicación solo está disponible para dispositivos móviles Android e iOS.</p>
+                <p class="global">Windows no es compatible.</p>
             </div>
         </div>
     </div>

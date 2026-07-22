@@ -1,3 +1,127 @@
+/* =========================================
+   NUEVO LAYOUT: STICKY PLAYER Y TOOLBAR EN LÍNEA
+   (VERSIÓN CORREGIDA ANTI-CONFLICTOS)
+   ========================================= */
+
+/* 1. Contenedor del video y barra pegada */
+.sticky-player-area {
+    position: sticky;
+    top: 0; 
+    z-index: 40;
+    background-color: var(--bg-primary);
+    padding-bottom: 10px;
+    border: 0;
+    margin-bottom: 10px;
+}
+
+/* 2. La fila (Forzando alineación perfecta) */
+.toolbar-row {
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* 3. Forzamos la MISMA ALTURA (42px) y quitamos márgenes viejos para que alineen exactos */
+.compact-tabs, .expandable-search, .icon-btn {
+    height: 42px !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+/* 4. Pestañas compactas */
+.compact-tabs {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+.compact-tabs .sub-tab {
+    height: 100%;
+    margin: 0;
+    padding: 0 12px;
+    font-size: 13px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	background: var(--bg-elevated);
+}
+.compact-tabs .sub-tab .material-symbols-rounded {
+    font-size: 18px;
+}
+
+/* 5. Barra de búsqueda */
+.expandable-search {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    background: var(--bg-surface)!important; /* Forzamos el fondo oscuro */
+    border-radius: 20px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+.expandable-search:focus-within {
+    background: var(--bg-surface)!important;
+    border-color: var(--accent)!important; /* Borde rojo al escribir */
+    box-shadow: 0;
+}
+
+/* 6. Limpiar estilos fantasma del Input y su Autocompletado */
+.expandable-search input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    outline: none !important;
+    margin-left: 8px;
+    font-size: 14px;
+    box-shadow: none !important;
+}
+
+/* Hack para matar el fondo raro de Chrome/Android al autocompletar */
+.expandable-search input:-webkit-autofill,
+.expandable-search input:-webkit-autofill:hover, 
+.expandable-search input:-webkit-autofill:focus,
+.expandable-search input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px #1a1a1a inset !important;
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 7. Botón de recarga sobre-escribiendo tu CSS viejo */
+.icon-btn {
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 42px !important;
+    border-radius: 10px;
+    background: var(--bg-surface);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    display: none !important; /* Oculto hasta tener video */
+}
+
+/* El !important obliga al navegador a mostrarlo sí o sí en Cine y TV cuando hay video */
+.icon-btn.visible {
+    display: flex !important; 
+}
+
+.icon-btn:active {
+    transform: scale(0.9);
+}
+
+
+
+
 /* ============================================ */
 /* MATERIAL SYMBOLS ROUNDED - Fuente local      */
 /* ============================================ */
@@ -105,6 +229,12 @@ html, body {
 }
 .brand { display: flex; align-items: center; gap: var(--space-sm); }
 .logo-img { width: 32px; height: 32px; border-radius: 0; object-fit: cover; display: block; -webkit-user-drag: none; }
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
 
 .top-tabs { display: flex; align-items: center; gap: var(--space-xs); height: 100%; }
 .top-tab {
@@ -114,9 +244,9 @@ html, body {
     border-radius: var(--radius-md); transition: color var(--transition-fast), background var(--transition-fast);
     position: relative; cursor: pointer; border: none; background: transparent; font-family: inherit;
 }
-.top-tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.05); }
+.top-tab:hover { color: var(--text-secondary);} /**background: rgba(255,255,255,0.05);**/
 .top-tab:active { transform: scale(0.95); }
-.top-tab .tab-icon { font-size: 22px; transition: transform var(--transition-smooth), color var(--transition-fast); }
+.top-tab .tab-icon { font-size: 24px; transition: transform var(--transition-smooth), color var(--transition-fast); }
 .top-tab .tab-label { font-size: var(--text-mini); font-weight: 500; color: inherit; transition: color var(--transition-fast); }
 .top-tab.active { color: var(--accent); }
 .top-tab.active .tab-icon { transform: translateY(-1px); font-variation-settings: "FILL" 1; }
@@ -153,7 +283,7 @@ html, body {
     width: 100vw;
     margin-left: calc(-1 * var(--space-md));
     margin-right: calc(-1 * var(--space-md));
-    margin-bottom: var(--space-lg);
+    margin-bottom: 0;
     position: relative;
 }
 
@@ -181,24 +311,25 @@ html, body {
 
 /* Reload button */
 .reload-btn {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-sm);
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: 44px;
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-md);
     border: none;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px);
-    color: #fff;
-    border-radius: var(--radius-full);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: var(--space-sm);
     cursor: pointer;
-    z-index: 10;
     transition: all var(--transition-fast);
     opacity: 0;
     pointer-events: none;
+    font-family: inherit;
+    font-size: var(--text-global);
+    font-weight: 600;
 }
 
 .reload-btn.visible {
@@ -208,15 +339,20 @@ html, body {
 
 .reload-btn:hover {
     background: var(--accent);
-    transform: scale(1.1);
+    color: #fff;
 }
 
 .reload-btn:active {
-    transform: scale(0.9);
+    transform: scale(0.98);
 }
 
 .reload-btn span {
     font-size: 20px;
+}
+
+.reload-btn .reload-label {
+    font-size: var(--text-global);
+    font-weight: 600;
 }
 
 /* ============================================ */
@@ -437,10 +573,10 @@ width: 100vw;
 }
 .card-title {/*solo canales*/
     width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    text-align: center; font-size: var(--text-mini); color: var(--text-secondary); font-weight: 500;
+    text-align: center; font-size: 12px; color: var(--text-secondary); font-weight: 500;
 }
 .card-subtitle {
-    width: 100%; text-align: center; font-size: 10px; color: var(--text-muted); text-transform: capitalize;
+    width: 100%; text-align: center; font-size: 11px; color: var(--text-muted); text-transform: capitalize;
 }
 
 .movie-card {
@@ -462,7 +598,7 @@ width: 100vw;
 }
 .movie-title {/*solo peliculas*/
     width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    text-align: center; font-size: var(--text-mini); color: var(--text-secondary); font-weight: 500;
+    text-align: center; font-size: 12px; color: var(--text-secondary); font-weight: 500;
 }
 
 .news-section {
@@ -947,7 +1083,7 @@ position: sticky;
     background: linear-gradient(135deg, var(--accent) 0%, #742384 100%);
     color: #fff;
     font-family: inherit;
-    font-size: var(--text-global);
+    font-size: 16px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -1233,4 +1369,89 @@ body.modal-open {
 .options-list.open .movie-description {
     -webkit-line-clamp: unset;
     display: block;
+}
+
+/* ============================================ */
+/* [NUEVO] BADGE "NUEVO" EN CARDS RECIÉN AGREGADOS */
+/* ============================================ */
+
+.new-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    pointer-events: none;
+    animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* ============================================ */
+/* [NUEVO] LOADER MEJORADO - Estado y Error   */
+/* ============================================ */
+
+.loader-status {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 16px;
+    animation: fadeIn 0.3s ease;
+}
+
+.loader-error {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+.loader-error-text {
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.loader-retry-btn {
+    height: 40px;
+    padding: 0 24px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.loader-retry-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.loader-retry-btn:active {
+    transform: scale(0.95);
+}
+
+/* Cuando hay error: ocultar spinner, logo opaco, quitar status */
+.page-loader.has-error .loader-spinner {
+    display: none;
+}
+.page-loader.has-error .loader-logo {
+    animation: none;
+    opacity: 0.5;
+}
+.page-loader.has-error .loader-status {
+    display: none;
+}
+.page-loader.has-error .loader-error {
+    display: flex !important;
 }
