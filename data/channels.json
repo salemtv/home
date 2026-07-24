@@ -1,27 +1,37 @@
 {
   "channels": [
 	{
-      "id": "dsports",
-      "name": "DSports",
+      "id": "tntsports",
+      "name": "TNT Sports",
       "number": 1,
-      "image": "https://placehold.co/80x80/5f1e3a/ffffff?text=DS",
+      "image": "https://placehold.co/80x80/ff006e/ffffff?text=TNT",
       "isFavorite": false,
       "options": [
 		{
-          "label": "PRO HD 1080p",
-          "url": "https://esvidzypro.sbs/dsportsl.php"
-        },
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=tntsports"
+        }
+      ],
+      "tag": "canal"
+    },
+	{
+      "id": "dsports",
+      "name": "DSports",
+      "number": 2,
+      "image": "https://placehold.co/80x80/0057d9/ffffff?text=DS",
+      "isFavorite": false,
+      "options": [
 		{
-          "label": "LA HD 1080p",
-          "url": "https://la16hd.com/dsportslatam.php"
+          "label": "LA 1080p",
+          "url": "https://la16hd.com/dsportsar.php"
         },
         {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=dsports"
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=dsports"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=dsports"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=dsports"
         }
       ],
       "tag": "canal"
@@ -30,21 +40,17 @@
 	{
       "id": "dsports2",
       "name": "DSports 2",
-      "number": 2,
-      "image": "https://placehold.co/80x80/5f1e3a/ffffff?text=DS",
+      "number": 3,
+      "image": "https://placehold.co/80x80/0057d9/ffffff?text=DS",
       "isFavorite": false,
       "options": [
-		{
-          "label": "PRO HD 1080p",
-          "url": "https://esvidzypro.sbs/dsports2l.php"
-        },
         {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=dsports2"
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=dsports2"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=dsports2"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=dsports2"
         }
       ],
       "tag": "canal"
@@ -52,21 +58,17 @@
 {
       "id": "dsportsplus",
       "name": "DSports Plus",
-      "number": 3,
-      "image": "https://placehold.co/80x80/5f1e3a/ffffff?text=DS",
+      "number": 4,
+      "image": "https://placehold.co/80x80/0057d9/ffffff?text=DS",
       "isFavorite": false,
       "options": [
-		{
-          "label": "PRO HD 1080p",
-          "url": "https://esvidzypro.sbs/dsportsplusl.php"
-        },
         {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=dsportsplus"
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=dsportsplus"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=dsportsplus"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=dsportsplus"
         }
       ],
       "tag": "canal"
@@ -76,17 +78,36 @@
     {
       "id": "l1max",
       "name": "Liga 1 Max",
-      "number": 4,
-      "image": "https://next-liga1.fanatiz.com/liga1/strapi/production/small_image_LIGA_1_MAX_fabe3155b8.png",
+      "number": 5,
+      "image": "https://placehold.co/80x80/e31e24/ffffff?text=L1MAX",
       "isFavorite": false,
       "options": [
         {
-          "label": "TV 720p",
-          "url": "https://latamvidzpro.com/canal.php?stream=tycsports"
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=liga1max"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=liga1max"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=liga1max"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "espnpremium",
+      "name": "ESPN Premium",
+      "number": 6,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESP",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs//global1.php?stream=espnpremium"
+        },
+		{
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espnpremium"
         }
       ],
       "tag": "canal"
@@ -95,21 +116,17 @@
     {
       "id": "espn",
       "name": "ESPN",
-      "number": 5,
-      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN",
+      "number": 7,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES",
       "isFavorite": false,
       "options": [
 		{
-          "label": "ST 720p",
-          "url": "https://streamtp.sbs//global1.php?stream=espn"
-        },
-        {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=espn"
+          "label": "ST 720p Colombia",
+          "url": "https://streamtp99a.sbs//global1.php?stream=espn"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=espn"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espn"
         }
       ],
       "tag": "canal"
@@ -118,21 +135,17 @@
 	{
       "id": "espn2",
       "name": "ESPN 2",
-      "number": 6,
-      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN 2",
+      "number": 8,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES2",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp.sbs//global1.php?stream=espn2"
-        },
-        {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=espn2"
+          "url": "https://streamtp99a.sbs//global1.php?stream=espn2"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=espn2"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espn2"
         }
       ],
       "tag": "canal"
@@ -141,21 +154,17 @@
 	{
       "id": "espn3",
       "name": "ESPN 3",
-      "number": 7,
-      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN 3",
+      "number": 9,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES3",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp.sbs//global1.php?stream=espn3"
-        },
-        {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=espn3"
+          "url": "https://streamtp99a.sbs//global1.php?stream=espn3"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=espn3"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espn3"
         }
       ],
       "tag": "canal"
@@ -164,21 +173,74 @@
 	{
       "id": "espn4",
       "name": "ESPN 4",
-      "number": 8,
-      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESPN 4",
+      "number": 10,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES4",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp.sbs//global1.php?stream=espn4"
-        },
-        {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=espn4"
+          "url": "https://streamtp99a.sbs//global1.php?stream=espn4"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=espn4"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espn4"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "espn5",
+      "name": "ESPN 5",
+      "number": 11,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES5",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs//global1.php?stream=espn5"
+        },
+		{
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espn5"
+        }
+      ],
+      "tag": "canal"
+    },
+
+{
+      "id": "espn6",
+      "name": "ESPN 6",
+      "number": 12,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES6",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs//global1.php?stream=espn6"
+        },
+		{
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espn6"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "espn7",
+      "name": "ESPN 7",
+      "number": 13,
+      "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES7",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs//global1.php?stream=espn7"
+        },
+		{
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=espn7"
         }
       ],
       "tag": "canal"
@@ -187,17 +249,119 @@
 	{
       "id": "telefe",
       "name": "Telefe",
-      "number": 9,
-      "image": "https://placehold.co/80x80/041e3a/ffffff?text=Telefe",
+      "number": 14,
+      "image": "https://placehold.co/80x80/0057b8/ffffff?text=FE",
       "isFavorite": false,
       "options": [
         {
-          "label": "TV 720p",
-          "url": "https://tvhd2.com/vivo/canales.php?stream=telefe"
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=telefe"
         },
 		{
-          "label": "OP 720p",
-          "url": "https://la20hd.com/vivo/canales.php?stream=telefe"
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=telefe"
+        }
+      ],
+      "tag": "canal"
+    },
+
+
+	{
+      "id": "fanatiz",
+      "name": "Fanatiz",
+      "number": 15,
+      "image": "https://placehold.co/80x80/0488ba/ffffff?text=F",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "fanatiz2",
+      "name": "Fanatiz 2",
+      "number": 16,
+      "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F2",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz2"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "fanatiz3",
+      "name": "Fanatiz 3",
+      "number": 17,
+      "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F3",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz3"
+        }
+      ],
+      "tag": "canal"
+    },
+	{
+      "id": "fanatiz4",
+      "name": "Fanatiz 4",
+      "number": 18,
+      "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F4",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz4"
+        }
+      ],
+      "tag": "canal"
+    },
+	{
+      "id": "fanatiz5",
+      "name": "Fanatiz 5",
+      "number": 19,
+      "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F5",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz5"
+        }
+      ],
+      "tag": "canal"
+    },
+	{
+      "id": "fanatiz6",
+      "name": "Fanatiz 6",
+      "number": 20,
+      "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F6",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz6"
+        }
+      ],
+      "tag": "canal"
+    },
+	{
+      "id": "movistardeportes",
+      "name": "Movistar Deportes",
+      "number": 21,
+      "image": "https://placehold.co/80x80/00a9e0/ffffff?text=MOV",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=movistar"
         }
       ],
       "tag": "canal"
