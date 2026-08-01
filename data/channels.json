@@ -267,15 +267,15 @@
 
 
 	{
-      "id": "fanatiz",
+      "id": "fanatiz1",
       "name": "Fanatiz",
       "number": 15,
-      "image": "https://placehold.co/80x80/0488ba/ffffff?text=F",
+      "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz"
+          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz1"
         }
       ],
       "tag": "canal"
