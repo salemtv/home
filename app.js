@@ -6,7 +6,7 @@
     "use strict";
 
     /* 1. CONFIGURACION */
-    const ITEMS_PER_PAGE = 100;
+    const ITEMS_PER_PAGE = 20;
     const STORAGE_KEYS = {
         favChannels: "stv_fav_channels",
         favMovies: "stv_fav_movies",
@@ -17,13 +17,15 @@
         newsContent: "stv_news_content",
         lastPlaying: "stv_last_playing",
         seenNew: "stv_seen_new",
-        newsDismissed: "stv_news_dismissed"
+        newsDismissed: "stv_news_dismissed",
+        lastActiveTab: "stv_last_active_tab"  // NUEVO: guardar pestaña activa
     };
 
     /* 2. ESTADO GLOBAL */
     let _tvData = [];
     let _cinemaData = [];
     let _newItemsCache = null;
+    let _isPlaying = false;  // NUEVO: estado de reproducción
 
     /* 3. UTILIDADES DOM */
     function $(sel) { return document.querySelector(sel); }
@@ -86,6 +88,20 @@
         }
     }
 
+    // NUEVO: función para obtener la pestaña a mostrar al cargar
+    function getInitialTab() {
+        const playing = getPlaying();
+        const lastTab = load(STORAGE_KEYS.lastActiveTab, "home");
+        
+        // Si hay reproducción activa, ir a la pestaña correspondiente
+        if (playing && playing.type) {
+            return playing.type === "tv" ? "tv" : "cinema";
+        }
+        
+        // Si no hay reproducción, siempre ir a home
+        return "home";
+    }
+
     window.switchPage = function(pageId) {
         if (document.body.dataset.page === pageId) return;
         document.body.dataset.page = pageId;
@@ -99,6 +115,17 @@
             window.history.pushState({}, "", url);
         }
 
+        // Guardar la pestaña activa SOLO si hay reproducción
+        const playing = getPlaying();
+        if (playing && playing.type) {
+            save(STORAGE_KEYS.lastActiveTab, pageId);
+        } else {
+            // Si no hay reproducción, no guardamos (o guardamos home)
+            if (pageId === "home") {
+                save(STORAGE_KEYS.lastActiveTab, "home");
+            }
+        }
+
         requestAnimationFrame(() => {
             window.scrollTo(0, 0);
             const main = document.getElementById("main-content");
@@ -109,7 +136,6 @@
 
         if (pageId === "home") {
             requestAnimationFrame(() => { initMarquee(); });
-            renderHomeHistory();
         }
 
         updateBadgeDeferred();
@@ -130,7 +156,21 @@
 
         window.addEventListener("popstate", () => {
             const params = new URLSearchParams(location.search);
-            const target = params.get("p") || "home";
+            let target = params.get("p") || "home";
+            
+            // Verificar si hay reproducción activa para validar la pestaña
+            const playing = getPlaying();
+            if (playing && playing.type) {
+                // Si hay reproducción y el target no coincide, usar el de la reproducción
+                const playingTab = playing.type === "tv" ? "tv" : "cinema";
+                if (target !== playingTab && target !== "home") {
+                    target = playingTab;
+                }
+            } else {
+                // Si no hay reproducción, siempre home
+                target = "home";
+            }
+            
             if (document.body.dataset.page !== target) switchPage(target);
         });
     }
@@ -227,6 +267,9 @@
         });
         hist = hist.slice(0, 12);
         save(STORAGE_KEYS.history, hist);
+        
+        // NUEVO: Actualizar historial en vivo
+        renderHomeHistory();
     }
 
     function getHistory(type, limit) {
@@ -235,6 +278,8 @@
 
     function clearHistory(type) {
         save(STORAGE_KEYS.history, load(STORAGE_KEYS.history, []).filter(h => h.type !== type));
+        // NUEVO: Actualizar historial en vivo después de limpiar
+        renderHomeHistory();
     }
 
     function hasHistory(type) {
@@ -247,14 +292,39 @@
 
     function setPlaying(type, id, optIdx, url, seasonIdx, episodeIdx, optionLabel) {
         save(STORAGE_KEYS.lastPlaying, { type, id, optIdx, seasonIdx, episodeIdx, optionLabel, time: Date.now() });
+        _isPlaying = true;
+        // NUEVO: Guardar la pestaña activa
+        save(STORAGE_KEYS.lastActiveTab, type === "tv" ? "tv" : "cinema");
     }
 
     function getPlaying() { return load(STORAGE_KEYS.lastPlaying, null); }
+
+    // NUEVO: Limpiar selección en la otra pestaña
+    function clearOtherTabSelections(type) {
+        const otherType = type === "tv" ? "movie" : "tv";
+        const otherContainer = $(`#tab-${otherType === "tv" ? "tv" : "cinema"} .list-container`);
+        if (otherContainer) {
+            // Limpiar selecciones visuales en la otra pestaña
+            otherContainer.querySelectorAll(".option-btn.selected").forEach(btn => {
+                btn.classList.remove("selected");
+                const checkIcon = btn.querySelector(".check-icon");
+                if (checkIcon) {
+                    checkIcon.textContent = "radio_button_unchecked";
+                }
+            });
+            otherContainer.querySelectorAll(".list-item.playing").forEach(el => {
+                el.classList.remove("playing");
+            });
+        }
+    }
 
     /* 10. REPRODUCCION */
     window.goToAndPlay = function(type, id, seasonIdx, epIdx, optIdx) {
         const typeKey = type === "tv" ? "tv" : "movie";
         markNewAsSeen(typeKey, id);
+        
+        // NUEVO: Limpiar selección en la otra pestaña
+        clearOtherTabSelections(type);
 
         const targetTab = type === "tv" ? "tv" : "cinema";
         switchPage(targetTab);
@@ -278,20 +348,18 @@
 
             refreshList(type, container.dataset.tab || "all", section.querySelector("input").value.trim(), 1);
 
-                        requestAnimationFrame(() => {
-    const el = container.querySelector(`[data-id="${id}"]`);
-    const main = document.getElementById("main-content");
-    const stickyArea = section.querySelector(".sticky-player-area");
-    if (el && main && stickyArea) {
-        const stickyHeight = stickyArea.offsetHeight;
-        const rect = el.getBoundingClientRect();
-        const mainRect = main.getBoundingClientRect();
-        const scrollNeeded = rect.top - mainRect.top + main.scrollTop - stickyHeight - 38;
-        main.scrollTo({ top: Math.max(0, scrollNeeded), behavior: "smooth" });
-    }
-});
-
-
+            requestAnimationFrame(() => {
+                const el = container.querySelector(`[data-id="${id}"]`);
+                const main = document.getElementById("main-content");
+                const stickyArea = section.querySelector(".sticky-player-area");
+                if (el && main && stickyArea) {
+                    const stickyHeight = stickyArea.offsetHeight;
+                    const rect = el.getBoundingClientRect();
+                    const mainRect = main.getBoundingClientRect();
+                    const scrollNeeded = rect.top - mainRect.top + main.scrollTop - stickyHeight - 38;
+                    main.scrollTo({ top: Math.max(0, scrollNeeded), behavior: "smooth" });
+                }
+            });
         }
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
@@ -309,6 +377,8 @@
         addHistory(type, item, opt.label, optionIdx);
         setPlaying(type, item.id, optionIdx, opt.url, null, null, opt.label);
         showReloadButton(type);
+        
+        // NUEVO: Actualizar historial en vivo
         renderHomeHistory();
     }
 
@@ -328,6 +398,9 @@
         addHistory(type, item, label, optionIdx, seasonIdx, episodeIdx);
         setPlaying(type, item.id, optionIdx, opt.url, seasonIdx, episodeIdx, opt.label);
         showReloadButton(type);
+        
+        // NUEVO: Actualizar historial en vivo
+        renderHomeHistory();
     }
 
     function showReloadButton(type) {
@@ -666,6 +739,7 @@
             if (container) {
                 container.innerHTML = `<iframe src="${getPlayerUrl(url)}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
                 showReloadButton(type);
+                _isPlaying = true;
             }
         }
     }
@@ -808,7 +882,7 @@
                 if (hasHistory("tv") && confirm("¿Estás seguro de borrar todo el historial de TV?")) {
                     clearHistory("tv");
                     renderHomeHistory();
-					initMarquee();
+                    initMarquee();
                 }
             });
         }
@@ -888,47 +962,46 @@
         }, { passive: false });
     }
 
-/* MARQUEE AVANZADO */
-function initMarquee(scope) {
-    const targets = (scope || document).querySelectorAll(".item-name, .content-title");
-    targets.forEach(function(el) {
-        if (el.classList.contains("marquee-wrap")) return;
-        var inner = document.createElement("span");
-        inner.className = "marquee-inner";
-        while (el.firstChild) inner.appendChild(el.firstChild);
-        el.appendChild(inner);
-        el.classList.add("marquee-wrap");
-    });
-    requestAnimationFrame(function() {
+    /* MARQUEE AVANZADO */
+    function initMarquee(scope) {
+        const targets = (scope || document).querySelectorAll(".item-name, .content-title");
         targets.forEach(function(el) {
-            var inner = el.querySelector(".marquee-inner");
-            if (!inner) return;
-            var overflow = inner.scrollWidth > el.clientWidth;
-            if (overflow) {
-                el.classList.add("is-overflow");
-                el.style.setProperty("--marquee-end", (el.clientWidth - inner.scrollWidth) + "px");
-                var duration = Math.min(12, Math.max(6, inner.scrollWidth / 25));
-                el.style.setProperty("--marquee-duration", duration + "s");
-            } else {
-                el.classList.remove("is-overflow");
-            }
+            if (el.classList.contains("marquee-wrap")) return;
+            var inner = document.createElement("span");
+            inner.className = "marquee-inner";
+            while (el.firstChild) inner.appendChild(el.firstChild);
+            el.appendChild(inner);
+            el.classList.add("marquee-wrap");
         });
-    });
-}
+        requestAnimationFrame(function() {
+            targets.forEach(function(el) {
+                var inner = el.querySelector(".marquee-inner");
+                if (!inner) return;
+                var overflow = inner.scrollWidth > el.clientWidth;
+                if (overflow) {
+                    el.classList.add("is-overflow");
+                    el.style.setProperty("--marquee-end", (el.clientWidth - inner.scrollWidth) + "px");
+                    var duration = Math.min(12, Math.max(6, inner.scrollWidth / 25));
+                    el.style.setProperty("--marquee-duration", duration + "s");
+                } else {
+                    el.classList.remove("is-overflow");
+                }
+            });
+        });
+    }
 
-let _marqueeObserver = null;
-function initMarqueeObserver() {
-    if (_marqueeObserver) return;
-    _marqueeObserver = new MutationObserver(function(mutations) {
-        var hasNew = mutations.some(function(m) { return m.type === "childList" && m.addedNodes.length; });
-        if (!hasNew) return;
-        clearTimeout(window._marqueeDebounce);
-        window._marqueeDebounce = setTimeout(function() { initMarquee(); }, 60);
-    });
-    var wrapper = document.getElementById("app-wrapper");
-    if (wrapper) _marqueeObserver.observe(wrapper, { childList: true, subtree: true });
-}
-
+    let _marqueeObserver = null;
+    function initMarqueeObserver() {
+        if (_marqueeObserver) return;
+        _marqueeObserver = new MutationObserver(function(mutations) {
+            var hasNew = mutations.some(function(m) { return m.type === "childList" && m.addedNodes.length; });
+            if (!hasNew) return;
+            clearTimeout(window._marqueeDebounce);
+            window._marqueeDebounce = setTimeout(function() { initMarquee(); }, 60);
+        });
+        var wrapper = document.getElementById("app-wrapper");
+        if (wrapper) _marqueeObserver.observe(wrapper, { childList: true, subtree: true });
+    }
 
     /* 15. NOTICIAS Y DONACIONES */
     function initNewsDismiss() {
@@ -1002,8 +1075,7 @@ function initMarqueeObserver() {
         initPWA();
         initTouch();
         initTabs();
-		initMarqueeObserver();
-
+        initMarqueeObserver();
 
         let hasError = false;
         try {
@@ -1024,13 +1096,9 @@ function initMarqueeObserver() {
 
         updateBadge();
 
-        // Siempre reiniciar al inicio al cargar o recargar la página (F5, pull-to-refresh, etc.)
-        const cleanUrl = new URL(window.location);
-        if (cleanUrl.searchParams.has("p")) {
-            cleanUrl.searchParams.delete("p");
-            window.history.replaceState({}, "", cleanUrl);
-        }
-        switchPage("home");
+        // NUEVO: Determinar pestaña inicial
+        const initialTab = getInitialTab();
+        switchPage(initialTab);
         handleUrlParams();
 
         window.hidePageLoader(hasError);
