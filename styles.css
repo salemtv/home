@@ -129,10 +129,6 @@ html, body {
     align-items: center;
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
-    border: none;
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
 }
 
 .logo-img {
@@ -331,7 +327,7 @@ html, body {
 .tab-panel.hidden { display: none; }
 
 
-/* 6. REPRODUCTOR DE VIDEO (Sticky) */
+/* 6. REPRODUCTOR DE VIDEO (Sticky) - MÓVIL */
 .sticky-player-area {
     position: sticky;
     top: 0;
@@ -1313,7 +1309,251 @@ body.modal-open {
 .unsupported-wrapper .global { color: var(--text-muted); margin-top: var(--space-sm); }
 
 
-/* 17. MEDIA QUERIES Y SAFE AREA */
+/* 17. LAYOUT DE DOS COLUMNAS PARA TABLET Y TV ANDROID EN HORIZONTAL */
+@media (min-width: 1024px) and (orientation: landscape) {
+    /* Estilos específicos para TV Android en horizontal */
+    .top-bar-inner {
+        padding: 0 var(--space-lg);
+    }
+    
+    .top-tab {
+        width: 60px;
+        padding: 0 var(--space-md);
+    }
+    
+    .top-tab .tab-label {
+        font-size: 13px;
+    }
+    
+    .main-content {
+        padding: var(--space-lg);
+        padding-top: var(--space-md);
+        top: calc(56px + env(safe-area-inset-top));
+    }
+    
+    /* Las pestañas TV y Cine usan grid de 2 columnas */
+    #tab-tv, #tab-cinema {
+        display: grid !important;
+        grid-template-columns: 1fr 1.2fr;
+        gap: var(--space-lg);
+        height: 100%;
+        align-content: start;
+    }
+    
+    #tab-tv.hidden, #tab-cinema.hidden {
+        display: none !important;
+    }
+    
+    /* El área del reproductor (columna izquierda) */
+    #tab-tv .sticky-player-area,
+    #tab-cinema .sticky-player-area {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: transparent;
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+    
+    /* El área de lista (columna derecha) */
+    #tab-tv .list-container,
+    #tab-cinema .list-container {
+        grid-column: 2;
+        grid-row: 1;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+    
+    /* La paginación se alinea con la lista */
+    #tab-tv .pagination,
+    #tab-cinema .pagination {
+        grid-column: 2;
+        margin-top: var(--space-sm);
+        margin-bottom: env(safe-area-inset-bottom);
+    }
+    
+    /* El reproductor ocupa toda la columna izquierda */
+    .video-section {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .video-container {
+        aspect-ratio: 16 / 9;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: #000;
+        max-height: 50vh;
+    }
+    
+    .video-container iframe {
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Toolbar en modo horizontal - más compacto */
+    .toolbar-row {
+        gap: 12px;
+        margin-top: 12px;
+        flex-wrap: nowrap;
+    }
+    
+    .compact-tabs {
+        height: 36px;
+    }
+    
+    .compact-tabs .sub-tab {
+        padding: 0 14px;
+        font-size: 13px;
+    }
+    
+    .search-bar {
+        height: 36px;
+    }
+    
+    .search-bar input {
+        font-size: 13px;
+    }
+    
+    .reload-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .reload-btn span {
+        font-size: 18px;
+    }
+    
+    /* Los items de la lista se ven más compactos */
+    .list-item {
+        margin-bottom: 6px;
+    }
+    
+    .list-row {
+        padding: 6px var(--space-md);
+        padding-left: 6px;
+        min-height: 48px;
+    }
+    
+    .item-img {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .item-poster-img {
+        width: 40px;
+        height: 56px;
+    }
+    
+    .item-name {
+        font-size: 14px;
+    }
+    
+    .option-btn {
+        padding: 6px var(--space-md);
+        font-size: 14px;
+    }
+}
+
+/* Ajustes para tablet en horizontal (pantallas más pequeñas que TV) */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+    #tab-tv, #tab-cinema {
+        display: grid !important;
+        grid-template-columns: 1fr 1.1fr;
+        gap: var(--space-md);
+        height: 100%;
+        align-content: start;
+    }
+    
+    #tab-tv.hidden, #tab-cinema.hidden {
+        display: none !important;
+    }
+    
+    #tab-tv .sticky-player-area,
+    #tab-cinema .sticky-player-area {
+        position: sticky;
+        top: 0;
+        background: transparent;
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+    
+    #tab-tv .list-container,
+    #tab-cinema .list-container {
+        grid-column: 2;
+        grid-row: 1;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+    
+    #tab-tv .pagination,
+    #tab-cinema .pagination {
+        grid-column: 2;
+    }
+    
+    .video-section {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .video-container {
+        aspect-ratio: 16 / 9;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        max-height: 40vh;
+    }
+    
+    .toolbar-row {
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+    
+    .compact-tabs {
+        height: 34px;
+    }
+    
+    .compact-tabs .sub-tab {
+        padding: 0 12px;
+        font-size: 12px;
+    }
+    
+    .search-bar {
+        height: 34px;
+    }
+    
+    .search-bar input {
+        font-size: 12px;
+    }
+    
+    .reload-btn {
+        width: 34px;
+        height: 34px;
+    }
+    
+    .reload-btn span {
+        font-size: 16px;
+    }
+}
+
+/* Ajuste para cuando el grid está activo y la página es home */
+@media (min-width: 768px) and (orientation: landscape) {
+    #tab-home {
+        display: block !important;
+    }
+    
+    #tab-home.hidden {
+        display: none !important;
+    }
+}
+
+
+/* 18. MEDIA QUERIES Y SAFE AREA */
 @media (min-width: 768px) {
     .top-bar-inner { padding: 0 var(--space-lg); }
     .top-tab { padding: 0 var(--space-md); }
@@ -1344,7 +1584,7 @@ body.modal-open {
 }
 
 
-/* 18. ANIMACIONES */
+/* 19. ANIMACIONES */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
@@ -1409,4 +1649,3 @@ body.modal-open {
     45%, 65%  { transform: translateX(var(--marquee-end, -50px)); }
     85%, 100% { transform: translateX(0); }
 }
-
