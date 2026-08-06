@@ -1739,7 +1739,7 @@ function initManualSearch(type) {
         performSearch();
     }
 
-    // Agregar letra
+    // Agregar letra - AHORA CON SOPORTE PARA ESPACIO
     function addLetter(letter) {
         if (letter === '⌫') {
             _manualSearchQuery = _manualSearchQuery.slice(0, -1);
@@ -1770,16 +1770,27 @@ function initManualSearch(type) {
         const letter = btn.dataset.letter;
         if (!letter) return;
 
-        btn.addEventListener('click', (e) => {
+        // SOLUCIÓN: Mejor manejo de eventos para la tecla espacio
+        const handlePress = (e) => {
             e.preventDefault();
             e.stopPropagation();
+            
+            // Verificar si es la tecla espacio (data-letter=" ")
+            if (letter === ' ') {
+                _manualSearchQuery += ' ';
+                updateDisplay();
+                performSearch();
+                return;
+            }
+            
             addLetter(letter);
-        });
+        };
 
+        btn.addEventListener('click', handlePress);
         btn.addEventListener('touchend', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            addLetter(letter);
+            handlePress(e);
         }, { passive: false });
     });
 
