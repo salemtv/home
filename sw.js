@@ -2,8 +2,8 @@
 /* STV - SERVICE WORKER (SPA Optimizado)        */
 /* ============================================ */
 
-const CACHE_NAME = "stv-cache-v7";
-const DATA_CACHE_NAME = "stv-data-v2";
+const CACHE_NAME = "stv-cache-v9";
+const DATA_CACHE_NAME = "stv-data-v4";
 
 const STATIC_ASSETS = [
     "/",

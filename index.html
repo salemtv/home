@@ -12,7 +12,12 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" as="style">
+    
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0">
     <link rel="stylesheet" href="styles.css">
     <title>Salem TV</title>
@@ -23,9 +28,9 @@
             <header class="top-bar">
                 <div class="top-bar-inner">
                     <div class="brand">
-                        <button class="logo-link" onclick="location.reload()" type="button" title="Actualizar Salem TV">
+                        <a href="#" class="logo-link" onclick="switchPage('home'); return false;">
                             <img src="stv.png" alt="STV" class="logo-img">
-                        </button>
+                        </a>
                     </div>
                     <nav class="top-tabs">
                         <a href="#" class="top-tab active" data-target="home">
@@ -45,11 +50,13 @@
                 </div>
             </header>
 
+            <!-- PAGE LOADER CON DOBLE CAPA DE LOGO -->
             <div class="page-loader" id="page-loader">
                 <div class="loader-content">
-                    <img src="icon-192x192.png" alt="STV" class="loader-logo">
-                    <div class="loader-spinner"></div>
-                    <div class="loader-status" id="loader-status">Cargando recursos...</div>
+                    <div class="loader-logo-wrapper">
+                        <img src="stv.png" alt="STV" class="loader-logo loader-logo-back">
+                        <img src="stv.png" alt="STV" class="loader-logo loader-logo-front" id="loader-logo">
+                    </div>
                     <div class="loader-error" id="loader-error" style="display:none;">
                         <p class="loader-error-text">No se pudo cargar el contenido.<br>Verifica tu conexión.</p>
                         <button class="loader-retry-btn" onclick="location.reload()">Actualizar página</button>
@@ -121,14 +128,13 @@
                             </div>
                         </div>
                         <div class="legal-content" id="legal-content">
-                            Salem TV no produce ni aloja contenido ilegal.<br />Todo el material disponible en nuestro sitio proviene de fuentes públicas y gratuitas.<br />No somos propietarios.
+                            Queremos enfatizar que Salem TV no produce ni aloja contenido ilegal. Todo el material disponible en nuestro sitio proviene de fuentes públicas y gratuitas... No somos propietarios.
                         </div>
                     </div>
                 </section>
 
-                                <!-- ================== PESTAÑA TV ================== -->
+                <!-- ================== PESTAÑA TV ================== -->
                 <section class="tab-panel hidden" id="tab-tv">
-                    <!-- ZONA ESTÁTICA (Pegada arriba) -->
                     <div class="sticky-player-area">
                         <div class="video-section">
                             <div class="video-container">
@@ -137,7 +143,6 @@
                             </div>
                         </div>
 
-                        <!-- CONTROLES EN UNA SOLA LÍNEA -->
                         <div class="toolbar-row">
                             <div class="sub-tabs compact-tabs">
                                 <button class="sub-tab active" data-tab="all" title="Todos">Todo</button>
@@ -158,15 +163,69 @@
                                 <span class="material-symbols-rounded">refresh</span>
                             </button>
                         </div>
+
+                        <!-- ===== BUSCADOR MANUAL (SOLO MODO HORIZONTAL) ===== -->
+                        <div class="tv-keyboard-search">
+                            <div class="search-display">
+                                <span class="search-placeholder">Buscar canal...</span>
+                                <span class="search-text"></span>
+                                <button class="search-clear-btn" type="button">
+                                    <span class="material-symbols-rounded">close</span>
+                                </button>
+                            </div>
+                            <div class="keyboard-grid">
+                                 <div class="key-row">
+                                    <button class="key-btn" data-letter="A">A</button>
+                                    <button class="key-btn" data-letter="B">B</button>
+                                    <button class="key-btn" data-letter="C">C</button>
+                                    <button class="key-btn" data-letter="D">D</button>
+                                    <button class="key-btn" data-letter="E">E</button>
+                                    <button class="key-btn" data-letter="F">F</button>
+                                    <button class="key-btn" data-letter="G">G</button>
+                                    <button class="key-btn" data-letter="H">H</button>
+                                    <button class="key-btn" data-letter="I">I</button>
+                                    <button class="key-btn" data-letter="J">J</button>
+                                </div>
+                                <div class="key-row">
+                                    
+                                    <button class="key-btn" data-letter="K">K</button>
+                                    <button class="key-btn" data-letter="L">L</button>
+                                    <button class="key-btn" data-letter="M">M</button>
+                                    <button class="key-btn" data-letter="N">N</button>
+                                    <button class="key-btn" data-letter="Ñ">Ñ</button>
+                                    <button class="key-btn" data-letter="O">O</button>
+                                    <button class="key-btn" data-letter="P">P</button>
+                                    <button class="key-btn" data-letter="Q">Q</button>
+                                    <button class="key-btn" data-letter="R">R</button>
+                                    <button class="key-btn" data-letter="S">S</button>
+                                </div>
+                                <div class="key-row">
+                                    
+                                    <button class="key-btn" data-letter="T">T</button>
+                                    <button class="key-btn" data-letter="U">U</button>
+                                    <button class="key-btn" data-letter="V">V</button>
+                                    <button class="key-btn" data-letter="W">W</button>
+                                    <button class="key-btn" data-letter="X">X</button>
+                                    <button class="key-btn" data-letter="Y">Y</button>
+                                    <button class="key-btn" data-letter="Z">Z</button>
+                                    <button class="key-btn key-space" data-letter=" ">Espacio</button>
+                                    <button class="key-btn key-backspace" data-letter="⌫">
+                                        <span class="material-symbols-rounded">backspace</span>
+                                    </button>
+                                    <button style="display:none" class="key-btn key-search" data-letter="🔍">
+                                        <span class="material-symbols-rounded">search</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- ZONA ESCROLEABLE (La lista baja y sube) -->
                     <div class="list-container" data-tab="all"></div>
+                    <div class="pagination"></div>
                 </section>
 
                 <!-- ================== PESTAÑA CINE ================== -->
                 <section class="tab-panel hidden" id="tab-cinema">
-                    <!-- ZONA ESTÁTICA (Pegada arriba) -->
                     <div class="sticky-player-area">
                         <div class="video-section">
                             <div class="video-container">
@@ -175,7 +234,6 @@
                             </div>
                         </div>
 
-                        <!-- CONTROLES EN UNA SOLA LÍNEA -->
                         <div class="toolbar-row">
                             <div class="sub-tabs compact-tabs">
                                 <button class="sub-tab active" data-tab="all" title="Todas">Todo</button>
@@ -196,13 +254,66 @@
                                 <span class="material-symbols-rounded">refresh</span>
                             </button>
                         </div>
+
+                        <!-- ===== BUSCADOR MANUAL (SOLO MODO HORIZONTAL) ===== -->
+                        <div class="tv-keyboard-search">
+                            <div class="search-display">
+                                <span class="search-placeholder">Buscar película...</span>
+                                <span class="search-text"></span>
+                                <button class="search-clear-btn" type="button">
+                                    <span class="material-symbols-rounded">close</span>
+                                </button>
+                            </div>
+                            <div class="keyboard-grid">
+                                <div class="key-row">
+                                    <button class="key-btn" data-letter="A">A</button>
+                                    <button class="key-btn" data-letter="B">B</button>
+                                    <button class="key-btn" data-letter="C">C</button>
+                                    <button class="key-btn" data-letter="D">D</button>
+                                    <button class="key-btn" data-letter="E">E</button>
+                                    <button class="key-btn" data-letter="F">F</button>
+                                    <button class="key-btn" data-letter="G">G</button>
+                                    <button class="key-btn" data-letter="H">H</button>
+                                    <button class="key-btn" data-letter="I">I</button>
+                                    <button class="key-btn" data-letter="J">J</button>
+                                </div>
+                                <div class="key-row">
+                                    
+                                    <button class="key-btn" data-letter="K">K</button>
+                                    <button class="key-btn" data-letter="L">L</button>
+                                    <button class="key-btn" data-letter="M">M</button>
+                                    <button class="key-btn" data-letter="N">N</button>
+                                    <button class="key-btn" data-letter="Ñ">Ñ</button>
+                                    <button class="key-btn" data-letter="O">O</button>
+                                    <button class="key-btn" data-letter="P">P</button>
+                                    <button class="key-btn" data-letter="Q">Q</button>
+                                    <button class="key-btn" data-letter="R">R</button>
+                                    <button class="key-btn" data-letter="S">S</button>
+                                </div>
+                                <div class="key-row">
+                                    
+                                    <button class="key-btn" data-letter="T">T</button>
+                                    <button class="key-btn" data-letter="U">U</button>
+                                    <button class="key-btn" data-letter="V">V</button>
+                                    <button class="key-btn" data-letter="W">W</button>
+                                    <button class="key-btn" data-letter="X">X</button>
+                                    <button class="key-btn" data-letter="Y">Y</button>
+                                    <button class="key-btn" data-letter="Z">Z</button>
+                                    <button class="key-btn key-space" data-letter=" ">Espacio</button>
+                                    <button class="key-btn key-backspace" data-letter="⌫">
+                                        <span class="material-symbols-rounded">backspace</span>
+                                    </button>
+                                    <button style="display:none" class="key-btn key-search" data-letter="🔍">
+                                        <span class="material-symbols-rounded">search</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- ZONA ESCROLEABLE (La lista baja y sube) -->
                     <div class="list-container" data-tab="all"></div>
                     <div class="pagination"></div>
                 </section>
-
 
             </main>
         </div>
