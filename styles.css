@@ -48,7 +48,7 @@
 
 html, body {
     width: 100%;
-    height: 100%;
+    height: 100dvh;
     overflow: hidden;
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -359,13 +359,14 @@ html, body {
     bottom: 0;
     left: 0;
     width: 100%;
-	height: ;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 0;
 	margin: 0;
+    padding-bottom: env(safe-area-inset-bottom);
 }
+
 
 .tab-panel {
     width: 100%;
@@ -1957,26 +1958,6 @@ body.modal-open {
     }
 }
 
-/* ===== SAFE AREA ===== */
-@supports (padding-top: env(safe-area-inset-top)) {
-    .page-loader {
-        top: calc(0px + env(safe-area-inset-top));
-        height: calc(100% - 0px - env(safe-area-inset-top));
-    }
-}
-
-@supports (padding-bottom: env(safe-area-inset-top)) {
-    .page-loader {
-        bottom: calc(0px + env(safe-area-inset-top));
-        height: calc(100% - 0px - env(safe-area-inset-top));
-    }
-	#tab-home, #tab-tv, #tab-cinema, html, body, main-content {
-        bottom: calc(0px + env(safe-area-inset-top));
-        height: calc(100% - 0px - env(safe-area-inset-top));
-    }
-
-}
-
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -1984,6 +1965,43 @@ body.modal-open {
         transition-duration: 0.01ms !important;
     }
 }
+
+
+/* ===== SAFE AREA HANDLING (PWA + Safari Fix) ===== */
+@supports (padding: env(safe-area-inset-bottom)) {
+    .main-content {
+        padding-bottom: env(safe-area-inset-bottom) !important;
+    }
+
+    .page-loader {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* Asegurar que los tab-panels respeten el safe-area */
+    .tab-panel {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* Para dispositivos con notch inferior (iPhone 14+) */
+    @media screen and (orientation: portrait) and (max-height: 812px) {
+        .tab-panel {
+            margin-bottom: env(safe-area-inset-bottom);
+        }
+    }
+}
+
+/* Fallback para dispositivos/navegadores sin soporte de env() */
+@supports not (padding: env(safe-area-inset-bottom)) {
+    .main-content {
+        padding-bottom: 16px;
+    }
+    
+    .tab-panel {
+        padding-bottom: 16px;
+    }
+}
+
+
 
 /* 19. ANIMACIONES */
 @keyframes fadeIn {
