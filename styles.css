@@ -612,7 +612,7 @@ html, body {
 }
 
 .list-container .list-item:last-child {
-    margin-bottom: 0;
+    margin-bottom: var(--space-md);
 }
 
 
@@ -1125,8 +1125,6 @@ html, body {
 /* 13. HOME: NOTICIAS Y LEGAL */
 .news-section {
     background: rgba(255, 59, 48, 0.08);
-    border-top: 1px solid rgba(255, 59, 48, 0.15);
-	border-bottom: 1px solid rgba(255, 59, 48, 0.15);
     border-radius: 0;
     padding: var(--space-md);
     margin-bottom: 0;
@@ -1182,11 +1180,12 @@ html, body {
 .news-close-btn span { font-size: 18px; display: flex; align-items: center; justify-content: center; line-height: 1; }
 
 .legal-section {
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.05);
     background: transparent;
     border-radius: 0;
     padding: var(--space-md);
     margin-top: var(--space-lg);
+    margin-bottom: var(--space-md);
     margin-left: calc(-1 * var(--space-md));
     margin-right: calc(-1 * var(--space-md));
     width: 100vw;
