@@ -9,11 +9,27 @@
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=tntsports"
+          "url": "https://streamtp-golden1.click/global1.php?stream=tntsports"
         }
       ],
       "tag": "canal"
     },
+	
+	{
+      "id": "tntsportschile",
+      "name": "TNT Sports Chile",
+      "number": 1.1,
+      "image": "https://placehold.co/80x80/ff006e/ffffff?text=TNT CH",
+      "isFavorite": false,
+      "options": [
+		{
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=tntsportschile"
+        }
+      ],
+      "tag": "canal"
+    },
+	
 	{
       "id": "dsports",
       "name": "DSports",
@@ -27,7 +43,7 @@
         },
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=dsports"
+          "url": "https://streamtp-golden1.click/global1.php?stream=dsports"
         },
 		{
           "label": "LA 720p",
@@ -46,7 +62,7 @@
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=dsports2"
+          "url": "https://streamtp-golden1.click/global1.php?stream=dsports2"
         },
 		{
           "label": "LA 720p",
@@ -64,7 +80,7 @@
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=dsportsplus"
+          "url": "https://streamtp-golden1.click/global1.php?stream=dsportsplus"
         },
 		{
           "label": "LA 720p",
@@ -79,12 +95,12 @@
       "id": "l1max",
       "name": "Liga 1 Max",
       "number": 5,
-      "image": "https://placehold.co/80x80/e31e24/ffffff?text=L1MAX",
+      "image": "https://placehold.co/80x80/e31e24/ffffff?text=L1 MAX",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=liga1max"
+          "url": "https://streamtp-golden1.click/global1.php?stream=liga1max"
         },
 		{
           "label": "LA 720p",
@@ -94,16 +110,31 @@
       "tag": "canal"
     },
 
+{
+      "id": "movistardeportes",
+      "name": "Movistar Deportes",
+      "number": 6,
+      "image": "https://placehold.co/80x80/00a9e0/ffffff?text=MD",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "LA 720p",
+          "url": "https://la18hd.su/vivo/canales.php?stream=movistar"
+        }
+      ],
+      "tag": "canal"
+    },
+
 	{
       "id": "espnpremium",
       "name": "ESPN Premium",
-      "number": 6,
+      "number": 7,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ESP",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espnpremium"
+          "url": "https://streamtp-golden1.click/global1.php?stream=espnpremium"
         },
 		{
           "label": "LA 720p",
@@ -116,13 +147,13 @@
     {
       "id": "espn",
       "name": "ESPN",
-      "number": 7,
+      "number": 8,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES",
       "isFavorite": false,
       "options": [
 		{
-          "label": "ST 720p Colombia",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espn"
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=espn"
         },
 		{
           "label": "LA 720p",
@@ -135,13 +166,13 @@
 	{
       "id": "espn2",
       "name": "ESPN 2",
-      "number": 8,
+      "number": 9,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES2",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espn2"
+          "url": "https://streamtp-golden1.click/global1.php?stream=espn2"
         },
 		{
           "label": "LA 720p",
@@ -154,13 +185,13 @@
 	{
       "id": "espn3",
       "name": "ESPN 3",
-      "number": 9,
+      "number": 10,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES3",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espn3"
+          "url": "https://streamtp-golden1.click/global1.php?stream=espn3"
         },
 		{
           "label": "LA 720p",
@@ -173,13 +204,13 @@
 	{
       "id": "espn4",
       "name": "ESPN 4",
-      "number": 10,
+      "number": 11,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES4",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espn4"
+          "url": "https://streamtp-golden1.click/global1.php?stream=espn4"
         },
 		{
           "label": "LA 720p",
@@ -192,13 +223,13 @@
 	{
       "id": "espn5",
       "name": "ESPN 5",
-      "number": 11,
+      "number": 12,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES5",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espn5"
+          "url": "https://streamtp-golden1.click/global1.php?stream=espn5"
         },
 		{
           "label": "LA 720p",
@@ -211,13 +242,13 @@
 {
       "id": "espn6",
       "name": "ESPN 6",
-      "number": 12,
+      "number": 13,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES6",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espn6"
+          "url": "https://streamtp-golden1.click/global1.php?stream=espn6"
         },
 		{
           "label": "LA 720p",
@@ -230,13 +261,13 @@
 	{
       "id": "espn7",
       "name": "ESPN 7",
-      "number": 13,
+      "number": 14,
       "image": "https://placehold.co/80x80/c41e3a/ffffff?text=ES7",
       "isFavorite": false,
       "options": [
 		{
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs//global1.php?stream=espn7"
+          "url": "https://streamtp-golden1.click/global1.php?stream=espn7"
         },
 		{
           "label": "LA 720p",
@@ -249,13 +280,13 @@
 	{
       "id": "telefe",
       "name": "Telefe",
-      "number": 14,
+      "number": 15,
       "image": "https://placehold.co/80x80/0057b8/ffffff?text=FE",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=telefe"
+          "url": "https://streamtp-golden1.click/global1.php?stream=telefe"
         },
 		{
           "label": "LA 720p",
@@ -269,13 +300,13 @@
 	{
       "id": "fanatiz1",
       "name": "Fanatiz",
-      "number": 15,
+      "number": 16,
       "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz1"
+          "url": "https://streamtp-golden1.click/global1.php?stream=fanatiz1"
         }
       ],
       "tag": "canal"
@@ -284,13 +315,13 @@
 	{
       "id": "fanatiz2",
       "name": "Fanatiz 2",
-      "number": 16,
+      "number": 17,
       "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F2",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz2"
+          "url": "https://streamtp-golden1.click/global1.php?stream=fanatiz2"
         }
       ],
       "tag": "canal"
@@ -299,13 +330,13 @@
 	{
       "id": "fanatiz3",
       "name": "Fanatiz 3",
-      "number": 17,
+      "number": 18,
       "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F3",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz3"
+          "url": "https://streamtp-golden1.click/global1.php?stream=fanatiz3"
         }
       ],
       "tag": "canal"
@@ -313,13 +344,13 @@
 	{
       "id": "fanatiz4",
       "name": "Fanatiz 4",
-      "number": 18,
+      "number": 19,
       "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F4",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz4"
+          "url": "https://streamtp-golden1.click/global1.php?stream=fanatiz4"
         }
       ],
       "tag": "canal"
@@ -327,13 +358,13 @@
 	{
       "id": "fanatiz5",
       "name": "Fanatiz 5",
-      "number": 19,
+      "number": 20,
       "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F5",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz5"
+          "url": "https://streamtp-golden1.click/global1.php?stream=fanatiz5"
         }
       ],
       "tag": "canal"
@@ -341,27 +372,301 @@
 	{
       "id": "fanatiz6",
       "name": "Fanatiz 6",
-      "number": 20,
+      "number": 21,
       "image": "https://placehold.co/80x80/ff6b00/ffffff?text=F6",
       "isFavorite": false,
       "options": [
         {
           "label": "ST 720p",
-          "url": "https://streamtp99a.sbs/global1.php?stream=fanatiz6"
+          "url": "https://streamtp-golden1.click/global1.php?stream=fanatiz6"
         }
       ],
       "tag": "canal"
     },
+
 	{
-      "id": "movistardeportes",
-      "name": "Movistar Deportes",
-      "number": 21,
-      "image": "https://placehold.co/80x80/00a9e0/ffffff?text=MOV",
+      "id": "disney1",
+      "name": "Disney",
+      "number": 22,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D",
       "isFavorite": false,
       "options": [
         {
-          "label": "LA 720p",
-          "url": "https://la18hd.su/vivo/canales.php?stream=movistar"
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney1"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "disney2",
+      "name": "Disney 2",
+      "number": 23,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D2",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney2"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "disney3",
+      "name": "Disney 3",
+      "number": 24,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D3",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney3"
+        }
+      ],
+      "tag": "canal"
+    },
+
+
+	{
+      "id": "disney4",
+      "name": "Disney 4",
+      "number": 25,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D4",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney4"
+        }
+      ],
+      "tag": "canal"
+    },
+
+
+	{
+      "id": "disney5",
+      "name": "Disney 5",
+      "number": 26,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D5",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney5"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "disney6",
+      "name": "Disney 6",
+      "number": 27,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D6",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney6"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "disney7",
+      "name": "Disney 7",
+      "number": 28,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D7",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney7"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "disney8",
+      "name": "Disney 8",
+      "number": 29,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D8",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney8"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "disney9",
+      "name": "Disney 9",
+      "number": 30,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D9",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney9"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "disney10",
+      "name": "Disney 10",
+      "number": 31,
+      "image": "https://placehold.co/80x80/136878/ffffff?text=D10",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=disney10"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "laligahypermotion1",
+      "name": "LaLiga Hypermotion",
+      "number": 32,
+      "image": "https://placehold.co/80x80/ff4b44/ffffff?text=LA",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=hypermotion1"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "laligahypermotion2",
+      "name": "LaLiga Hypermotion 2",
+      "number": 33,
+      "image": "https://placehold.co/80x80/ff4b44/ffffff?text=LA2",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=hypermotion2"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "laligahypermotion3",
+      "name": "LaLiga Hypermotion 3",
+      "number": 34,
+      "image": "https://placehold.co/80x80/ff4b44/ffffff?text=LA3",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=hypermotion3"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "clarosports",
+      "name": "Claro Sports",
+      "number": 35,
+      "image": "https://placehold.co/80x80/ff0000/ffffff?text=CS",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=clarosports"
+        }
+      ],
+      "tag": "canal"
+    },
+
+
+	{
+      "id": "paramount1",
+      "name": "Paramount",
+      "number": 36,
+      "image": "https://placehold.co/80x80/2864f0/ffffff?text=P",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=paramount1"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "paramount2",
+      "name": "Paramount 2",
+      "number": 37,
+      "image": "https://placehold.co/80x80/2864f0/ffffff?text=P2",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=paramount2"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "paramount3",
+      "name": "Paramount 3",
+      "number": 38,
+      "image": "https://placehold.co/80x80/2864f0/ffffff?text=P3",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=paramount3"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "paramount4",
+      "name": "Paramount 4",
+      "number": 39,
+      "image": "https://placehold.co/80x80/2864f0/ffffff?text=P4",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=paramount4"
+        }
+      ],
+      "tag": "canal"
+    },
+
+	{
+      "id": "paramount5",
+      "name": "Paramount 5",
+      "number": 40,
+      "image": "https://placehold.co/80x80/2864f0/ffffff?text=P5",
+      "isFavorite": false,
+      "options": [
+        {
+          "label": "ST 720p",
+          "url": "https://streamtp-golden1.click/global1.php?stream=paramount5"
         }
       ],
       "tag": "canal"
