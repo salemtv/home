@@ -46,10 +46,21 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html {
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    height: 100dvh;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+	overflow: hidden;
+}
+
+
+html, body {
     background: var(--bg-primary);
     color: var(--text-primary);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -70,8 +81,12 @@ html, body {
 .subtitle { font-size: var(--text-subtitle); font-weight: 600; color: var(--text-primary); }
 .mini { font-size: var(--text-mini); color: var(--text-secondary); font-weight: 500; }
 
-#app-wrapper { width: 100%; height: 100%; position: relative; }
-
+#app-wrapper { 
+    width: 100%; 
+    height: 100%; 
+    min-height: 100dvh;
+    position: relative; 
+}
 
 /* 2. TIPOGRAFIA: MATERIAL SYMBOLS */
 @font-face {
@@ -362,7 +377,7 @@ html, body {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 0;
-    padding-bottom: calc(0 + env(safe-area-inset-bottom));
+    padding-bottom: calc(0px + env(safe-area-inset-bottom));
 }
 
 .tab-panel {
@@ -374,11 +389,13 @@ html, body {
 .tab-panel.hidden { display: none!important; }
 
 /* ===== PESTAÑAS TV/CINE: LAYOUT FLEX 100% ALTO CON SCROLL INTERNO ===== */
-#tab-home, #tab-tv, #tab-cinema {
+#tab-home {
     padding: var(--space-md);
+	padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom));
 }
 #tab-tv, #tab-cinema {
-    
+    padding: 0px var(--space-md);
+	padding-bottom: calc(0px + env(safe-area-inset-bottom));
 }
 
 #tab-tv, #tab-cinema {
@@ -609,6 +626,10 @@ html, body {
     overflow: hidden;
     transition: border-color var(--transition-fast), background var(--transition-fast);
 }
+.list-container .list-item:last-child {
+    margin-bottom: var(--space-md);  /* el último item no deja espacio */
+}
+
 
 .list-item:hover { border-color: rgba(255,255,255,0.1); }
 .list-item.playing { background: var(--bg-active); border-color: rgba(255,59,48,0.2); }
@@ -1419,7 +1440,7 @@ body.modal-open {
     }
 
     .main-content {
-        top: calc(56px + env(safe-area-inset-top));
+        top: calc(55px + env(safe-area-inset-top));
         padding: var(--space-md);
         max-width: 1000px;
         margin: 0 auto;
