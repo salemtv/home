@@ -85,31 +85,31 @@
     /* ============================================ */
     /* 7. LOADER CON PROGRESO (DOBLE CAPA)         */
     /* ============================================ */
-    
+
     function updateLoaderProgress(percent) {
         const logo = document.getElementById("loader-logo");
         if (!logo) return;
-        
+
         const rounded = Math.round(percent / 5) * 5;
         const clamped = Math.min(100, Math.max(0, rounded));
-        
+
         logo.className = 'loader-logo loader-logo-front';
-        
+
         if (clamped >= 0 && clamped <= 100) {
             logo.classList.add('progress-' + clamped);
         }
-        
+
         _loaderProgress = clamped;
-        
+
         if (clamped >= 100 && !_loaderComplete) {
             _loaderComplete = true;
             logo.classList.add('glow');
-            
+
             setTimeout(() => {
                 logo.classList.add('fade-out');
                 const backLogo = document.querySelector('.loader-logo-back');
                 if (backLogo) backLogo.classList.add('fade-out');
-                
+
                 setTimeout(() => {
                     const loader = document.getElementById("page-loader");
                     if (loader) {
@@ -136,10 +136,10 @@
     /* ============================================ */
     /* 8. ESPERA DE RECURSOS CRÍTICOS              */
     /* ============================================ */
-    
+
     async function waitForMaterialFonts() {
         updateLoaderProgress(10);
-        
+
         try {
             await document.fonts.load('1em "Material Symbols Rounded"');
             await document.fonts.ready;
@@ -147,7 +147,7 @@
             return true;
         } catch (e) {
             await new Promise(r => setTimeout(r, 500));
-            
+
             const testIcon = document.querySelector('.material-symbols-rounded');
             if (testIcon) {
                 const fontFamily = getComputedStyle(testIcon).fontFamily;
@@ -156,7 +156,7 @@
                     return true;
                 }
             }
-            
+
             await new Promise(r => setTimeout(r, 1000));
             updateLoaderProgress(35);
             return true;
@@ -165,21 +165,21 @@
 
     async function preloadImagesFromData() {
         updateLoaderProgress(45);
-        
+
         const allItems = [..._tvData, ..._cinemaData];
         const imageUrls = allItems
             .map(item => item.image)
             .filter(url => url && url.startsWith('http'));
-        
+
         const urlsToLoad = imageUrls.slice(0, 20);
         let loaded = 0;
         const total = urlsToLoad.length || 1;
-        
+
         if (urlsToLoad.length === 0) {
             updateLoaderProgress(75);
             return;
         }
-        
+
         const loadImage = (url) => {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -190,7 +190,7 @@
                 setTimeout(() => resolve(false), 5000);
             });
         };
-        
+
         const batchSize = 5;
         for (let i = 0; i < urlsToLoad.length; i += batchSize) {
             const batch = urlsToLoad.slice(i, i + batchSize);
@@ -199,13 +199,13 @@
             const progress = 45 + (loaded / total) * 30;
             updateLoaderProgress(Math.min(75, progress));
         }
-        
+
         updateLoaderProgress(75);
     }
 
     async function waitForCriticalImages() {
         updateLoaderProgress(15);
-        
+
         const criticalImages = [
             'stv.png',
             'icon-192x192.png',
@@ -213,7 +213,7 @@
             'maskable-icon-192x192.png',
             'maskable-icon-512x512.png'
         ];
-        
+
         const loadImage = (url) => {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -223,7 +223,7 @@
                 setTimeout(() => resolve(false), 3000);
             });
         };
-        
+
         await Promise.all(criticalImages.map(url => loadImage(url)));
         updateLoaderProgress(30);
     }
@@ -234,23 +234,23 @@
                 waitForCriticalImages(),
                 new Promise(resolve => setTimeout(resolve, 3000))
             ]);
-            
+
             await Promise.race([
                 waitForMaterialFonts(),
                 new Promise(resolve => setTimeout(resolve, 3000))
             ]);
-            
+
             await Promise.race([
                 preloadImagesFromData(),
                 new Promise(resolve => setTimeout(resolve, 4000))
             ]);
-            
+
             updateLoaderProgress(85);
             await new Promise(r => setTimeout(r, 300));
             updateLoaderProgress(95);
             await new Promise(r => setTimeout(r, 200));
             updateLoaderProgress(100);
-            
+
         } catch (e) {
             console.warn("STV: Error en carga de recursos", e);
             updateLoaderProgress(100);
@@ -258,9 +258,9 @@
     }
 
     /* ============================================ */
-    /* 9. NAVEGACION SPA - SIN LIMPIEZA AUTOMÁTICA */
+    /* 9. NAVEGACION SPA                           */
     /* ============================================ */
-    
+
     function updateBadgeDeferred() {
         if ("requestIdleCallback" in window) {
             requestIdleCallback(updateBadge, { timeout: 200 });
@@ -272,8 +272,7 @@
     function getInitialTab() {
         const playing = getPlaying();
         const lastTab = load(STORAGE_KEYS.lastActiveTab, "home");
-        
-        // Verificar si el estado de reproducción es válido
+
         if (playing && playing.type) {
             const data = playing.type === "tv" ? _tvData : _cinemaData;
             const item = data.find(it => it.id === playing.id);
@@ -281,13 +280,13 @@
                 return playing.type === "tv" ? "tv" : "cinema";
             }
         }
-        
+
         return "home";
     }
 
     window.switchPage = function(pageId) {
         if (document.body.dataset.page === pageId) return;
-        
+
         document.body.dataset.page = pageId;
 
         $$(".top-tab").forEach(t => t.classList.toggle("active", t.dataset.target === pageId));
@@ -309,6 +308,12 @@
             if (main) main.scrollTop = 0;
             const panel = document.getElementById("tab-" + pageId);
             if (panel) panel.scrollTop = 0;
+
+            // Reset scroll interno de TV/Cine
+            if (pageId === "tv" || pageId === "cinema") {
+                const scrollArea = panel.querySelector(".tab-scroll-area");
+                if (scrollArea) scrollArea.scrollTop = 0;
+            }
         });
 
         if (pageId === "home") {
@@ -334,7 +339,7 @@
         window.addEventListener("popstate", () => {
             const params = new URLSearchParams(location.search);
             let target = params.get("p") || "home";
-            
+
             const playing = getPlaying();
             if (playing && playing.type) {
                 const playingTab = playing.type === "tv" ? "tv" : "cinema";
@@ -344,7 +349,7 @@
             } else {
                 target = "home";
             }
-            
+
             if (document.body.dataset.page !== target) switchPage(target);
         });
     }
@@ -352,7 +357,7 @@
     /* ============================================ */
     /* 10. NOVEDADES Y FAVORITOS                   */
     /* ============================================ */
-    
+
     function getNewItems(currentItems, type) {
         if (_newItemsCache && _newItemsCache[type]) return _newItemsCache[type];
 
@@ -429,38 +434,71 @@
     function isFav(type, id) { return getFavs(type).includes(id); }
 
     /* ============================================ */
-    /* 11. HISTORIAL Y PROGRESO                    */
+    /* 11. HISTORIAL Y PROGRESO - CORREGIDO        */
     /* ============================================ */
-    
+
     function addHistory(type, item, optionLabel, optIdx, seasonIdx, episodeIdx) {
         let hist = load(STORAGE_KEYS.history, []);
+
+        if (!Array.isArray(hist)) {
+            hist = [];
+        }
+
         const key = item.id + "|" + (optIdx ?? "") + "|" + (seasonIdx ?? "") + "|" + (episodeIdx ?? "");
+
         hist = hist.filter(h => {
             const hKey = h.id + "|" + (h.optIdx ?? "") + "|" + (h.seasonIdx ?? "") + "|" + (h.episodeIdx ?? "");
             return hKey !== key;
         });
+
         hist.unshift({
-            type, id: item.id, name: item.name, year: item.year || null,
-            image: item.image || "", optionLabel, tag: item.tag || "",
-            optIdx: optIdx ?? null, seasonIdx: seasonIdx ?? null, episodeIdx: episodeIdx ?? null,
+            type: type,
+            id: item.id,
+            name: item.name,
+            year: item.year || null,
+            image: item.image || "",
+            optionLabel: optionLabel || "",
+            tag: item.tag || "",
+            optIdx: optIdx ?? null,
+            seasonIdx: seasonIdx ?? null,
+            episodeIdx: episodeIdx ?? null,
             timestamp: now()
         });
-        hist = hist.slice(0, 12);
+
+        // Máximo 12 por tipo (TV y Cine independientes)
+        const tvItems = hist.filter(h => h.type === "tv").slice(0, 12);
+        const movieItems = hist.filter(h => h.type === "movie").slice(0, 12);
+        hist = [...tvItems, ...movieItems];
+
         save(STORAGE_KEYS.history, hist);
         renderHomeHistory();
     }
 
     function getHistory(type, limit) {
-        return load(STORAGE_KEYS.history, []).filter(h => h.type === type).slice(0, limit || 10);
+        const all = load(STORAGE_KEYS.history, []);
+        if (!Array.isArray(all)) {
+            return [];
+        }
+        return all.filter(h => h.type === type).slice(0, limit || 10);
     }
 
     function clearHistory(type) {
-        save(STORAGE_KEYS.history, load(STORAGE_KEYS.history, []).filter(h => h.type !== type));
+        const all = load(STORAGE_KEYS.history, []);
+        if (!Array.isArray(all)) {
+            save(STORAGE_KEYS.history, []);
+            renderHomeHistory();
+            return;
+        }
+        save(STORAGE_KEYS.history, all.filter(h => h.type !== type));
         renderHomeHistory();
     }
 
     function hasHistory(type) {
-        return load(STORAGE_KEYS.history, []).some(h => h.type === type);
+        const all = load(STORAGE_KEYS.history, []);
+        if (!Array.isArray(all)) {
+            return false;
+        }
+        return all.some(h => h.type === type);
     }
 
     function getMovieProgress(id) {
@@ -489,9 +527,6 @@
 
         console.log(`[STV] 🧹 Limpiando pestaña: ${type.toUpperCase()}`);
 
-        // ============================================
-        // 1. LIMPIAR EL ESTADO DE REPRODUCCIÓN PRIMERO
-        // ============================================
         const lastPlaying = getPlaying();
         if (lastPlaying && lastPlaying.type === type) {
             save(STORAGE_KEYS.lastPlaying, null);
@@ -499,9 +534,6 @@
             console.log(`[STV] Estado de reproducción limpiado para: ${type}`);
         }
 
-        // ============================================
-        // 2. DESTRUIR EL IFRAME (DETENER VIDEO)
-        // ============================================
         const videoContainer = section.querySelector(".video-container");
         if (videoContainer) {
             const iframes = videoContainer.querySelectorAll("iframe");
@@ -511,7 +543,7 @@
                     iframe.remove();
                 } catch(e) {}
             });
-            
+
             const videos = videoContainer.querySelectorAll("video");
             videos.forEach(video => {
                 try {
@@ -520,28 +552,25 @@
                     video.remove();
                 } catch(e) {}
             });
-            
+
             videoContainer.innerHTML = `
                 <span class="material-symbols-rounded placeholder-icon">${type === "tv" ? "tv" : "theaters"}</span>
                 <p class="placeholder-text">Selecciona ${type === "tv" ? "un canal" : "una película"} para reproducir</p>
             `;
         }
 
-        // ============================================
-        // 3. LIMPIAR LA LISTA - BORRAR TODO Y RE-RENDER
-        // ============================================
         const container = section.querySelector(".list-container");
         if (container) {
             const currentTab = container.dataset.tab || "all";
             const currentPage = parseInt(container.dataset.page) || 1;
             const searchInput = section.querySelector("input[type='text']");
             const filterText = searchInput ? searchInput.value.trim() : "";
-            
+
             container.innerHTML = '';
             container.dataset.openId = "";
             container.dataset.openSeason = "";
             container.dataset.openEpisode = "";
-            
+
             let items = type === "tv" ? _tvData : _cinemaData;
             if (currentTab === "favorites") {
                 items = items.filter(it => isFav(type, it.id));
@@ -550,9 +579,9 @@
                 const searchLower = filterText.toLowerCase();
                 items = items.filter(it => it.name.toLowerCase().includes(searchLower));
             }
-            
+
             renderListClean(container, items, type, currentPage);
-            
+
             const paginationContainer = section.querySelector(".pagination");
             if (paginationContainer) {
                 const totalItems = items.length;
@@ -562,9 +591,6 @@
             }
         }
 
-        // ============================================
-        // 4. OCULTAR BOTÓN DE RECARGA
-        // ============================================
         const reloadBtn = section.querySelector(".reload-btn");
         if (reloadBtn) {
             reloadBtn.classList.remove("visible");
@@ -587,7 +613,6 @@
         const start = (page - 1) * ITEMS_PER_PAGE;
         const paginatedItems = items.slice(start, start + ITEMS_PER_PAGE);
 
-        // FORZAR: isPlaying = false para TODOS los items
         const isPlaying = false;
         const openId = "";
         const openSeason = "";
@@ -825,11 +850,11 @@
 
         const typeKey = type === "tv" ? "tv" : "movie";
         markNewAsSeen(typeKey, id);
-        
+
         console.log(`[STV] 🎯 goToAndPlay: ${type} - ${id}`);
-        
+
         cleanOtherTab(type);
-        
+
         const targetTab = type === "tv" ? "tv" : "cinema";
         switchPage(targetTab);
 
@@ -853,26 +878,49 @@
             if (seasonIdx !== null) container.dataset.openSeason = `${id}-${seasonIdx}`;
             if (epIdx !== null) container.dataset.openEpisode = `${id}-${seasonIdx}-${epIdx}`;
 
-            const tab = container.dataset.tab || "all";
+            const currentTab = container.dataset.tab || "all";
             const searchInput = section.querySelector("input[type='text']");
             const filterText = searchInput ? searchInput.value.trim() : "";
-            refreshList(type, tab, filterText, 1);
+
+            let targetTab_ = currentTab;
+            let shouldSwitchToAll = false;
+
+            if (currentTab === "favorites") {
+                const favs = getFavs(type);
+                if (!favs.includes(id)) {
+                    shouldSwitchToAll = true;
+                    targetTab_ = "all";
+                }
+            }
+
+            if (shouldSwitchToAll) {
+                section.querySelectorAll(".sub-tab").forEach(t => {
+                    t.classList.toggle("active", t.dataset.tab === "all");
+                });
+            }
+
+            refreshList(type, targetTab_, filterText, 1);
 
             requestAnimationFrame(() => {
-                const el = container.querySelector(`[data-id="${id}"]`);
-                const main = document.getElementById("main-content");
-                const stickyArea = section.querySelector(".sticky-player-area");
-                if (el && main && stickyArea) {
-                    const stickyHeight = stickyArea.offsetHeight;
-                    const rect = el.getBoundingClientRect();
-                    const mainRect = main.getBoundingClientRect();
-                    const scrollNeeded = rect.top - mainRect.top + main.scrollTop - stickyHeight - 38;
-                    main.scrollTo({ top: Math.max(0, scrollNeeded), behavior: "smooth" });
-                }
+                setTimeout(() => {
+                    const el = container.querySelector(`[data-id="${id}"]`);
+                    const scrollArea = section.querySelector(".tab-scroll-area");
+                    const toolbar = section.querySelector(".toolbar-row");
+
+                    if (el && scrollArea && toolbar) {
+                        const rect = el.getBoundingClientRect();
+                        const areaRect = scrollArea.getBoundingClientRect();
+                        const targetScroll = rect.top - areaRect.top + scrollArea.scrollTop - 0;
+
+                        scrollArea.scrollTo({ 
+                            top: Math.max(0, targetScroll), 
+                            behavior: "smooth" 
+                        });
+                    }
+                }, 200);
             });
         }
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
         console.log(`[STV] ▶️ Reproduciendo: ${item.name} (${type})`);
     };
 
@@ -885,7 +933,7 @@
             console.warn("[STV] URL no disponible para:", item.name);
             return;
         }
-        
+
         const container = $(`#tab-${type === "tv" ? "tv" : "cinema"} .video-container`);
         if (!container) {
             console.warn("[STV] Contenedor de video no encontrado");
@@ -893,42 +941,42 @@
         }
 
         container.innerHTML = "";
-        
+
         const iframe = document.createElement("iframe");
         iframe.src = getPlayerUrl(opt.url);
         iframe.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture";
         iframe.allowFullscreen = true;
         container.appendChild(iframe);
-        
+
         addHistory(type, item, opt.label, optionIdx);
         setPlaying(type, item.id, optionIdx, opt.url, null, null, opt.label);
         showReloadButton(type);
         renderHomeHistory();
-        
+
         console.log(`[STV] Video reproducido: ${item.name} - ${opt.label}`);
     }
 
     function playSeriesVideo(type, item, seasonIdx, episodeIdx, optionIdx) {
         markNewAsSeen("movie", item.id);
-        
+
         const season = item.seasons[seasonIdx];
         if (!season) {
             console.warn("[STV] Temporada no encontrada:", seasonIdx);
             return;
         }
-        
+
         const episode = season.episodes[episodeIdx];
         if (!episode) {
             console.warn("[STV] Episodio no encontrado:", episodeIdx);
             return;
         }
-        
+
         const opt = episode.options[optionIdx];
         if (!opt || !opt.url) {
             console.warn("[STV] URL no disponible para:", episode.name);
             return;
         }
-        
+
         const container = $("#tab-cinema .video-container");
         if (!container) {
             console.warn("[STV] Contenedor de video no encontrado");
@@ -936,19 +984,19 @@
         }
 
         container.innerHTML = "";
-        
+
         const iframe = document.createElement("iframe");
         iframe.src = getPlayerUrl(opt.url);
         iframe.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture";
         iframe.allowFullscreen = true;
         container.appendChild(iframe);
-        
+
         const label = `T${season.seasonNumber} E${episodeIdx + 1}${episode.name ? " - " + episode.name : ""}`;
         addHistory(type, item, label, optionIdx, seasonIdx, episodeIdx);
         setPlaying(type, item.id, optionIdx, opt.url, seasonIdx, episodeIdx, opt.label);
         showReloadButton(type);
         renderHomeHistory();
-        
+
         console.log(`[STV] Serie reproducida: ${item.name} - ${label}`);
     }
 
@@ -978,17 +1026,17 @@
     function validatePlayingStateOnLoad() {
         const lastPlaying = getPlaying();
         if (!lastPlaying) return;
-        
+
         const data = lastPlaying.type === "tv" ? _tvData : _cinemaData;
         const item = data.find(it => it.id === lastPlaying.id);
-        
+
         if (!item) {
             save(STORAGE_KEYS.lastPlaying, null);
             _isPlaying = false;
             console.log("[STV] Estado de reproducción limpiado (item no existe)");
             return;
         }
-        
+
         let url = null;
         if (item.isSeries && lastPlaying.seasonIdx !== null && lastPlaying.seasonIdx !== undefined) {
             const season = item.seasons[lastPlaying.seasonIdx];
@@ -998,7 +1046,7 @@
         } else if (!item.isSeries) {
             url = item.options[lastPlaying.optIdx]?.url;
         }
-        
+
         if (!url) {
             save(STORAGE_KEYS.lastPlaying, null);
             _isPlaying = false;
@@ -1009,7 +1057,7 @@
     /* ============================================ */
     /* 14. LISTADOS Y PAGINACION                    */
     /* ============================================ */
-    
+
     function renderPagination(container, totalItems, currentPage, onPageChange) {
         const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
         if (totalPages <= 1) { container.innerHTML = ""; return; }
@@ -1308,7 +1356,8 @@
         if (paginationContainer) {
             renderPagination(paginationContainer, totalItems, page, (newPage) => {
                 refreshList(type, tab, filterText, newPage);
-                container.scrollIntoView({ behavior: "smooth", block: "start" });
+                const scrollArea = section.querySelector(".tab-scroll-area");
+                if (scrollArea) scrollArea.scrollTop = 0;
             });
         }
     }
@@ -1316,7 +1365,7 @@
     function restorePlaying(type) {
         const last = getPlaying();
         if (!last || last.type !== type) return;
-        
+
         const item = (type === "tv" ? _tvData : _cinemaData).find(it => it.id === last.id);
         if (!item) return;
 
@@ -1348,8 +1397,6 @@
         const sectionId = type === "tv" ? "tab-tv" : "tab-cinema";
         const section = $(`#${sectionId}`);
 
-		initManualSearch(type);
-		
         const subTabs = section.querySelectorAll(".sub-tab");
         const searchInput = section.querySelector("input[type='text']");
         const clearBtn = section.querySelector(".clear-btn");
@@ -1364,8 +1411,8 @@
                 tab.classList.add("active");
                 currentTab = tab.dataset.tab;
                 refreshList(type, currentTab, filterText, 1);
-                const main = document.getElementById("main-content");
-                if (main) main.scrollTop = 0;
+                const scrollArea = section.querySelector(".tab-scroll-area");
+                if (scrollArea) scrollArea.scrollTop = 0;
             });
         });
 
@@ -1375,8 +1422,8 @@
                 updateClear();
                 filterText = e.target.value.trim();
                 refreshList(type, currentTab, filterText, 1);
-                const main = document.getElementById("main-content");
-                if (main) main.scrollTop = 0;
+                const scrollArea = section.querySelector(".tab-scroll-area");
+                if (scrollArea) scrollArea.scrollTop = 0;
             });
             searchInput.addEventListener("focus", updateClear);
             clearBtn.addEventListener("click", () => {
@@ -1384,21 +1431,8 @@
                 searchInput.focus();
                 updateClear();
                 searchInput.dispatchEvent(new Event("input"));
-    
-    // 🔥 NUEVO: También limpiar el buscador manual
-    _manualSearchQuery = '';
-    const keyboardContainer = section.querySelector('.tv-keyboard-search');
-    if (keyboardContainer) {
-        const displayText = keyboardContainer.querySelector('.search-text');
-        const placeholder = keyboardContainer.querySelector('.search-placeholder');
-        const clearBtnManual = keyboardContainer.querySelector('.search-clear-btn');
-        if (displayText) displayText.textContent = '';
-        if (placeholder) placeholder.classList.remove('hidden');
-        if (clearBtnManual) clearBtnManual.classList.remove('visible');
-    }
-});
-
-}
+            });
+        }
 
         if (reloadBtn) {
             reloadBtn.addEventListener("click", () => {
@@ -1427,11 +1461,13 @@
     /* ============================================ */
     /* 15. HOME: HISTORIAL Y NOVEDADES             */
     /* ============================================ */
-    
+
     function renderHomeHistory() {
         const tvNew = getNewItems(_tvData, "tv");
         const mvNew = getNewItems(_cinemaData, "movie");
-        const allNew = tvNew.map(it => ({...it, type: "tv"})).concat(mvNew.map(it => ({...it, type: "movie"})));
+        let allNew = tvNew.map(it => ({...it, type: "tv"})).concat(mvNew.map(it => ({...it, type: "movie"})));
+        // Máximo 12 novedades en total, independiente de paginación
+        allNew = allNew.slice(0, 12);
 
         const newSection = $("#new-section");
         const newRow = $("#new-row");
@@ -1455,7 +1491,7 @@
             }
         }
 
-        const tvHist = getHistory("tv", 10);
+        const tvHist = getHistory("tv", 12);
         const tvRow = $("#tv-history-row");
         if (tvRow) {
             if (tvHist.length === 0) {
@@ -1469,7 +1505,7 @@
             }
         }
 
-        const mvHist = getHistory("movie", 10);
+        const mvHist = getHistory("movie", 12);
         const mvRow = $("#cinema-history-row");
         if (mvRow) {
             if (mvHist.length === 0) {
@@ -1553,7 +1589,7 @@
     /* ============================================ */
     /* 16. SEGURIDAD                               */
     /* ============================================ */
-    
+
     function initSecurity() {
         document.addEventListener("contextmenu", e => { e.preventDefault(); return false; });
         document.addEventListener("keydown", e => {
@@ -1568,7 +1604,7 @@
     /* ============================================ */
     /* 17. PWA Y TOUCH                             */
     /* ============================================ */
-    
+
     function initPWA() {
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("sw.js").catch(err => console.log("STV: SW failed", err));
@@ -1590,7 +1626,7 @@
     /* ============================================ */
     /* 18. MARQUEE                                 */
     /* ============================================ */
-    
+
     function initMarquee(scope) {
         const targets = (scope || document).querySelectorAll(".item-name, .content-title");
         targets.forEach(function(el) {
@@ -1634,7 +1670,7 @@
     /* ============================================ */
     /* 19. NOTICIAS Y DONACIONES                   */
     /* ============================================ */
-    
+
     function initNewsDismiss() {
         const newsSection = $("#news-section");
         const closeBtn = $("#news-close-btn");
@@ -1675,7 +1711,7 @@
     /* ============================================ */
     /* 20. PAGE LOADER                             */
     /* ============================================ */
-    
+
     function initPageLoader() {
         const loader = document.getElementById("page-loader");
         const mainContent = document.querySelector(".main-content");
@@ -1683,140 +1719,29 @@
 
         mainContent.style.opacity = "0";
         mainContent.style.transition = "opacity 0.3s ease";
-        
+
         updateLoaderProgress(0);
     }
 
-/* ============================================ */
-/* 21. BUSCADOR MANUAL (MODO HORIZONTAL)       */
-/* ============================================ */
-
-let _manualSearchQuery = '';
-let _manualSearchTimer = null;
-
-function initManualSearch(type) {
-    const sectionId = type === "tv" ? "tab-tv" : "tab-cinema";
-    const section = $(`#${sectionId}`);
-    if (!section) return;
-
-    const keyboardContainer = section.querySelector('.tv-keyboard-search');
-    if (!keyboardContainer) return;
-
-    const displayText = keyboardContainer.querySelector('.search-text');
-    const placeholder = keyboardContainer.querySelector('.search-placeholder');
-    const clearBtn = keyboardContainer.querySelector('.search-clear-btn');
-    const searchInput = section.querySelector('input[type="text"]');
-    const container = section.querySelector('.list-container');
-
-    if (!displayText || !placeholder || !clearBtn || !searchInput) return;
-
-    // Actualizar display
-    function updateDisplay() {
-        if (_manualSearchQuery.length > 0) {
-            displayText.textContent = _manualSearchQuery;
-            placeholder.classList.add('hidden');
-            clearBtn.classList.add('visible');
-        } else {
-            displayText.textContent = '';
-            placeholder.classList.remove('hidden');
-            clearBtn.classList.remove('visible');
-        }
-    }
-
-    // Ejecutar búsqueda
-    function performSearch() {
-        if (searchInput) {
-            searchInput.value = _manualSearchQuery;
-            const event = new Event('input', { bubbles: true });
-            searchInput.dispatchEvent(event);
-        }
-    }
-
-    // Limpiar búsqueda
-    function clearSearch() {
-        _manualSearchQuery = '';
-        updateDisplay();
-        performSearch();
-    }
-
-    // Agregar letra - AHORA CON SOPORTE PARA ESPACIO
-    function addLetter(letter) {
-        if (letter === '⌫') {
-            _manualSearchQuery = _manualSearchQuery.slice(0, -1);
-            updateDisplay();
-            performSearch();
-            return;
-        }
-
-        if (letter === ' ') {
-            _manualSearchQuery += ' ';
-            updateDisplay();
-            performSearch();
-            return;
-        }
-
-        if (letter === '🔍') {
-            return;
-        }
-
-        _manualSearchQuery += letter;
-        updateDisplay();
-        performSearch();
-    }
-
-    // Configurar teclas
-    const keys = keyboardContainer.querySelectorAll('.key-btn');
-    keys.forEach(btn => {
-        const letter = btn.dataset.letter;
-        if (!letter) return;
-
-        // SOLUCIÓN: Mejor manejo de eventos para la tecla espacio
-        const handlePress = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Verificar si es la tecla espacio (data-letter=" ")
-            if (letter === ' ') {
-                _manualSearchQuery += ' ';
-                updateDisplay();
-                performSearch();
-                return;
-            }
-            
-            addLetter(letter);
-        };
-
-        btn.addEventListener('click', handlePress);
-        btn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handlePress(e);
-        }, { passive: false });
-    });
-
-    // Botón clear
-    clearBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        clearSearch();
-    });
-
-    // Sincronizar con el input normal
-    searchInput.addEventListener('input', () => {
-        const val = searchInput.value.trim();
-        if (val !== _manualSearchQuery) {
-            _manualSearchQuery = val;
-            updateDisplay();
-        }
-    });
-
-    updateDisplay();
-}
-
     /* ============================================ */
-    /* 22. BOOT                                    */
+    /* 21. BOOT                                    */
     /* ============================================ */
-    
+
     async function boot() {
+        // SAFARI: Ocultar barra de navegación
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari) {
+            const hideSafariBar = () => {
+                window.scrollTo({ top: 1, behavior: 'smooth' });
+                setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
+            };
+            setTimeout(hideSafariBar, 300);
+            document.addEventListener('touchstart', hideSafariBar, { passive: true });
+            document.addEventListener('click', hideSafariBar, { passive: true });
+        }
+
         initApp();
         initPageLoader();
         initNewsDismiss();
@@ -1837,7 +1762,7 @@ function initManualSearch(type) {
             ]);
             _tvData = chRes.status === "fulfilled" ? chRes.value.channels || [] : [];
             _cinemaData = mvRes.status === "fulfilled" ? mvRes.value.movies || [] : [];
-            
+
             if (chRes.status === "rejected" || mvRes.status === "rejected") {
                 hasError = true;
             } else {
@@ -1852,7 +1777,6 @@ function initManualSearch(type) {
             return;
         }
 
-        // 🔥 Validar y limpiar estado de reproducción al inicio
         validatePlayingStateOnLoad();
 
         initHome();

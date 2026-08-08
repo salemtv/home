@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,12 +12,12 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" as="style">
-    
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0">
     <link rel="stylesheet" href="styles.css">
     <title>Salem TV</title>
@@ -31,6 +31,16 @@
                         <a href="#" class="logo-link" onclick="switchPage('home'); return false;">
                             <img src="stv.png" alt="STV" class="logo-img">
                         </a>
+
+
+
+<button class="donate-top-btn" id="donate-top-btn">
+                        <span class="material-symbols-rounded">volunteer_activism</span>
+                        </button>
+
+
+
+
                     </div>
                     <nav class="top-tabs">
                         <a href="#" class="top-tab active" data-target="home">
@@ -65,12 +75,8 @@
             </div>
 
             <main class="main-content" id="main-content">
-                
-                <section class="tab-panel" id="tab-home">
-                    <button class="donate-top-btn" id="donate-top-btn">
-                        <span class="material-symbols-rounded">volunteer_activism</span>
-                        Apoyar a Salem via Yape!
-                    </button>
+
+    <section class="tab-panel" id="tab-home">
 
                     <div class="news-section" id="news-section">
                         <div class="news-header">
@@ -128,7 +134,7 @@
                             </div>
                         </div>
                         <div class="legal-content" id="legal-content">
-                            Queremos enfatizar que Salem TV no produce ni aloja contenido ilegal. Todo el material disponible en nuestro sitio proviene de fuentes públicas y gratuitas... No somos propietarios.
+                            <p>Salem TV no posee, produce ni aloja contenido ilegal; Todo el catalogo disponible proviene de fuentes públicas y gratuitas que se incorporan automáticamente sin moderación previa. STV no almacena copias ilegales de obras protegidas por derecho de autor.</p>
                         </div>
                     </div>
                 </section>
@@ -142,86 +148,33 @@
                                 <p class="placeholder-text">Selecciona un canal para reproducir</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="toolbar-row">
-                            <div class="sub-tabs compact-tabs">
-                                <button class="sub-tab active" data-tab="all" title="Todos">Todo</button>
-                                <button class="sub-tab" data-tab="favorites" title="Favoritos">
-                                    <span class="material-symbols-rounded">star</span>
-                                </button>
-                            </div>
-
-                            <div class="search-bar expandable-search">
-                                <span class="material-symbols-rounded search-icon">search</span>
-                                <input type="text" placeholder="Buscar canal..." autocomplete="off">
-                                <button class="clear-btn" type="button">
-                                    <span class="material-symbols-rounded">close</span>
-                                </button>
-                            </div>
-
-                            <button class="reload-btn icon-btn" type="button" title="Recargar video">
-                                <span class="material-symbols-rounded">refresh</span>
+                    <div class="toolbar-row">
+                        <div class="sub-tabs compact-tabs">
+                            <button class="sub-tab active" data-tab="all" title="Todos">Todo</button>
+                            <button class="sub-tab" data-tab="favorites" title="Favoritos">
+                                <span class="material-symbols-rounded">star</span>
                             </button>
                         </div>
 
-                        <!-- ===== BUSCADOR MANUAL (SOLO MODO HORIZONTAL) ===== -->
-                        <div class="tv-keyboard-search">
-                            <div class="search-display">
-                                <span class="search-placeholder">Buscar canal...</span>
-                                <span class="search-text"></span>
-                                <button class="search-clear-btn" type="button">
-                                    <span class="material-symbols-rounded">close</span>
-                                </button>
-                            </div>
-                            <div class="keyboard-grid">
-                                 <div class="key-row">
-                                    <button class="key-btn" data-letter="A">A</button>
-                                    <button class="key-btn" data-letter="B">B</button>
-                                    <button class="key-btn" data-letter="C">C</button>
-                                    <button class="key-btn" data-letter="D">D</button>
-                                    <button class="key-btn" data-letter="E">E</button>
-                                    <button class="key-btn" data-letter="F">F</button>
-                                    <button class="key-btn" data-letter="G">G</button>
-                                    <button class="key-btn" data-letter="H">H</button>
-                                    <button class="key-btn" data-letter="I">I</button>
-                                    <button class="key-btn" data-letter="J">J</button>
-                                </div>
-                                <div class="key-row">
-                                    
-                                    <button class="key-btn" data-letter="K">K</button>
-                                    <button class="key-btn" data-letter="L">L</button>
-                                    <button class="key-btn" data-letter="M">M</button>
-                                    <button class="key-btn" data-letter="N">N</button>
-                                    <button class="key-btn" data-letter="Ñ">Ñ</button>
-                                    <button class="key-btn" data-letter="O">O</button>
-                                    <button class="key-btn" data-letter="P">P</button>
-                                    <button class="key-btn" data-letter="Q">Q</button>
-                                    <button class="key-btn" data-letter="R">R</button>
-                                    <button class="key-btn" data-letter="S">S</button>
-                                </div>
-                                <div class="key-row">
-                                    
-                                    <button class="key-btn" data-letter="T">T</button>
-                                    <button class="key-btn" data-letter="U">U</button>
-                                    <button class="key-btn" data-letter="V">V</button>
-                                    <button class="key-btn" data-letter="W">W</button>
-                                    <button class="key-btn" data-letter="X">X</button>
-                                    <button class="key-btn" data-letter="Y">Y</button>
-                                    <button class="key-btn" data-letter="Z">Z</button>
-                                    <button class="key-btn key-space" data-letter=" ">Espacio</button>
-                                    <button class="key-btn key-backspace" data-letter="⌫">
-                                        <span class="material-symbols-rounded">backspace</span>
-                                    </button>
-                                    <button style="display:none" class="key-btn key-search" data-letter="🔍">
-                                        <span class="material-symbols-rounded">search</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="search-bar expandable-search">
+                            <span class="material-symbols-rounded search-icon">search</span>
+                            <input type="text" placeholder="Buscar canal..." autocomplete="off">
+                            <button class="clear-btn" type="button">
+                                <span class="material-symbols-rounded">close</span>
+                            </button>
                         </div>
+
+                        <button class="reload-btn icon-btn" type="button" title="Recargar video">
+                            <span class="material-symbols-rounded">refresh</span>
+                        </button>
                     </div>
 
-                    <div class="list-container" data-tab="all"></div>
-                    <div class="pagination"></div>
+                    <div class="tab-scroll-area">
+                        <div class="list-container" data-tab="all"></div>
+                        <div class="pagination"></div>
+                    </div>
                 </section>
 
                 <!-- ================== PESTAÑA CINE ================== -->
@@ -233,86 +186,33 @@
                                 <p class="placeholder-text">Selecciona una película para reproducir</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="toolbar-row">
-                            <div class="sub-tabs compact-tabs">
-                                <button class="sub-tab active" data-tab="all" title="Todas">Todo</button>
-                                <button class="sub-tab" data-tab="favorites" title="Favoritos">
-                                    <span class="material-symbols-rounded">star</span>
-                                </button>
-                            </div>
-
-                            <div class="search-bar expandable-search">
-                                <span class="material-symbols-rounded search-icon">search</span>
-                                <input type="text" placeholder="Buscar peli..." autocomplete="off">
-                                <button class="clear-btn" type="button">
-                                    <span class="material-symbols-rounded">close</span>
-                                </button>
-                            </div>
-
-                            <button class="reload-btn icon-btn" type="button" title="Recargar video">
-                                <span class="material-symbols-rounded">refresh</span>
+                    <div class="toolbar-row">
+                        <div class="sub-tabs compact-tabs">
+                            <button class="sub-tab active" data-tab="all" title="Todas">Todo</button>
+                            <button class="sub-tab" data-tab="favorites" title="Favoritos">
+                                <span class="material-symbols-rounded">star</span>
                             </button>
                         </div>
 
-                        <!-- ===== BUSCADOR MANUAL (SOLO MODO HORIZONTAL) ===== -->
-                        <div class="tv-keyboard-search">
-                            <div class="search-display">
-                                <span class="search-placeholder">Buscar película...</span>
-                                <span class="search-text"></span>
-                                <button class="search-clear-btn" type="button">
-                                    <span class="material-symbols-rounded">close</span>
-                                </button>
-                            </div>
-                            <div class="keyboard-grid">
-                                <div class="key-row">
-                                    <button class="key-btn" data-letter="A">A</button>
-                                    <button class="key-btn" data-letter="B">B</button>
-                                    <button class="key-btn" data-letter="C">C</button>
-                                    <button class="key-btn" data-letter="D">D</button>
-                                    <button class="key-btn" data-letter="E">E</button>
-                                    <button class="key-btn" data-letter="F">F</button>
-                                    <button class="key-btn" data-letter="G">G</button>
-                                    <button class="key-btn" data-letter="H">H</button>
-                                    <button class="key-btn" data-letter="I">I</button>
-                                    <button class="key-btn" data-letter="J">J</button>
-                                </div>
-                                <div class="key-row">
-                                    
-                                    <button class="key-btn" data-letter="K">K</button>
-                                    <button class="key-btn" data-letter="L">L</button>
-                                    <button class="key-btn" data-letter="M">M</button>
-                                    <button class="key-btn" data-letter="N">N</button>
-                                    <button class="key-btn" data-letter="Ñ">Ñ</button>
-                                    <button class="key-btn" data-letter="O">O</button>
-                                    <button class="key-btn" data-letter="P">P</button>
-                                    <button class="key-btn" data-letter="Q">Q</button>
-                                    <button class="key-btn" data-letter="R">R</button>
-                                    <button class="key-btn" data-letter="S">S</button>
-                                </div>
-                                <div class="key-row">
-                                    
-                                    <button class="key-btn" data-letter="T">T</button>
-                                    <button class="key-btn" data-letter="U">U</button>
-                                    <button class="key-btn" data-letter="V">V</button>
-                                    <button class="key-btn" data-letter="W">W</button>
-                                    <button class="key-btn" data-letter="X">X</button>
-                                    <button class="key-btn" data-letter="Y">Y</button>
-                                    <button class="key-btn" data-letter="Z">Z</button>
-                                    <button class="key-btn key-space" data-letter=" ">Espacio</button>
-                                    <button class="key-btn key-backspace" data-letter="⌫">
-                                        <span class="material-symbols-rounded">backspace</span>
-                                    </button>
-                                    <button style="display:none" class="key-btn key-search" data-letter="🔍">
-                                        <span class="material-symbols-rounded">search</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="search-bar expandable-search">
+                            <span class="material-symbols-rounded search-icon">search</span>
+                            <input type="text" placeholder="Buscar peli..." autocomplete="off">
+                            <button class="clear-btn" type="button">
+                                <span class="material-symbols-rounded">close</span>
+                            </button>
                         </div>
+
+                        <button class="reload-btn icon-btn" type="button" title="Recargar video">
+                            <span class="material-symbols-rounded">refresh</span>
+                        </button>
                     </div>
 
-                    <div class="list-container" data-tab="all"></div>
-                    <div class="pagination"></div>
+                    <div class="tab-scroll-area">
+                        <div class="list-container" data-tab="all"></div>
+                        <div class="pagination"></div>
+                    </div>
                 </section>
 
             </main>
@@ -325,11 +225,8 @@
                     <img src="data/yape.jpeg" alt="QR Donación" class="donate-qr-img">
                     <p class="donate-text">Escanea el código QR</p>
                     <p class="donate-sub">
-                        <span class="material-symbols-rounded">pets</span>
-                        <span class="material-symbols-rounded">health_metrics</span>
-                        <span class="material-symbols-rounded">digital_wellbeing</span>
-                        <br /><b>Donaciones & Ayuda</b>
-                        <br />Tu contribución ayudará a Salem en sus tratamientos post cirugias y cuidados.
+                        <b>Donaciones</b>
+                        Tu contribución ayudará a Salem en sus tratamientos post-cirugias y cuidados.
                         <br />También ayudará a mantener STV activo.
                         <br />¡Gracias por tu apoyo!
                     </p>

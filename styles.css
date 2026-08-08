@@ -108,20 +108,20 @@ html, body {
     width: 100%;
     z-index: 99;
     background: var(--bg-primary);
-    border-bottom: 1px solid var(--bg-surface);
+    border: 0;
     padding-top: env(safe-area-inset-top);
 }
 
 .top-bar-inner {
     width: 100%;
-    max-width: 1040px;
+    max-width: 720px;
     margin: 0 auto;
     height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: var(--space-sm);
-    padding-left: var(--space-md);
+    padding-right: 3px;
+    padding-left: 13px;
 }
 
 .brand { display: flex; align-items: center; gap: var(--space-sm); }
@@ -249,8 +249,8 @@ html, body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: var(--radius-lg);
     object-fit: contain;
     -webkit-user-drag: none;
@@ -281,7 +281,7 @@ html, body {
 .loader-logo-front.progress-100 { clip-path: inset(0 0 0% 0); }
 
 .loader-logo-front.glow {
-    animation: logoGlow 0.9s ease forwards;
+    animation: /*NOlogoGlow 0.9s ease forwards*/;
 }
 
 @keyframes logoGlow {
@@ -354,15 +354,15 @@ html, body {
 /* 5. CONTENIDO PRINCIPAL Y PANELES */
 .main-content {
     position: fixed;
-    top: calc(41px + env(safe-area-inset-top));
+    top: calc(40px + env(safe-area-inset-top));
     bottom: 0;
     left: 0;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: var(--space-md);
-    padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom));
+    padding: 0;
+    padding-bottom: calc(0 + env(safe-area-inset-bottom));
 }
 
 .tab-panel {
@@ -371,7 +371,43 @@ html, body {
     animation: fadeIn 0.3s ease;
 }
 
-.tab-panel.hidden { display: none; }
+.tab-panel.hidden { display: none!important; }
+
+/* ===== PESTAÑAS TV/CINE: LAYOUT FLEX 100% ALTO CON SCROLL INTERNO ===== */
+#tab-home, #tab-tv, #tab-cinema {
+    padding: var(--space-md);
+}
+#tab-tv, #tab-cinema {
+    
+}
+
+#tab-tv, #tab-cinema {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#tab-tv .sticky-player-area,
+#tab-cinema .sticky-player-area {
+    position: relative;
+    flex-shrink: 0;
+    top: auto;
+}
+
+#tab-tv .toolbar-row,
+#tab-cinema .toolbar-row {
+    flex-shrink: 0;
+}
+
+.tab-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    min-height: 0;
+}
 
 
 /* 6. REPRODUCTOR DE VIDEO (Sticky) - MÓVIL */
@@ -380,20 +416,20 @@ html, body {
     top: 0;
     z-index: 40;
     background-color: var(--bg-primary);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 15px;
+    margin-bottom: 0;
+    border: 0;
 }
 
 .video-section {
-    width: 100vw;
     margin-left: calc(-1 * var(--space-md));
     margin-right: calc(-1 * var(--space-md));
+    width: 100vw;
     position: relative;
 }
 
 .video-container {
-    width: 100%;
+    width: 100vw;
     aspect-ratio: 16 / 9;
     background: var(--bg-surface);
     display: flex;
@@ -422,7 +458,7 @@ html, body {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-top: 10px;
+    margin-bottom: 15px;
     width: 100%;
     padding: 0;
     box-sizing: border-box;
@@ -561,167 +597,8 @@ html, body {
 .reload-btn span { font-size: 20px; }
 
 
-/* ============================================ */
-/* 7B. BUSCADOR MANUAL (MODO HORIZONTAL)       */
-/* ============================================ */
-
-.tv-keyboard-search {
-    display: none;
-    flex-direction: column;
-    gap: 6px;
-    padding: 8px 0;
-    margin-top: 6px;
-    width: 80%;
-    margin: auto;
-}
-
-
-.search-display {
-    display: flex;
-    align-items: center;
-    background: var(--bg-elevated);
-    border-radius: var(--radius-sm);
-    padding: 4px 12px;
-    min-height: 36px;
-    border: 1px solid rgba(255,255,255,0.05);
-    gap: 4px;
-    width: 100%;
-}
-
-.search-placeholder {
-    color: var(--text-muted);
-    font-size: 13px;
-    flex-shrink: 0;
-}
-
-.search-placeholder.hidden {
-    display: none;
-}
-
-.search-text {
-    flex: 1;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    min-height: 20px;
-    word-break: break-all;
-}
-
-.search-clear-btn {
-    width: 28px;
-    height: 28px;
-    border: none;
-    background: transparent;
-    color: var(--text-muted);
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    flex-shrink: 0;
-}
-
-.search-clear-btn.visible {
-    display: flex;
-}
-
-.search-clear-btn:hover {
-    background: rgba(255,59,48,0.15);
-    color: var(--accent);
-}
-
-.search-clear-btn span {
-    font-size: 16px;
-}
-
-.keyboard-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
-}
-
-.key-row {
-    display: flex;
-    gap: 4px;
-    justify-content: center;
-    width: 100%;
-}
-
-.key-btn {
-    flex: 1;
-    min-width: 28px;
-    max-width: 48px;
-    height: 32px;
-    border: none;
-    background: var(--bg-elevated);
-    color: var(--text-primary);
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    padding: 0 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255,255,255,0.03);
-}
-
-.key-btn:hover {
-    background: var(--accent-soft);
-    color: var(--accent);
-    transform: scale(1.05);
-    border-color: var(--accent);
-}
-
-.key-btn:active {
-    transform: scale(0.92);
-}
-
-.key-btn.key-space {
-    flex: 2;
-    min-width: 60px;
-    max-width: 80px;
-    color: var(--text-muted);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.key-btn.key-backspace {
-    flex: 1.2;
-    max-width: 54px;
-    color: var(--text-muted);
-}
-
-.key-btn.key-backspace span {
-    font-size: 18px;
-}
-
-.key-btn.key-search {
-    flex: 1.2;
-    max-width: 54px;
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-}
-
-.key-btn.key-search:hover {
-    opacity: 0.9;
-    transform: scale(1.05);
-    background: var(--accent);
-}
-
-.key-btn.key-search span {
-    font-size: 18px;
-}
-
-
 /* 8. LISTADOS (Canales / Peliculas) */
-.list-container { width: 100%; }
+.list-container { width: 100%;}
 
 .list-item {
     width: 100%;
@@ -1119,36 +996,31 @@ html, body {
 .section-header .mini { color: var(--accent); cursor: pointer; }
 
 .card-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(103px, 1fr));
     gap: var(--space-md);
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-left: var(--space-md);
-    padding-right: var(--space-md);
-    padding-bottom: var(--space-sm);
-    -webkit-overflow-scrolling: touch;
-    width: 100vw;
-    margin-left: calc(-1 * var(--space-md));
-    margin-right: calc(-1 * var(--space-md));
-    position: relative;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    overflow: visible;
 }
 
 .content-card {
-    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
     cursor: pointer;
     transition: transform var(--transition-fast);
-    width: 130px;
+    width: 100%;
+    min-width: 0;
 }
 
 .content-card:hover { transform: scale(1.03); }
 .content-card:active { transform: scale(0.97); }
 
 .content-thumb {
-    width: 130px;
-    height: 190px;
+    width: 100%;
+    aspect-ratio: 2 / 3;
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
@@ -1156,7 +1028,12 @@ html, body {
     position: relative;
     overflow: hidden;
     background: var(--bg-surface);
+	margin-bottom: 2px;
 }
+#tv-history-row .content-thumb {
+aspect-ratio: 1 / 1; }
+#cinema-history-row .content-thumb {
+aspect-ratio: 2 / 3; }
 
 .content-thumb img {
     width: 100%;
@@ -1246,7 +1123,7 @@ html, body {
     background: linear-gradient(135deg, #262a33 0%, var(--bg-surface) 100%);
     border-radius: 0;
     padding: var(--space-md);
-    margin-bottom: var(--space-lg);
+    margin-bottom: 0;
     border: 0;
     margin-left: calc(-1 * var(--space-md));
     margin-right: calc(-1 * var(--space-md));
@@ -1318,32 +1195,33 @@ html, body {
 }
 
 .legal-section .legal-title {
-    color: var(--text-secondary);
-    font-size: var(--text-subtitle);
+    color: var(--text-muted);
+    font-size: 14px;
     font-weight: 700;
     display: flex;
     align-items: center;
     gap: var(--space-sm);
 }
 
-.legal-section .legal-title span { color: var(--text-secondary); font-size: 24px; }
+.legal-section .legal-title span { color: var(--text-muted); font-size: 16px; }
 
 .legal-content {
-    color: var(--text-secondary);
-    font-size: var(--text-global);
+    color: var(--text-muted);
+    font-size: 12px;
     line-height: 1.6;
     min-height: 60px;
+    text-align: justify;
 }
 
 
 /* 14. HOME: BOTON DONAR Y RESET HISTORIAL */
 .donate-top-btn {
-    width: 100vw;
-    margin-left: calc(-1 * var(--space-md));
-    margin-right: calc(-1 * var(--space-md));
-    height: 48px;
+    width: 36px;
+    /*margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));*/
+    height: 36px;
     border: none;
-    border-radius: 0;
+    border-radius: var(--radius-full);
     background: linear-gradient(135deg, var(--accent) 0%, #742384 100%);
     color: #fff;
     font-family: inherit;
@@ -1354,7 +1232,7 @@ html, body {
     justify-content: center;
     gap: var(--space-sm);
     cursor: pointer;
-    margin-bottom: 0;
+    margin: 0;
     transition: all var(--transition-fast);
     -webkit-tap-highlight-color: transparent;
 }
@@ -1458,6 +1336,10 @@ html, body {
     font-size: 13px;
     color: var(--text-muted);
     margin: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .donate-modal-close {
@@ -1516,22 +1398,26 @@ body.modal-open {
 /* MEDIA QUERIES OPTIMIZADAS - SOLO 2 BREAKPOINTS */
 /* ============================================ */
 
-/* ===== BREAKPOINT 1: 720px en adelante (2 columnas + teclado) ===== */
+/* ===== BREAKPOINT 1: 720px en adelante (2 columnas) ===== */
 @media (min-width: 720px) and (orientation: landscape) {
-    /* ---- BARRA SUPERIOR ---- */
+    #tab-home {
+    padding: 0;
+}
     .top-bar-inner {
-        padding: 0 var(--space-lg);
+        padding: 0 13px;
+        padding-right: 0;
+        max-width: 1000px;
     }
-    
+
     .top-tab {
         width: 60px;
         padding: 0 var(--space-md);
     }
-    
+
     .top-tab .tab-label {
         font-size: 13px;
     }
-    
+
     .main-content {
         top: calc(56px + env(safe-area-inset-top));
         padding: var(--space-md);
@@ -1540,75 +1426,90 @@ body.modal-open {
         left: 0;
         right: 0;
     }
-    
+	.logo-img {
+    width: 40px;
+    height: 40px;
+	}
+
     /* ---- HOME: corregir márgenes ---- */
     .donate-top-btn {
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        border-radius: var(--radius-md);
-        margin-bottom: var(--space-md);
+        width: 38px;
+		height: 38px;
+        border-radius: var(--radius-full);
+        margin: 0;
     }
-    
+
     .news-section {
         width: 100%;
         margin-left: 0;
         margin-right: 0;
         border-radius: var(--radius-md);
     }
-    
+
     .legal-section {
         width: 100%;
         margin-left: 0;
         margin-right: 0;
         border-radius: var(--radius-md);
     }
-    
+
     .card-row {
+        grid-template-columns: repeat(5, 1fr);
+        gap: var(--space-md);
         width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        padding-left: 0;
-        padding-right: 0;
+        margin: 0;
+        padding: 0;
     }
-    
+
+    .content-card {
+        width: 100%;
+    }
+
+    .content-thumb {
+        aspect-ratio: 2 / 3;
+    }
+
     /* ---- TV / CINE: GRID 2 COLUMNAS ---- */
     #tab-tv, #tab-cinema {
         display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: var(--space-lg);
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: auto 1fr;
+        gap: var(--space-md);
         height: 100%;
         min-height: 100%;
-        align-content: start;
+        padding: 0;
     }
-    
+
     #tab-tv.hidden, #tab-cinema.hidden {
         display: none !important;
     }
-    
-    /* ---- COLUMNA IZQUIERDA: VIDEO ---- */
+
+    /* ---- COLUMNA IZQUIERDA: SOLO VIDEO CENTRADO ---- */
     #tab-tv .sticky-player-area,
     #tab-cinema .sticky-player-area {
+        grid-column: 1;
+        grid-row: 1 / span 2;
         position: sticky;
         top: 0;
         z-index: 20;
         background: transparent;
-        border-bottom: none;
         padding: 0 !important;
         margin: 0 !important;
-        height: 100%;
         display: flex;
         flex-direction: column;
-        gap: var(--space-sm);
+        justify-content: center;
+        height: 100%;
+        min-height: 100%;
+        gap: 0;
     }
-    
+
     .video-section {
         width: 100%;
         margin-left: 0;
         margin-right: 0;
         flex-shrink: 0;
     }
-    
+
     .video-container {
         aspect-ratio: 16 / 9;
         border-radius: var(--radius-md);
@@ -1618,21 +1519,31 @@ body.modal-open {
         width: 100%;
         flex-shrink: 0;
     }
-    
+
     .video-container iframe {
         width: 100%;
         height: 100%;
     }
-    
+
+    /* ---- TOOLBAR: COLUMNA DERECHA ARRIBA ---- */
     .toolbar-row {
+        grid-column: 2;
+        grid-row: 1;
         gap: 12px;
-        margin-top: 8px;
         flex-wrap: nowrap;
         flex-shrink: 0;
         justify-content: flex-start;
+        width: 100%;
+        height: auto;
+        margin-bottom: -5px;
+        align-self: start;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--bg-primary);
+        padding: 0;
     }
-    
-    /* ---- TABS COMPACTOS ---- */
+
     .compact-tabs {
         height: 34px;
         background: var(--bg-elevated) !important;
@@ -1641,8 +1552,9 @@ body.modal-open {
         padding: 0;
         gap: 0;
         flex-shrink: 0;
+        margin: 0;
     }
-    
+
     .compact-tabs .sub-tab {
         height: 100%;
         padding: 0 14px;
@@ -1658,266 +1570,170 @@ body.modal-open {
         align-items: center;
         gap: 4px;
     }
-    
+
     .compact-tabs .sub-tab.active {
         background: var(--accent);
         color: #fff;
     }
-    
+
     .compact-tabs .sub-tab .material-symbols-rounded {
         font-size: 16px;
     }
-    
-    /* ---- BUSCADOR ---- */
+
     .search-bar {
         height: 34px;
         padding: 0 10px;
         flex: 1;
         min-width: 100px;
     }
-    
+
     .search-bar input {
         font-size: 12px;
         margin-left: 6px;
     }
-    
+
     .search-bar .search-icon {
         font-size: 18px;
     }
-    
+
     .search-bar .clear-btn {
         width: 24px;
         height: 24px;
     }
-    
+
     .search-bar .clear-btn span {
         font-size: 14px;
     }
-    
+
     .reload-btn {
         width: 34px;
         height: 34px;
         flex-shrink: 0;
     }
-    
+
     .reload-btn span {
         font-size: 18px;
     }
-    
-    /* ---- TECLADO VIRTUAL ---- */
-    .tv-keyboard-search {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        padding: 4px 0;
-        margin-top: 4px;
-        width: 100%;
-    }
-    
-    .expandable-search {
-        display: flex !important;
-    }
-    
-    .search-display {
-        min-height: 28px;
-        padding: 4px 10px;
-        border-radius: 4px;
-        background: var(--bg-elevated);
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-    
-    .search-placeholder {
-        font-size: 12px;
-        color: var(--text-muted);
-    }
-    
-    .search-text {
-        font-size: 12px;
-        min-height: 16px;
-        color: #fff;
-    }
-    
-    .search-clear-btn {
-        width: 22px;
-        height: 22px;
-    }
-    
-    .search-clear-btn span {
-        font-size: 14px;
-    }
-    
-    .keyboard-grid {
-        gap: 3px;
-    }
-    
-    .key-row {
-        gap: 3px;
-    }
-    
-    .key-btn {
-        height: 28px;
-        font-size: 11px;
-        min-width: 28px;
-        max-width: 100%;
-        border-radius: 4px;
-        background: var(--bg-elevated);
-        border: 1px solid rgba(255,255,255,0.03);
-        color: var(--text-primary);
-        cursor: pointer;
-        transition: all 0.15s ease;
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-family: inherit;
-    }
-    
-    .key-btn:hover {
-        background: var(--accent-soft);
-        color: var(--accent);
-        border-color: var(--accent);
-    }
-    
-    .key-btn:active {
-        transform: scale(0.92);
-    }
-    
-    .key-btn.key-space {
-        flex: 2;
-        min-width: 60px;
-        max-width: 100px;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--text-muted);
-    }
-    
-    .key-btn.key-backspace {
-        flex: 1.2;
-        max-width: 54px;
-        color: var(--text-muted);
-    }
-    
-    .key-btn.key-backspace span {
-        font-size: 16px;
-    }
-    
-    /* ---- COLUMNA DERECHA: LISTA ---- */
-    #tab-tv .list-container,
-    #tab-cinema .list-container {
-        grid-column: 2;
-        grid-row: 1;
-        height: 100%;
-        max-height: 100%;
-        overflow-y: auto;
-        padding: 0;
-        scroll-behavior: smooth;
-    }
-    
-    /* ---- PAGINACIÓN ---- */
-    #tab-tv .pagination,
-    #tab-cinema .pagination {
+
+    /* ---- SCROLL AREA: COLUMNA DERECHA ABAJO ---- */
+    #tab-tv .tab-scroll-area,
+    #tab-cinema .tab-scroll-area {
         grid-column: 2;
         grid-row: 2;
+        overflow-y: auto;
+        min-height: 0;
+        height: 100%;
+        padding-bottom: 0;
+        margin: 0;
+    }
+
+    /* Resetear grid en elementos internos */
+    #tab-tv .list-container,
+    #tab-cinema .list-container {
+        grid-column: auto;
+        grid-row: auto;
+        height: auto;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    #tab-tv .pagination,
+    #tab-cinema .pagination {
+        grid-column: auto;
+        grid-row: auto;
         margin-top: var(--space-sm);
         margin-bottom: 0;
         padding-bottom: env(safe-area-inset-bottom);
-        position: sticky;
-        bottom: 0;
-        background: var(--bg-primary);
-        padding-top: var(--space-sm);
     }
-    
+
     /* ---- LISTA COMPACTA ---- */
     .list-item {
         margin-bottom: 6px;
         border-radius: var(--radius-sm);
     }
-    
+
     .list-row {
         padding: 8px var(--space-sm);
         padding-left: 6px;
         min-height: 44px;
         gap: var(--space-xs);
     }
-    
+
     .fav-btn {
         width: 30px;
         height: 30px;
     }
-    
+
     .fav-btn span {
         font-size: 18px;
     }
-    
-    /* ---- MÁRGENES UNIFORMES PARA IMÁGENES ---- */
+
     .item-img {
         width: 32px;
         height: 32px;
         border-radius: 4px;
         flex-shrink: 0;
     }
-    
+
     .item-poster-img {
         width: 32px;
         height: 44px;
         border-radius: 4px;
         flex-shrink: 0;
     }
-    
+
     .item-info {
         gap: 1px;
         min-width: 0;
     }
-    
+
     .item-name {
         font-size: 13px;
         font-weight: 500;
     }
-    
+
     .item-meta {
         font-size: 10px;
     }
-    
+
     .movie-meta-row {
         gap: 4px;
     }
-    
+
     .movie-genre {
         font-size: 10px;
     }
-    
+
     .movie-rating {
         font-size: 9px;
         padding: 0 3px;
     }
-    
+
     .options-toggle {
         padding: 2px 8px;
         font-size: 10px;
         gap: 2px;
     }
-    
+
     .options-toggle span:first-child {
         font-size: 10px;
     }
-    
+
     .options-toggle span:last-child {
         font-size: 16px;
     }
-    
+
     .option-btn {
         padding: 4px var(--space-sm);
         margin-bottom: 4px;
         font-size: 12px;
         border-radius: 4px;
     }
-    
+
     .option-btn .check-icon {
         font-size: 14px;
     }
-    
+
     .ep-num-circle {
         width: 20px;
         height: 20px;
@@ -1926,51 +1742,51 @@ body.modal-open {
         font-size: 9px;
         margin-right: 6px;
     }
-    
+
     .season-count {
         font-size: 9px;
         padding: 1px 6px;
         margin-right: 4px;
     }
-    
+
     .season-toggle span:last-child,
     .episode-toggle span:last-child {
         font-size: 14px;
     }
-    
+
     .accordion-body {
         padding: 4px var(--space-sm);
     }
-    
+
     .movie-description {
         font-size: 11px;
         margin-bottom: 8px;
     }
-    
+
     .episode-group {
         margin-bottom: 2px;
     }
-    
+
     .season-group {
         margin-bottom: 4px;
     }
-    
+
     .pagination-inner {
         padding: 4px;
         gap: 2px;
     }
-    
+
     .page-btn {
         min-width: 28px;
         height: 28px;
         font-size: 12px;
         padding: 0 6px;
     }
-    
+
     .page-btn span {
         font-size: 14px;
     }
-    
+
     .page-dots {
         font-size: 12px;
         padding: 0 2px;
@@ -1978,162 +1794,132 @@ body.modal-open {
 }
 
 /* ===== BREAKPOINT 2: 1020px en adelante (más grande) ===== */
-@media (min-width: 1020px) and (orientation: landscape) {
+@media (min-width: 1200px) and (orientation: landscape) {
+    .top-bar-inner {
+        padding: 0 13px;
+        padding-right: 0;
+        max-width: 1130px;
+    }
     .main-content {
         max-width: 1100px;
-        padding: var(--space-lg);
+        padding: var(--space-md) 0;
     }
-    
+
     #tab-tv, #tab-cinema {
-        gap: var(--space-xl);
+        gap: var(--space-md);
     }
-    
-    /* ---- Elementos más grandes ---- */
+
+    .card-row {
+        grid-template-columns: repeat(6, 1fr);
+        gap: var(--space-lg);
+    }
+
+    .content-title {
+        font-size: 14px;
+    }
+
     .video-container {
         max-height: 65vh;
         border-radius: var(--radius-lg);
     }
-    
+
     .compact-tabs .sub-tab {
         padding: 0 20px;
         font-size: 14px;
     }
-    
+
     .compact-tabs .sub-tab .material-symbols-rounded {
         font-size: 18px;
     }
-    
+
     .search-bar {
         height: 38px;
         padding: 0 14px;
     }
-    
+
     .search-bar input {
         font-size: 13px;
     }
-    
+
     .reload-btn {
         width: 38px;
         height: 38px;
     }
-    
-    /* ---- Teclado más grande ---- */
-    .tv-keyboard-search {
-        gap: 6px;
-        padding: 6px 0;
-    }
-    
-    .search-display {
-        min-height: 32px;
-        padding: 6px 14px;
-        border-radius: 6px;
-    }
-    
-    .search-placeholder {
-        font-size: 13px;
-    }
-    
-    .search-text {
-        font-size: 13px;
-        min-height: 18px;
-    }
-    
-    .key-btn {
-        height: 32px;
-        font-size: 12px;
-        min-width: 32px;
-        border-radius: 6px;
-    }
-    
-    .key-btn.key-space {
-        min-width: 80px;
-        max-width: 120px;
-        font-size: 11px;
-    }
-    
-    .key-btn.key-backspace {
-        max-width: 60px;
-    }
-    
-    .key-btn.key-backspace span {
-        font-size: 18px;
-    }
-    
-    /* ---- Lista más grande ---- */
+
     .list-item {
         margin-bottom: 8px;
         border-radius: var(--radius-md);
     }
-    
+
     .list-row {
         padding: 10px var(--space-md);
         padding-left: 8px;
         min-height: 52px;
         gap: var(--space-sm);
     }
-    
+
     .fav-btn {
         width: 34px;
         height: 34px;
     }
-    
+
     .fav-btn span {
         font-size: 20px;
     }
-    
+
     .item-img {
         width: 38px;
         height: 38px;
         border-radius: 6px;
     }
-    
+
     .item-poster-img {
         width: 38px;
         height: 52px;
         border-radius: 6px;
     }
-    
+
     .item-name {
         font-size: 15px;
     }
-    
+
     .item-meta {
         font-size: 12px;
     }
-    
+
     .movie-genre {
         font-size: 12px;
     }
-    
+
     .movie-rating {
         font-size: 10px;
         padding: 0 4px;
     }
-    
+
     .options-toggle {
         padding: 4px 12px;
         font-size: 12px;
     }
-    
+
     .options-toggle span:first-child {
         font-size: 12px;
     }
-    
+
     .options-toggle span:last-child {
         font-size: 18px;
     }
-    
+
     .option-btn {
         padding: 6px var(--space-md);
         margin-bottom: 6px;
         font-size: 13px;
         border-radius: 6px;
     }
-    
+
     .option-btn .check-icon {
         font-size: 16px;
     }
-    
+
     .ep-num-circle {
         width: 24px;
         height: 24px;
@@ -2142,32 +1928,25 @@ body.modal-open {
         font-size: 10px;
         margin-right: 8px;
     }
-    
+
     .accordion-body {
         padding: 6px var(--space-md);
     }
-    
+
     .movie-description {
         font-size: 13px;
         margin-bottom: 12px;
     }
-    
+
     .page-btn {
         min-width: 32px;
         height: 32px;
         font-size: 13px;
         padding: 0 8px;
     }
-    
+
     .page-btn span {
         font-size: 16px;
-    }
-}
-
-/* ===== CORRECCIÓN: Mostrar teclado solo en landscape ===== */
-@media (orientation: portrait) {
-    .tv-keyboard-search {
-        display: none !important;
     }
 }
 
