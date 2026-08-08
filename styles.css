@@ -48,7 +48,8 @@
 
 html, body {
     width: 100%;
-    height: 100%;
+    height: 100dvh;
+	height: 100vw;
     overflow: hidden;
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -70,11 +71,8 @@ html, body {
 .subtitle { font-size: var(--text-subtitle); font-weight: 600; color: var(--text-primary); }
 .mini { font-size: var(--text-mini); color: var(--text-secondary); font-weight: 500; }
 
-#app-wrapper { 
-    width: 100%; 
-    height: 100%; 
-    position: relative; 
-}
+#app-wrapper { width: 100%; height: 100%; position: relative; }
+
 
 /* 2. TIPOGRAFIA: MATERIAL SYMBOLS */
 @font-face {
@@ -357,15 +355,16 @@ html, body {
 /* 5. CONTENIDO PRINCIPAL Y PANELES */
 .main-content {
     position: fixed;
-    top: calc(41px + env(safe-area-inset-top));
+    top: calc(56px + env(safe-area-inset-top));
     bottom: 0;
     left: 0;
     width: 100%;
+	height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: var(--space-md);
-    padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom));
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .tab-panel {
@@ -376,6 +375,42 @@ html, body {
 
 .tab-panel.hidden { display: none!important; }
 
+/* ===== PESTAÑAS TV/CINE: LAYOUT FLEX 100% ALTO CON SCROLL INTERNO ===== */
+#tab-home {
+    padding: 0 var(--space-md);
+}
+#tab-tv, #tab-cinema {
+    padding: 0 var(--space-md);
+}
+
+#tab-tv, #tab-cinema {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#tab-tv .sticky-player-area,
+#tab-cinema .sticky-player-area {
+    position: relative;
+    flex-shrink: 0;
+    top: auto;
+}
+
+#tab-tv .toolbar-row,
+#tab-cinema .toolbar-row {
+    flex-shrink: 0;
+}
+
+.tab-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    min-height: 0;
+}
+
 
 /* 6. REPRODUCTOR DE VIDEO (Sticky) - MÓVIL */
 .sticky-player-area {
@@ -383,20 +418,20 @@ html, body {
     top: 0;
     z-index: 40;
     background-color: var(--bg-primary);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 15px;
+    margin-bottom: 0;
+    border: 0;
 }
 
 .video-section {
-    width: 100vw;
     margin-left: calc(-1 * var(--space-md));
     margin-right: calc(-1 * var(--space-md));
+    width: 100vw;
     position: relative;
 }
 
 .video-container {
-    width: 100%;
+    width: 100vw;
     aspect-ratio: 16 / 9;
     background: var(--bg-surface);
     display: flex;
@@ -425,7 +460,7 @@ html, body {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-top: 10px;
+    margin-bottom: 15px;
     width: 100%;
     padding: 0;
     box-sizing: border-box;
@@ -576,6 +611,7 @@ html, body {
     overflow: hidden;
     transition: border-color var(--transition-fast), background var(--transition-fast);
 }
+
 .list-container .list-item:last-child {
     margin-bottom: var(--space-md);  /* el último item no deja espacio */
 }
@@ -999,12 +1035,10 @@ html, body {
     position: relative;
     overflow: hidden;
     background: var(--bg-surface);
-	margin-bottom: 2px;
 }
-#tv-history-row .content-thumb {
-aspect-ratio: 1 / 1; }
-#cinema-history-row .content-thumb {
-aspect-ratio: 2 / 3; }
+
+#tv-history-row .content-thumb { aspect-ratio: 1 / 1; }
+#cinema-history-row .content-thumb { aspect-ratio: 2 / 3; }
 
 .content-thumb img {
     width: 100%;
@@ -1174,7 +1208,7 @@ aspect-ratio: 2 / 3; }
     gap: var(--space-sm);
 }
 
-.legal-section .legal-title span { color: var(--text-muted); font-size: 16px; }
+.legal-section .legal-title span { color: var(--text-muted); font-size: 14px; }
 
 .legal-content {
     color: var(--text-muted);
@@ -1374,6 +1408,9 @@ body.modal-open {
     #tab-home {
     padding: 0;
 }
+	.list-container .list-item:last-child {
+    margin-bottom: 0px;  /* el último item no deja espacio */
+}
     .top-bar-inner {
         padding: 0 13px;
         padding-right: 0;
@@ -1390,7 +1427,7 @@ body.modal-open {
     }
 
     .main-content {
-        top: calc(55px + env(safe-area-inset-top));
+        top: calc(56px + env(safe-area-inset-top));
         padding: var(--space-md);
         max-width: 1000px;
         margin: 0 auto;
