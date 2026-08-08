@@ -48,8 +48,7 @@
 
 html, body {
     width: 100%;
-    height: 100dvh;
-	height: 100vw;
+    height: 100%;
     overflow: hidden;
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -356,15 +355,15 @@ html, body {
 .main-content {
     position: fixed;
     top: calc(56px + env(safe-area-inset-top));
-    bottom: 0;
+    bottom: env(safe-area-inset-bottom);
     left: 0;
     width: 100%;
-	height: 100%;
+	height: ;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 0;
-    padding-bottom: env(safe-area-inset-bottom);
+	margin: 0;
 }
 
 .tab-panel {
