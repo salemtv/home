@@ -1078,7 +1078,7 @@ html, body {
     display: inline-block;
     padding: 2px 8px;
     border-radius: var(--radius-full);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -1086,20 +1086,23 @@ html, body {
     color: var(--text-secondary);
 }
 
-.tag-badge.canal { background: rgba(52, 199, 89, 0.2); color: var(--tag-canal); }
+/*.tag-badge.canal { background: rgba(52, 199, 89, 0.2); color: var(--tag-canal); }
 .tag-badge.pelicula { background: rgba(255, 59, 48, 0.2); color: var(--tag-pelicula); }
-.tag-badge.serie { background: rgba(88, 86, 214, 0.2); color: var(--tag-serie); }
+.tag-badge.serie { background: rgba(88, 86, 214, 0.2); color: var(--tag-serie); }*/
 
 .new-badge {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    background: var(--accent);
+    top: 0px;
+    right: 0px;
+    background: var(--tag-canal);
     color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: var(--radius-sm);
+    font-size: 9px;
+    font-weight: 800;
+    padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 10px;
+	padding-left: 8px;
+	border-radius: 0 0 0 var(--radius-sm);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     z-index: 2;
