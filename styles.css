@@ -60,6 +60,8 @@ html, body {
     -webkit-user-drag: none;
     -webkit-touch-callout: none;
     touch-action: manipulation;
+	padding: 0;
+	padding-bottom: env(safe-area-inset-bottom);
 }
 
 ::-webkit-scrollbar { display: none; }
@@ -363,7 +365,9 @@ html, body {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 0;
+	padding-bottom: env(safe-area-inset-bottom);
 	margin: 0;
+	margin-bottom: env(safe-area-inset-bottom);
 }
 
 .tab-panel {
