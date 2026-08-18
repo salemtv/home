@@ -73,7 +73,7 @@
         const isIPad = /ipad/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
         const isIOS = /iphone|ipod/.test(ua) || isIPad;
         const isWindows = /windows/.test(ua);
-        return { supported: true, isAndroid, isIOS };
+        return { supported: !isWindows, isAndroid, isIOS };
     }
 
     function initApp() {
@@ -358,6 +358,8 @@
     /* 10. NOVEDADES Y FAVORITOS                   */
     /* ============================================ */
 
+    const MAX_NEW_ITEMS = 12;
+
     function getNewItems(currentItems, type) {
         if (_newItemsCache && _newItemsCache[type]) return _newItemsCache[type];
 
@@ -366,7 +368,7 @@
         const today = todayStr();
 
         if (!resetDate || daysDiff(resetDate, today) >= 7) {
-            snapshot[type] = currentItems.map(it => it.id);
+            snapshot[type] = currentItems.slice(-MAX_NEW_ITEMS).map(it => it.id);
             save(STORAGE_KEYS.newSnapshot, snapshot);
             save(STORAGE_KEYS.newResetDate, today);
             const seen = load(STORAGE_KEYS.seenNew, {});
@@ -379,7 +381,8 @@
 
         const oldIds = new Set(snapshot[type] || []);
         const seenIds = new Set(load(STORAGE_KEYS.seenNew, {})[type] || []);
-        const result = currentItems.filter(it => !oldIds.has(it.id) && !seenIds.has(it.id));
+        let result = currentItems.filter(it => !oldIds.has(it.id) && !seenIds.has(it.id));
+        result = result.slice(0, MAX_NEW_ITEMS);
 
         _newItemsCache = _newItemsCache || {};
         _newItemsCache[type] = result;
@@ -513,6 +516,23 @@
 
     function getPlaying() { return load(STORAGE_KEYS.lastPlaying, null); }
 
+    function scrollToItem(type, id, behavior) {
+        behavior = behavior || "smooth";
+        const sectionId = type === "tv" ? "tab-tv" : "tab-cinema";
+        const section = $(`#${sectionId}`);
+        if (!section) return;
+        const container = section.querySelector(".list-container");
+        const scrollArea = section.querySelector(".tab-scroll-area");
+        if (!container || !scrollArea) return;
+        const el = container.querySelector(`[data-id="${id}"]`);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const areaRect = scrollArea.getBoundingClientRect();
+        const targetScroll = rect.top - areaRect.top + scrollArea.scrollTop - 8;
+        scrollArea.scrollTo({ top: Math.max(0, targetScroll), behavior: behavior });
+    }
+    window.scrollToItem = scrollToItem;
+
     /* ============================================ */
     /* 12. LIMPIEZA COMPLETA DE UNA PESTAÑA        */
     /* ============================================ */
@@ -635,14 +655,10 @@
                 : `<img src="${item.image}" alt="${item.name}" class="item-poster-img" loading="lazy" onerror="this.style.display='none'">`;
 
             const meta = type === "tv"
-                ? `<span>Canal ${item.number}</span>`
-                : `<span>${item.year || ""}</span>`;
+    ? `<span class="item-meta-number" data-number="${item.number}">Canal ${item.number}</span>`
+    : `<span class="item-meta-year" data-year="${item.year || ""}">${item.year || ""}</span>`;
 
-            const movieMeta = type !== "tv" ? `
-                <div class="movie-meta-row">
-                    ${item.genre ? `<span class="movie-genre">${item.genre}</span>` : ""}
-                    ${item.rating ? `<span class="movie-rating" data-rating="${item.rating}">${item.rating}</span>` : ""}
-                </div>` : "";
+            const movieMeta = "";  // movido al acordeón
 
             let optionsHTML = "";
             if (isSeries) {
@@ -696,9 +712,15 @@
                 }).join("");
             }
 
-            const movieDescription = type !== "tv" && item.description
-                ? `<div class="movie-description">${item.description}</div>`
-                : "";
+            const movieAccordionDetails = type !== "tv" ? `
+                <div class="movie-details-accordion">
+                    <div class="movie-meta-row">
+                        ${item.genre ? `<span class="movie-genre">${item.genre}</span>` : ""}
+                        ${item.rating ? `<span class="movie-rating" data-rating="${item.rating}">${item.rating}</span>` : ""}
+                    </div>
+                    ${item.description ? `<div class="movie-sinopsis-label">Sinopsis</div>` : ""}
+                    ${item.description ? `<div class="movie-description">${item.description}</div>` : ""}
+                </div>` : "";
 
             el.innerHTML = `
                 <div class="list-row">
@@ -719,7 +741,7 @@
                 <div class="options-list">
                     <div class="accordion-inner">
                         <div class="accordion-body">
-                            ${movieDescription}
+                            ${movieAccordionDetails}
                             ${optionsHTML}
                         </div>
                     </div>
@@ -755,6 +777,19 @@
                     list.classList.add("open");
                     btn.classList.add("open");
                     container.dataset.openId = item.id;
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            const scrollArea = el.closest(".tab-scroll-area");
+                            if (scrollArea) {
+                                const rect = el.getBoundingClientRect();
+                                const areaRect = scrollArea.getBoundingClientRect();
+                                if (rect.bottom > areaRect.bottom - 40 || rect.top < areaRect.top + 10) {
+                                    const target = rect.top - areaRect.top + scrollArea.scrollTop - 8;
+                                    scrollArea.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
+                                }
+                            }
+                        }, 50);
+                    });
                 } else {
                     container.dataset.openId = "";
                 }
@@ -902,22 +937,7 @@
             refreshList(type, targetTab_, filterText, 1);
 
             requestAnimationFrame(() => {
-                setTimeout(() => {
-                    const el = container.querySelector(`[data-id="${id}"]`);
-                    const scrollArea = section.querySelector(".tab-scroll-area");
-                    const toolbar = section.querySelector(".toolbar-row");
-
-                    if (el && scrollArea && toolbar) {
-                        const rect = el.getBoundingClientRect();
-                        const areaRect = scrollArea.getBoundingClientRect();
-                        const targetScroll = rect.top - areaRect.top + scrollArea.scrollTop - 0;
-
-                        scrollArea.scrollTo({ 
-                            top: Math.max(0, targetScroll), 
-                            behavior: "smooth" 
-                        });
-                    }
-                }, 200);
+                setTimeout(() => scrollToItem(type, id, "smooth"), 200);
             });
         }
 
@@ -1113,14 +1133,10 @@
                 : `<img src="${item.image}" alt="${item.name}" class="item-poster-img" loading="lazy" onerror="this.style.display='none'">`;
 
             const meta = type === "tv"
-                ? `<span>Canal ${item.number}</span>`
-                : `<span>${item.year || ""}</span>`;
+    ? `<span class="item-meta-number" data-number="${item.number}">Canal ${item.number}</span>`
+    : `<span class="item-meta-year" data-year="${item.year || ""}">${item.year || ""}</span>`;
 
-            const movieMeta = type !== "tv" ? `
-                <div class="movie-meta-row">
-                    ${item.genre ? `<span class="movie-genre">${item.genre}</span>` : ""}
-                    ${item.rating ? `<span class="movie-rating" data-rating="${item.rating}">${item.rating}</span>` : ""}
-                </div>` : "";
+            const movieMeta = "";  // movido al acordeón
 
             const playingOptionLabel = isPlaying && lastPlaying.optionLabel ? lastPlaying.optionLabel : "";
             const playingIndicator = isPlaying
@@ -1189,9 +1205,15 @@
                 }).join("");
             }
 
-            const movieDescription = type !== "tv" && item.description
-                ? `<div class="movie-description">${item.description}</div>`
-                : "";
+            const movieAccordionDetails = type !== "tv" ? `
+                <div class="movie-details-accordion">
+                    <div class="movie-meta-row">
+                        ${item.genre ? `<span class="movie-genre">${item.genre}</span>` : ""}
+                        ${item.rating ? `<span class="movie-rating" data-rating="${item.rating}">${item.rating}</span>` : ""}
+                    </div>
+                    ${item.description ? `<div class="movie-sinopsis-label">Sinopsis</div>` : ""}
+                    ${item.description ? `<div class="movie-description">${item.description}</div>` : ""}
+                </div>` : "";
 
             el.innerHTML = `
                 <div class="list-row">
@@ -1212,7 +1234,7 @@
                 <div class="options-list ${isOpen ? "open" : ""}">
                     <div class="accordion-inner">
                         <div class="accordion-body">
-                            ${movieDescription}
+                            ${movieAccordionDetails}
                             ${optionsHTML}
                         </div>
                     </div>
@@ -1248,6 +1270,19 @@
                     list.classList.add("open");
                     btn.classList.add("open");
                     container.dataset.openId = item.id;
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            const scrollArea = el.closest(".tab-scroll-area");
+                            if (scrollArea) {
+                                const rect = el.getBoundingClientRect();
+                                const areaRect = scrollArea.getBoundingClientRect();
+                                if (rect.bottom > areaRect.bottom - 40 || rect.top < areaRect.top + 10) {
+                                    const target = rect.top - areaRect.top + scrollArea.scrollTop - 8;
+                                    scrollArea.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
+                                }
+                            }
+                        }, 50);
+                    });
                 } else {
                     container.dataset.openId = "";
                 }
@@ -1339,7 +1374,16 @@
 
         let items = type === "tv" ? _tvData : _cinemaData;
         if (tab === "favorites") items = items.filter(it => isFav(type, it.id));
-        if (filterText) items = items.filter(it => it.name.toLowerCase().includes(filterText.toLowerCase()));
+        if (filterText) {
+            const searchLower = filterText.toLowerCase();
+            items = items.filter(it => {
+                const nameMatch = it.name.toLowerCase().includes(searchLower);
+                const genreMatch = it.genre && it.genre.toLowerCase().includes(searchLower);
+                const yearMatch = it.year && String(it.year).includes(searchLower);
+                const descMatch = it.description && it.description.toLowerCase().includes(searchLower);
+                return nameMatch || genreMatch || yearMatch || descMatch;
+            });
+        }
 
         const totalItems = items.length;
         const start = (page - 1) * ITEMS_PER_PAGE;
@@ -1466,8 +1510,6 @@
         const tvNew = getNewItems(_tvData, "tv");
         const mvNew = getNewItems(_cinemaData, "movie");
         let allNew = tvNew.map(it => ({...it, type: "tv"})).concat(mvNew.map(it => ({...it, type: "movie"})));
-        // Máximo 12 novedades en total, independiente de paginación
-        allNew = allNew.slice(0, 12);
 
         const newSection = $("#new-section");
         const newRow = $("#new-row");
@@ -1477,17 +1519,19 @@
             } else {
                 if (newSection) newSection.style.display = "block";
                 newRow.innerHTML = allNew.map(it => {
-                    const isMovie = it.type === "movie";
-                    const tag = it.tag || (isMovie ? "pelicula" : "canal");
-                    return `<div class="content-card" onclick="window.goToAndPlay('${it.type}', '${it.id}', null, null, 0)">
+                    const cardSubtitle = it.type === "tv"
+                        ? `<span class="tag-badge canal">Canal ${it.number || "TV"}</span>`
+                        : `<span class="tag-badge ${it.tag || "pelicula"}">${it.year || (it.isSeries ? "Serie" : "Estreno")}</span>`;
+                    return `<div class="content-card carousel-card" onclick="window.goToAndPlay('${it.type}', '${it.id}', null, null, 0)">
                                 <div class="content-thumb">
                                     <img src="${it.image}" alt="${it.name}" loading="lazy" onerror="this.style.display='none'">
                                     <span class="new-badge">NUEVO</span>
                                 </div>
                                 <p class="content-title">${it.name}</p>
-                                <p class="card-subtitle"><span class="tag-badge ${tag}">${tag}</span></p>
+                                <p class="card-subtitle">${cardSubtitle}</p>
                             </div>`;
                 }).join("");
+                initNewCarousel();
             }
         }
 
@@ -1509,7 +1553,7 @@
         const mvRow = $("#cinema-history-row");
         if (mvRow) {
             if (mvHist.length === 0) {
-                mvRow.innerHTML = `<div class="empty-state" style="width:100%;"><span class="material-symbols-rounded">movie_off</span><p>Aun no has visto nada en Cinema</p></div>`;
+                mvRow.innerHTML = `<div class="empty-state" style="width:100%;"><span class="material-symbols-rounded">movie_off</span><p>Aun no has visto nada en Cine</p></div>`;
             } else {
                 mvRow.innerHTML = mvHist.map(h => {
                     const progress = h.progress || getMovieProgress(h.id) || 0;
@@ -1525,6 +1569,25 @@
                 }).join("");
             }
         }
+    }
+
+    function initNewCarousel() {
+        const track = document.getElementById("new-row");
+        const prevBtn = document.getElementById("new-carousel-prev");
+        const nextBtn = document.getElementById("new-carousel-next");
+        if (!track || !prevBtn || !nextBtn) return;
+
+        // Botones avanzan 1 card a la vez
+        const cardWidth = 110;
+        const gap = 16;
+        const step = cardWidth + gap;
+
+        prevBtn.addEventListener("click", () => {
+            track.scrollBy({ left: -step, behavior: "smooth" });
+        });
+        nextBtn.addEventListener("click", () => {
+            track.scrollBy({ left: step, behavior: "smooth" });
+        });
     }
 
     function initHome() {
@@ -1788,6 +1851,14 @@
         const initialTab = getInitialTab();
         switchPage(initialTab);
         handleUrlParams();
+
+        // Scroll automático al item en reproducción al recargar
+        const lastPlayingOnLoad = getPlaying();
+        if (lastPlayingOnLoad && lastPlayingOnLoad.id) {
+            setTimeout(() => {
+                scrollToItem(lastPlayingOnLoad.type, lastPlayingOnLoad.id, "auto");
+            }, 350);
+        }
 
         try {
             await Promise.race([

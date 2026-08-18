@@ -1,3 +1,20 @@
+/* Canal 20 en color dorado */
+.item-meta-number[data-number="20"] {
+    // color: #fbbf24 !important;
+    // font-weight: 700;
+}
+
+/* Año 2026 en color rojo */
+.item-meta-year[data-year="2026"] {
+    // color: #ff3b30 !important;
+    // font-weight: 700;
+}
+
+.item-meta-year[data-year="2026"]::after {
+	// content: "";
+}
+
+
 /* ============================================ */
 /* STV - STYLES (Optimizado y Depurado v2025)   */
 /* ============================================ */
@@ -15,9 +32,9 @@
     --accent: #ff3b30;
     --accent-soft: rgba(255, 59, 48, 0.15);
     --success: #34c759;
-    --tag-canal: #34c759;
-    --tag-pelicula: #ff3b30;
-    --tag-serie: #5856d6;
+    --tag-canal: ;
+    --tag-pelicula: ;
+    --tag-serie: #34c759;
     --nav-bg: rgba(20, 20, 20, 0.85);
     --nav-border: rgba(255, 255, 255, 0.08);
     --space-xs: 4px;
@@ -380,6 +397,10 @@ html, body {
 #tab-home {
     padding: 0 var(--space-md);
 }
+#tab-home,
+.main-content {
+    overscroll-behavior-y: none;
+}
 #tab-tv, #tab-cinema {
     padding: 0 var(--space-md);
 }
@@ -651,10 +672,10 @@ html, body {
 .fav-btn span { font-size: 20px; }
 
 .item-img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    aspect-ratio: 2 / 3;
+	object-fit: cover;
     border-radius: var(--radius-sm);
-    object-fit: cover;
     flex-shrink: 0;
     display: block;
     -webkit-user-drag: none;
@@ -662,10 +683,10 @@ html, body {
 }
 
 .item-poster-img {
-    width: 48px;
-    height: 64px;
+    width: 45px;
+    aspect-ratio: 2 / 3;
+	object-fit: cover;
     border-radius: var(--radius-sm);
-    object-fit: cover;
     flex-shrink: 0;
     display: block;
     -webkit-user-drag: none;
@@ -760,11 +781,18 @@ html, body {
 
 
 /* 9. METADATOS DE PELICULAS */
-.movie-meta-row {
+.movie-details-accordion {
+    padding: var(--space-xs) 0 var(--space-sm);
+    margin-bottom: var(--space-sm);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.movie-details-accordion .movie-meta-row {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-sm);
-    margin-bottom: 1px;
+    margin-bottom: var(--space-sm);
     flex-wrap: wrap;
 }
 
@@ -780,12 +808,13 @@ html, body {
     justify-content: center;
     min-width: auto;
     height: auto;
-    padding: 0 4px;
+    padding: 2px 6px;
     font-size: 10px;
-    font-weight: 500;
+    font-weight: 700;
     color: #fff;
     border-radius: 4px;
     text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .movie-rating[data-rating="TP"],
@@ -804,14 +833,23 @@ html, body {
 
 .movie-rating:not([data-rating="TP"]):not([data-rating="G"]):not([data-rating="TV-Y"]):not([data-rating="+13"]):not([data-rating="PG-13"]):not([data-rating="TV-14"]):not([data-rating="PG"]):not([data-rating="+18"]):not([data-rating="R"]):not([data-rating="TV-MA"]):not([data-rating="NC-17"]) { background: var(--accent); }
 
+.movie-sinopsis-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-xs);
+}
+
 .movie-description {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-secondary);
     line-height: 1.6;
     padding: 0;
-    text-align: center;
+    text-align: left;
     border: 0;
-    margin-bottom: var(--space-md);
+    margin-bottom: 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -830,8 +868,9 @@ html, body {
 .episode-options {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
+    will-change: grid-template-rows;
 }
 
 .options-list.open,
@@ -844,8 +883,7 @@ html, body {
     padding: var(--space-sm) var(--space-md);
     border-top: 1px solid rgba(255,255,255,0.03);
     opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.35s ease;
+    transition: opacity 0.25s ease;
 }
 
 .episode-options .accordion-body { padding: var(--space-sm); }
@@ -854,14 +892,13 @@ html, body {
 .season-episodes.open .accordion-body,
 .episode-options.open .accordion-body {
     opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.4s ease 0.06s, transform 0.45s cubic-bezier(0.32, 0.72, 0, 1) 0.06s;
+    transition: opacity 0.3s ease 0.08s;
 }
 
 .options-list:not(.open) .accordion-body,
 .season-episodes:not(.open) .accordion-body,
 .episode-options:not(.open) .accordion-body {
-    transition: opacity 0.2s ease, transform 0.25s ease;
+    transition: opacity 0.15s ease;
 }
 
 .season-group { margin-bottom: var(--space-sm); }
@@ -939,7 +976,7 @@ html, body {
 
 /* 11. PAGINACION */
 .pagination {
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     margin-top: var(--space-lg);
@@ -1036,8 +1073,8 @@ html, body {
     background: var(--bg-surface);
 }
 
-#tv-history-row .content-thumb { aspect-ratio: 1 / 1; }
-#cinema-history-row .content-thumb { aspect-ratio: 2 / 3; }
+/*#tv-history-row .content-thumb { aspect-ratio: 1 / 1; }
+#cinema-history-row .content-thumb { aspect-ratio: 2 / 3; }*/
 
 .content-thumb img {
     width: 100%;
@@ -1047,6 +1084,7 @@ html, body {
 }
 
 .content-thumb .progress-bar {
+	display: none;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -1064,39 +1102,40 @@ html, body {
     font-size: 12px;
     color: var(--text-secondary);
     font-weight: 500;
+	margin-top: 4px;
 }
 
 .card-subtitle {
-    width: 100%;
+	padding: 0;
     text-align: center;
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: capitalize;
+    font-size: 10px;
+	font-weight: 400;
+    text-transform: uppercase;
+	color: var(--text-muted);
+	// letter-spacing: 0.5px;
 }
 
 .tag-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    background: rgba(255,255,255,0.1);
-    color: var(--text-secondary);
+	background: transparent;
 }
 
-/*.tag-badge.canal { background: rgba(52, 199, 89, 0.2); color: var(--tag-canal); }
-.tag-badge.pelicula { background: rgba(255, 59, 48, 0.2); color: var(--tag-pelicula); }
-.tag-badge.serie { background: rgba(88, 86, 214, 0.2); color: var(--tag-serie); }*/
+/**.tag-badge.canal {
+color: var(--accent);
+border: 0.5px solid var(--accent); }
+
+.tag-badge.pelicula {
+color: var(--accent);
+border: 0.5px solid var(--accent); }
+
+.tag-badge.serie { color: var(--tag-serie); }*/
 
 .new-badge {
     position: absolute;
     top: 0px;
     right: 0px;
-    background: var(--tag-canal);
+    background: var(--accent);
     color: #fff;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
     padding-top: 2px;
 	padding-bottom: 2px;
@@ -1210,7 +1249,7 @@ html, body {
     gap: var(--space-sm);
 }
 
-.legal-section .legal-title span { color: var(--text-muted); font-size: 14px; }
+.legal-section .legal-title span { color: var(--text-muted); font-size: 15px; }
 
 .legal-content {
     color: var(--text-muted);
@@ -1223,28 +1262,27 @@ html, body {
 
 /* 14. HOME: BOTON DONAR Y RESET HISTORIAL */
 .donate-top-btn {
-    width: 36px;
-    /*margin-left: calc(-1 * var(--space-md));
-    margin-right: calc(-1 * var(--space-md));*/
+    width: auto;
+    margin-left: var(--space-sm);
     height: 36px;
+	padding: 0 var(--space-md);
     border: none;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--accent) 0%, #742384 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, #7A1489 100%);
     color: #fff;
     font-family: inherit;
-    font-size: 16px;
+    font-size: var(--text-global);
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
     cursor: pointer;
-    margin: 0;
     transition: all var(--transition-fast);
     -webkit-tap-highlight-color: transparent;
 }
 
-.donate-top-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255, 59, 48, 0.3); }
+.donate-top-btn:hover { transform: translateY(-1px); }
 .donate-top-btn:active { transform: scale(0.98); }
 .donate-top-btn span { font-size: 20px; }
 
@@ -1443,10 +1481,7 @@ body.modal-open {
 
     /* ---- HOME: corregir márgenes ---- */
     .donate-top-btn {
-        width: 38px;
-		height: 38px;
-        border-radius: var(--radius-full);
-        margin: 0;
+        
     }
 
     .news-section {
@@ -1454,6 +1489,7 @@ body.modal-open {
         margin-left: 0;
         margin-right: 0;
         border-radius: var(--radius-md);
+		margin-bottom: var(--space-md);
     }
 
     .legal-section {
@@ -1679,14 +1715,16 @@ body.modal-open {
 
     .item-img {
         width: 32px;
-        height: 32px;
+    	aspect-ratio: 2 / 3;
+		object-fit: cover;
         border-radius: 4px;
         flex-shrink: 0;
     }
 
     .item-poster-img {
         width: 32px;
-        height: 44px;
+    	aspect-ratio: 2 / 3;
+		object-fit: cover;
         border-radius: 4px;
         flex-shrink: 0;
     }
@@ -1878,13 +1916,15 @@ body.modal-open {
 
     .item-img {
         width: 38px;
-        height: 38px;
-        border-radius: 6px;
+        aspect-ratio: 2 / 3;
+		object-fit: cover;
+		border-radius: 6px;
     }
 
     .item-poster-img {
         width: 38px;
-        height: 52px;
+        aspect-ratio: 2 / 3;
+		object-fit: cover;
         border-radius: 6px;
     }
 

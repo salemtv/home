@@ -21,6 +21,45 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0">
     <link rel="stylesheet" href="styles.css">
     <title>Salem TV</title>
+
+
+<!-- ==================== RESET GENERAL (Solo por Botón) ==================== -->
+<script>
+(function() {
+    "use strict";
+
+    /* Keys que se borran para simular un ingreso de cero.
+       Puedes agregar/quitar las que quieras. */
+    const KEYS_TO_RESET = [
+        "stv_last_playing",      // deja de recordar el último video
+        "stv_last_active_tab"   // vuelve a Home
+        // "stv_seen_new",          // los badges de nuevos vuelven a aparecer
+        // "stv_news_dismissed"     // la noticia de arriba vuelve a salir
+        // Si quieres borrar historial también, descomenta la siguiente línea:
+        // ,"stv_history"
+    ];
+
+    function performFullReset() {
+        KEYS_TO_RESET.forEach(function(key) {
+            try { localStorage.removeItem(key); } catch(e) {}
+        });
+        // Si quieres un reset más agresivo que borre TODO lo de STV, usa esto en vez del array:
+        /*
+        Object.keys(localStorage).forEach(function(k) {
+            if (k.startsWith("stv_")) localStorage.removeItem(k);
+        });
+        */
+        location.reload();
+    }
+
+    // Función global para el logo / botón
+    window.forceFullReset = performFullReset;
+})();
+</script>
+<!-- ==================== FIN RESET ==================== -->
+
+
+
 </head>
 <body data-page="home">
     <div id="app-wrapper">
@@ -28,14 +67,15 @@
             <header class="top-bar">
                 <div class="top-bar-inner">
                     <div class="brand">
-                        <a href="#" class="logo-link" onclick="switchPage('home'); return false;">
-                            <img src="stv.png" alt="STV" class="logo-img">
-                        </a>
+  <a class="logo-link" style="cursor: pointer;" onclick="window.forceFullReset();">
+    <img src="stv.png" alt="Salem TV" class="logo-img">
+</a>
+
 
 
 
 <button class="donate-top-btn" id="donate-top-btn">
-                        <span class="material-symbols-rounded">volunteer_activism</span>
+                        <span class="material-symbols-rounded">volunteer_activism</span> Donar
                         </button>
 
 
@@ -93,7 +133,366 @@
                         </div>
                     </div>
 
-                    <div id="new-section" style="display:none;">
+                   
+
+<!-- ==================== SLIDES DESTACADOS (v3 - Custom Image) ==================== -->
+<style>
+.stv-slides-wrapper {
+    width: 100vw;
+    margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.stv-slides-viewport {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0;
+    position: relative;
+    background: #141414;
+    aspect-ratio: 16 / 9;
+}
+.stv-slides-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+}
+.stv-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+    box-sizing: border-box;
+}
+.stv-slide-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.55;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+.stv-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.4) 50%, transparent 100%);
+    pointer-events: none;
+}
+.stv-slide-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.stv-slide-tag {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--text-primary);
+    border: 0;
+}
+.stv-slide-tag.tv {
+	background: var(--tag-serie);
+	color: var(--text-primary);
+	}
+.stv-slide-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+.stv-slide-meta {
+    font-size: 13px;
+    color: #a0a0a0;
+    font-weight: 500;
+}
+.stv-slide-meta .meta-number,
+.stv-slide-meta .meta-year {
+    color: inherit;
+}
+.stv-slide-desc {
+    font-size: 13px;
+    color: #a0a0a0;
+    line-height: 1.5;
+    max-width: 90%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.stv-slide-btn {
+    position: absolute;
+    bottom: -25px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.stv-slide-btn:hover { background: rgba(255,255,255,0.18); }
+.stv-slide-btn:active { transform: translateY(-50%) scale(0.92); }
+.stv-slide-btn.prev { 	display:none;left: 15px; }
+.stv-slide-btn.next { 	display:none;right: 15px; }
+.stv-slide-btn span { font-family: 'Material Symbols Rounded'; font-size: 20px; font-variation-settings: 'FILL' 1; }
+.stv-slide-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 10px;
+}
+.stv-slide-dot {
+    min-width: 12px;
+    height: 12px;
+    border-radius: 99px;
+    border: none;
+    background: #1f1f1f;
+    color: #6b6b6b;
+    font-size: 0;
+    font-weight: 0;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+}
+.stv-slide-dot.active {
+    background: #ff3b30;
+    color: #fff;
+	font-weight: 700;
+	font-size: 12px;
+	min-width: 22px;
+    height: 22px;
+}
+.stv-slide-counter {
+    text-align: center;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 8px;
+    font-weight: 500;
+	display:none;
+}
+@media (min-width: 720px) and (orientation: landscape) {
+    .stv-slides-wrapper {
+width: 100%;
+margin: 0;
+}
+.stv-slides-viewport {
+    border-radius: var(--radius-md);
+	height: 250px;
+}
+    .stv-slide-title { font-size: 26px; }
+    .stv-slide-desc { max-width: 60%; font-size: 14px; }
+.stv-slide-btn.prev { 	display:flex;}
+.stv-slide-btn.next { 	display:flex;}
+}
+</style>
+
+<div class="stv-slides-wrapper" id="stv-slides-wrapper">
+    <div class="stv-slides-viewport" id="stv-slides-viewport">
+        <div class="stv-slides-track" id="stv-slides-track"></div>
+    </div>
+    <button class="stv-slide-btn prev" id="stv-slide-prev" aria-label="Anterior"><span>chevron_left</span></button>
+    <button class="stv-slide-btn next" id="stv-slide-next" aria-label="Siguiente"><span>chevron_right</span></button>
+    <div class="stv-slide-dots" id="stv-slide-dots"></div>
+    <div class="stv-slide-counter" id="stv-slide-counter"></div>
+</div>
+
+<script>
+(function() {
+    "use strict";
+
+    /* ==================== CONFIGURA TUS SLIDES AQUÍ ==================== */
+    /* customImage: pon la URL de una imagen propia. Si no pones nada,     */
+    /* usa automáticamente la imagen que traiga el JSON.                   */
+    const SLIDE_ITEMS = [
+        { type: "movie", id: "mv13", customImage: "https://image.tmdb.org/t/p/original/nRbx6eZN4lajoN2OxU2Seu5qZUr.jpg" },
+        { type: "movie", id: "mv14", customImage: "https://image.tmdb.org/t/p/original/1gukfyy8czrGRlLe5P7VB3WF69P.jpg"},
+        { type: "movie", id: "mv15", customImage: "https://image.tmdb.org/t/p/original/2lHxj082xknb8kt4gOcmn1yPjkk.jpg" },
+        { type: "movie", id: "mv16", customImage: "https://image.tmdb.org/t/p/original/inzzrT5e6DgRVTFXSl2E6jgmDLr.jpg"},
+{ type: "movie", id: "mv17", customImage: "https://image.tmdb.org/t/p/original/tpRYtzeEl1Vc7vYr5unWs7qBNMW.jpg"},
+{ type: "tv",    id: "l1max",         customImage: "https://cdn-blog.joinnus.com/wp-content/uploads/2020/07/09203726/portada-liga-1-2026-torneo-clausura-toda-la-info-1000x600.jpg", customDesc: "Disfrutas de todos los partidos en vivo de la Liga1 Te Apuesto y de otras competencias." }
+    ];
+    const ENABLE_CLICK_TO_PLAY = true;
+    const AUTO_PLAY_DELAY = 5000;
+
+    let currentIndex = 0;
+    let slidesData = [];
+    let autoPlayInterval = null;
+
+    function $(sel) { return document.querySelector(sel); }
+
+    async function fetchJSON(url) {
+        try {
+            const res = await fetch(url, { cache: "no-store" });
+            if (!res.ok) throw new Error(res.status);
+            return res.json();
+        } catch (e) {
+            console.warn("[STV Slides] Error cargando", url, e);
+            return null;
+        }
+    }
+
+    function findItem(type, id, channels, movies) {
+        const pool = type === "tv" ? (channels.channels || []) : (movies.movies || []);
+        return pool.find(it => it.id === id) || null;
+    }
+
+    function buildSlide(item, cfg, index) {
+        const isTV = cfg.type === "tv";
+        const bgSrc = cfg.customImage || item.image || "";
+        const metaNum = item.number || "";
+        const metaYear = item.year || "";
+        const metaHTML = isTV
+            ? `<span class="meta-number" data-number="${metaNum}">Canal ${metaNum}</span>`
+            : `<span class="meta-year" data-year="${metaYear}">${metaYear}</span>`;
+        const tagText = isTV ? "En vivo" : (item.isSeries ? "Serie" : "Estreno");
+        const tagClass = isTV ? "tv" : "";
+
+        const div = document.createElement("div");
+        div.className = "stv-slide";
+        div.dataset.index = index;
+
+        div.innerHTML = `
+            <img src="${bgSrc}" alt="${item.name}" class="stv-slide-bg" loading="eager" onerror="this.style.display='none'">
+            <div class="stv-slide-content">
+                <span class="stv-slide-tag ${tagClass}">${tagText}</span>
+                <div class="stv-slide-title">${item.name}</div>
+                <div class="stv-slide-meta">${metaHTML}</div>
+                <div class="stv-slide-desc">${cfg.customDesc || item.description || ""}</div>
+            </div>
+        `;
+
+        if (ENABLE_CLICK_TO_PLAY) {
+            div.style.cursor = "pointer";
+            div.addEventListener("click", () => {
+                if (window.goToAndPlay) window.goToAndPlay(cfg.type, cfg.id, null, null, 0);
+            });
+        }
+        return div;
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayInterval = setInterval(() => next(), AUTO_PLAY_DELAY);
+    }
+    function stopAutoPlay() {
+        if (autoPlayInterval) { clearInterval(autoPlayInterval); autoPlayInterval = null; }
+    }
+    function resetAutoPlay() { stopAutoPlay(); startAutoPlay(); }
+
+    function renderDots() {
+        const dotsBox = $("#stv-slide-dots");
+        const counter = $("#stv-slide-counter");
+        if (!dotsBox) return;
+        dotsBox.innerHTML = "";
+        SLIDE_ITEMS.forEach((_, i) => {
+            const btn = document.createElement("button");
+            btn.className = "stv-slide-dot" + (i === currentIndex ? " active" : "");
+            btn.textContent = i + 1;
+            btn.addEventListener("click", () => { goTo(i); resetAutoPlay(); });
+            dotsBox.appendChild(btn);
+        });
+        if (counter) counter.textContent = `${currentIndex + 1} / ${SLIDE_ITEMS.length}`;
+    }
+
+    function goTo(index) {
+        const track = $("#stv-slides-track");
+        if (!track) return;
+        currentIndex = index;
+        track.style.transform = `translateX(-${index * 100}%)`;
+        renderDots();
+    }
+    function next() { goTo((currentIndex + 1) % SLIDE_ITEMS.length); }
+    function prev() { goTo((currentIndex - 1 + SLIDE_ITEMS.length) % SLIDE_ITEMS.length); }
+
+    async function init() {
+        const [chRes, mvRes] = await Promise.all([
+            fetchJSON("data/channels.json"),
+            fetchJSON("data/movies.json")
+        ]);
+        const track = $("#stv-slides-track");
+        if (!track) return;
+
+        SLIDE_ITEMS.forEach((cfg, i) => {
+            const item = findItem(cfg.type, cfg.id, chRes || {}, mvRes || {});
+            if (!item) { console.warn("[STV Slides] No encontrado:", cfg.type, cfg.id); return; }
+            track.appendChild(buildSlide(item, cfg, i));
+            slidesData.push({ item, cfg });
+        });
+
+        if (slidesData.length === 0) {
+            $("#stv-slides-wrapper").style.display = "none";
+            return;
+        }
+
+        renderDots();
+        startAutoPlay();
+
+        $("#stv-slide-prev").addEventListener("click", () => { prev(); resetAutoPlay(); });
+        $("#stv-slide-next").addEventListener("click", () => { next(); resetAutoPlay(); });
+
+        let startX = 0;
+        const viewport = $("#stv-slides-viewport");
+        viewport.addEventListener("touchstart", e => { startX = e.touches[0].clientX; }, { passive: true });
+        viewport.addEventListener("touchend", e => {
+            const diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) { diff > 0 ? next() : prev(); resetAutoPlay(); }
+        }, { passive: true });
+
+        document.addEventListener("visibilitychange", () => {
+            document.hidden ? stopAutoPlay() : startAutoPlay();
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+</script>
+<!-- ==================== FIN SLIDES ==================== -->
+
+
+
+
+
+
+<div id="new-section" style="display:none;">
+
+
                         <div class="section-header">
                             <h3 class="subtitle" style="display:flex;align-items:center;gap:8px;">
                                 <span class="material-symbols-rounded" style="color:var(--accent);">new_releases</span>
@@ -160,7 +559,7 @@
 
                         <div class="search-bar expandable-search">
                             <span class="material-symbols-rounded search-icon">search</span>
-                            <input type="text" placeholder="Buscar canal..." autocomplete="off">
+                            <input type="text" placeholder="Buscar canal" autocomplete="off">
                             <button class="clear-btn" type="button">
                                 <span class="material-symbols-rounded">close</span>
                             </button>
@@ -198,7 +597,7 @@
 
                         <div class="search-bar expandable-search">
                             <span class="material-symbols-rounded search-icon">search</span>
-                            <input type="text" placeholder="Buscar peli..." autocomplete="off">
+                            <input type="text" placeholder="Buscar pelicula" autocomplete="off">
                             <button class="clear-btn" type="button">
                                 <span class="material-symbols-rounded">close</span>
                             </button>
