@@ -1,9 +1,79 @@
 {
   "movies": [
 	{
+      "id": "mv17",
+      "name": "Camp Rock 3",
+	  "genre": "Música, Drama y Comedia",
+	  "rating": "G",
+	  "description": "En Camp Rock, los Connect 3 están buscando un nuevo grupo para abrir sus conciertos en la gira. Entre los campistas, como Sage, Desi, Rosie y otros, la competencia por ganar ese codiciado lugar desata rivalidades y romances, mientras todos luchan por destacar.",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/8wI9KByZtzBMWOzDFjxHPSOAuOH.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-zs5cvrnsap5j.html"
+        }
+      ]
+    },
+	{
+      "id": "mv16",
+      "name": "Avatar: Aang, El último Maestro Aire",
+	  "genre": "Acción, Aventura, Fantasía y Animación",
+	  "rating": "PG",
+	  "description": "Avatar Aang, el último Maestro Aire del mundo, se entera de un antiguo poder que podría salvar a su cultura de la extinción. Con la ayuda de sus amigos, se embarca en una búsqueda global para encontrarlo antes de que caiga en las manos equivocadas y amenace con deshacer la paz por la que lo sacrificaron todo.",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/e2VzQmZufeY3BPH0zWtIyr07Z7w.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-bskcbkf2zfia.html"
+        }
+      ]
+    },
+
+	{
+      "id": "mv15",
+      "name": "Minions & Monstruos",
+	  "genre": "Comedia, Aventura, Fantasía y Animación",
+	  "rating": "PG",
+	  "description": "Esta es la historia alocada, ridícula y totalmente verídica de cómo los Minions conquistaron Hollywood, se convirtieron en estrellas de cine, lo perdieron todo, desataron monstruos en el mundo y luego se unieron para intentar salvar al planeta del caos que acababan de crear.",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/uNtBRRLNsCiCcqccv3CMWPx5Xz.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-rxibp0g06k4r.html"
+        }
+      ]
+    },
+	
+	{
+      "id": "mv14",
+      "name": "Zona de Riesgo",
+	  "genre": "Acción, Crimen, Drama y Suspenso",
+	  "rating": "R",
+	  "description": "Los obreros de una construcción en Londres desentierran una bomba de la Segunda Guerra Mundial sin explotar, lo que obliga a la población a evacuar la ciudad. Unos ladrones oportunistas, aprovechan el caos para llevar a cabo un elaborado atraco.​",
+      "year": 2026,
+      "image": "https://image.tmdb.org/t/p/original/8f3EHn2nFe4xbtcwNX9hmM0kb4m.jpg",
+      "isFavorite": true,
+      "tag": "pelicula",
+      "options": [
+        {
+          "label": "HD",
+          "url": "https://vimeos.net/embed-glvzxlok0e74.html"
+        }
+      ]
+    },
+	{
       "id": "mv13",
       "name": "El dia de la Revelación",
-	  "genre": "Ficción, Suspenso",
+	  "genre": "Ciencia ficción y Suspenso",
 	  "rating": "PG",
 	  "description": "Si descubrieras que no estamos solos, si alguien te abriera los ojos y te lo demostrase, ¿te asustarías?",
       "year": 2026,
@@ -20,7 +90,7 @@
 	{
       "id": "mv12",
       "name": "Scary Movie: Terroríficamente incorrecta",
-	  "genre": "Comedia, Terror",
+	  "genre": "Comedia",
 	  "rating": "R",
 	  "description": "Veintiséis años después de conseguir escapar de un asesino enmascarado sospechosamente familiar, el Core Four están de vuelta en el punto de mira del asesino y ninguna película de terror está a salvo.",
       "year": 2026,
@@ -37,7 +107,7 @@
 	{
       "id": "mv11",
       "name": "Star Wars: The Mandalorian and Grogu",
-	  "genre": "Fantasía, Acción",
+	  "genre": "Acción, Aventura y Ciencia ficción",
 	  "rating": "PG",
 	  "description": "Un solitario cazarrecompensas a la fuga protege a un codiciado bebé alienígena mientras evita ser capturado en una galaxia anárquica y peligrosa.",
       "year": 2026,
@@ -54,7 +124,7 @@
 	{
       "id": "mv10",
       "name": "El sonido de la Muerte",
-	  "genre": "Terror, Misterio",
+	  "genre": "Terror y Misterio",
 	  "rating": "R",
 	  "description": "Un grupo inadaptado de estudiantes involuntarios de secundaria tropieza con un objeto maldito, un antiguo silbato de muerte azteca. Descubren que hacer sonar el silbato y el terrorífico sonido que emite convocará a sus futuras muertes para cazarlos.",
       "year": 2026,
@@ -71,7 +141,7 @@
 	{
       "id": "mv9",
       "name": "Sangre Asesina",
-	  "genre": "Acción, Romance",
+	  "genre": "Acción, Drama y Romance",
 	  "rating": "R",
 	  "description": "Una mujer perseguida por su inusual tipo de sangre encuentra protección y amor en los brazos de un asesino letal. Juntos, luchan por sobrevivir.",
       "year": 2026,
@@ -105,7 +175,7 @@
 	{
       "id": "mv7",
       "name": "Los Simpson: Simpsley",
-	  "genre": "Comedia, Crimen",
+	  "genre": "Animación, Comedia y Crimen",
 	  "rating": "PG",
 	  "description": "Cuando la estafadora sin dinero Marge Bouvier es enviada a Italia para convencer al rico Seymour Skinner de que regrese a casa, ella se siente tentada por las trampas de su estilo de vida acomodado. Pero hay una gran piedra en el camino: el huésped pegajoso y tonto de Skinner, Homero Simpsley. Las mentiras, la lujuria y la lira italiana abundan.",
       "year": 2026,
@@ -122,7 +192,7 @@
 	{
       "id": "mv6",
       "name": "La Posesión de la Momia",
-	  "genre": "Terror, Misterio",
+	  "genre": "Terror y Misterio",
 	  "rating": "R",
 	  "description": "La joven hija de un periodista desaparece en el desierto sin dejar rastro. Ocho años después, la familia rota se sorprende cuando ella regresa con ellos, mientras lo que debería ser una reunión alegre se convierte en una pesadilla viviente.",
       "year": 2026,
@@ -139,7 +209,7 @@
     {
       "id": "mv5",
       "name": "Michael",
-	  "genre": "Música, Drama",
+	  "genre": "Música y Drama",
 	  "rating": "PG",
 	  "description": "Narra la vida de Michael Jackson más allá de la música, recorriendo su trayectoria desde el descubrimiento de su extraordinario talento como líder de los Jackson Five hasta convertirse en un artista visionario cuya ambición creativa le impulsó a convertirse en el artista más grande del mundo.",
       "year": 2026,
@@ -156,7 +226,7 @@
 	{
       "id": "mv4",
       "name": "Mortal Kombat II",
-	  "genre": "Acción, Fantasía",
+	  "genre": "Acción, Fantasía y Aventura",
 	  "rating": "R",
 	  "description": "Los campeones favoritos de los fans —ahora acompañados por el mismísimo Johnny Cage— se enfrentan entre sí en la batalla definitiva, sangrienta y sin reglas, para derrotar el oscuro dominio de Shao Kahn, que amenaza con destruir el Reino de la Tierra y a sus defensores..",
       "year": 2026,
@@ -173,7 +243,7 @@
     {
       "id": "mv3",
       "name": "Super Mario Galaxy",
-	  "genre": "Comedia, Fantasía",
+	  "genre": "Comedia, Aventura, Fantasía y Animación",
 	  "rating": "G",
 	  "description": "Mario y Luigi se enfrentan una nueva amenaza: Bowser Jr., quién está decidido liberar a su padre del cautiverio y restaurar el legado familiar. Junto con nuevos y viejos compañeros, los hermanos viajan a través de las estrellas para detener la cruzada del joven heredero.",
       "year": 2026,
@@ -190,7 +260,7 @@
 	{
       "id": "mv2",
       "name": "Deadpool & Wolverine",
-	  "genre": "Comedia, Ficción",
+	  "genre": "Acción, Comedia, y Ciencia ficción",
 	  "rating": "R",
 	  "description": "Un Wade Wilson apático se esfuerza en la vida civil. Sus días como el mercenario moralmente flexible Deadpool quedaron atrás. Cuando su mundo natal se enfrenta a una amenaza existencial, Wade debe, a regañadientes, volver a la acción junto a un reacio Wolverine.",
       "year": 2024,
@@ -207,7 +277,7 @@
 	{
       "id": "mv1",
       "name": "Super Mario Bros",
-	  "genre": "Comedia, Fantasía",
+	  "genre": "Comedia, Aventura, Fantasía y Animación",
 	  "rating": "G",
 	  "description": "Mientras trabaja bajo tierra para arreglar una tubería de agua, los plomeros de Brooklyn Mario y su hermano Luigi son transportados por una misteriosa tubería y llegan a un nuevo mundo mágico.",
       "year": 2023,
