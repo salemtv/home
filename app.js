@@ -8,6 +8,8 @@
     /* 1. CONFIGURACION */
     const ITEMS_PER_PAGE = 99;
     const LOADER_TIMEOUT = 8000;
+    const MAX_NEW_ITEMS = 12;          // legacy: por tipo (ya no se usa para el home)
+    const MAX_NEW_TOTAL = 12;          // [NUEVO] 12 en total, global
     const STORAGE_KEYS = {
         favChannels: "stv_fav_channels",
         favMovies: "stv_fav_movies",
@@ -26,6 +28,7 @@
     let _tvData = [];
     let _cinemaData = [];
     let _newItemsCache = null;
+    let _globalNewCache = null;        // [NUEVO] caché global de los últimos 12
     let _isPlaying = false;
     let _loaderProgress = 0;
     let _loaderComplete = false;
@@ -358,8 +361,6 @@
     /* 10. NOVEDADES Y FAVORITOS                   */
     /* ============================================ */
 
-    const MAX_NEW_ITEMS = 12;
-
     function getNewItems(currentItems, type) {
         if (_newItemsCache && _newItemsCache[type]) return _newItemsCache[type];
 
@@ -389,7 +390,38 @@
         return result;
     }
 
-    function invalidateNewCache() { _newItemsCache = null; }
+    function invalidateNewCache() { _newItemsCache = null; _globalNewCache = null; }
+
+    /* [NUEVO] Últimos 12 artículos globales (TV + Cine) sin relleno */
+    function getGlobalNewItems() {
+        if (_globalNewCache) return _globalNewCache;
+
+        const seen = load(STORAGE_KEYS.seenNew, {});
+        const seenTv = new Set(seen.tv || []);
+        const seenMv = new Set(seen.movie || []);
+
+        const tvLast = _tvData.slice(-MAX_NEW_TOTAL);
+        const mvLast = _cinemaData.slice(-MAX_NEW_TOTAL);
+
+        const mixed = [];
+        const maxLen = Math.max(tvLast.length, mvLast.length);
+        for (let i = 0; i < maxLen; i++) {
+            const tIdx = tvLast.length - 1 - i;
+            const mIdx = mvLast.length - 1 - i;
+            if (tIdx >= 0) mixed.push({...tvLast[tIdx], type: "tv"});
+            if (mIdx >= 0) mixed.push({...mvLast[mIdx], type: "movie"});
+        }
+
+        const limited = mixed.slice(0, MAX_NEW_TOTAL);
+
+        const result = limited.filter(it => {
+            if (it.type === "tv") return !seenTv.has(it.id);
+            return !seenMv.has(it.id);
+        });
+
+        _globalNewCache = result;
+        return result;
+    }
 
     function markNewAsSeen(type, id) {
         const all = load(STORAGE_KEYS.seenNew, {});
@@ -409,9 +441,7 @@
             if (badge) badge.style.display = "none";
             return;
         }
-        const tvNew = getNewItems(_tvData, "tv");
-        const mvNew = getNewItems(_cinemaData, "movie");
-        const total = tvNew.length + mvNew.length;
+        const total = getGlobalNewItems().length;
         const badge = $("#home-badge");
         if (!badge) return;
         if (total > 0) {
@@ -1507,9 +1537,7 @@
     /* ============================================ */
 
     function renderHomeHistory() {
-        const tvNew = getNewItems(_tvData, "tv");
-        const mvNew = getNewItems(_cinemaData, "movie");
-        let allNew = tvNew.map(it => ({...it, type: "tv"})).concat(mvNew.map(it => ({...it, type: "movie"})));
+        const allNew = getGlobalNewItems();
 
         const newSection = $("#new-section");
         const newRow = $("#new-row");
@@ -1685,6 +1713,7 @@
             if (!e.target.closest(".main-content")) e.preventDefault();
         }, { passive: false });
     }
+
 
     /* ============================================ */
     /* 18. MARQUEE                                 */
